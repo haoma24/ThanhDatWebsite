@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ThanhDatWebsite.Orders>
+@{
+    ViewBag.Title = "Trang quản lý";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<main>
+    <div class="container-fluid px-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Danh sách đơn hàng
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Ngày đặt</th>
+                            <th>Người đặt</th>
+                            <th>Trị giá</th>
+                            <th>Tình trạng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dh in Model)
+                        {
+                            <tr>
+                                <td>@dh.OrderID</td>
+                                <td>@dh.OrderDate</td>
+                                <td>@dh.Customers.FullName</td>
+                                <td>@string.Format("{0:C0}", dh.TotalAmount)</td>
+                                <td><span class="badge bg-secondary">@dh.Status</span></td>
+                                <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Duyệt</button></td>
+                            </tr>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">DUYỆT ĐƠN HÀNG</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Nhấn "Xác nhận" để thông báo cho khách hàng biết rằng bạn đã nhận được đơn hàng của họ.
+                                            Đơn hàng sẽ được chuẩn bị và gửi cho đơn vị vận chuyển
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                            <a href="@Url.Action("DangKy","Home",new { id = dh.OrderID.Trim()})" class="btn btn-primary">Xác nhận</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h1 class="mt-4">Thống kê</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1"></i>
+                        Số đơn hàng theo ngày
+                    </div>
+                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        Doanh thu theo tháng
+                    </div>
+                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+

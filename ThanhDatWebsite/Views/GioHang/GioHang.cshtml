@@ -1,0 +1,232 @@
+﻿@using ThanhDatWebsite.Models
+@using System.Globalization
+@{
+    ViewBag.Title = "GioHang";
+}
+
+@{
+    double TongTien = 0;
+    int sl = 0;
+
+}
+@{
+    if (Session["cart"] == null)
+    {
+        <div class="container bg-light p-5 rounded-5 text-center mb-3">
+            <div><h2 class="fs-2 fw-bold text-dark">Bạn chưa có sản phẩm nào trong giỏ <i class="fa-regular fa-face-frown"></i></h2></div>
+            <div><img class="w-25" src="~/Media/cartempty.png" /><br /></div>
+            <div>@Html.ActionLink("Mua sắm ngay!", "Index", "Home", null, new { @class = "text-decoration-none text-default fs-5", })</div>
+        </div>
+    }
+    else
+    {
+        foreach (GioHangModel item in (List<GioHangModel>)Session["cart"])
+        {
+            sl++;
+        }
+        <section class="h-100">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center h-100">
+                    <div class="col-12">
+                        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                            <div class="card-body p-0">
+                                <div class="row g-0">
+                                    <div class="col-lg-8">
+                                        <div class="p-5">
+                                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                                <h1 class="fw-bold mb-0 text-black">Giỏ hàng</h1>
+                                                <h6 class="mb-0 text-muted">@sl sản phẩm</h6>
+                                            </div>
+                                            @foreach (GioHangModel item in (List<GioHangModel>)Session["cart"])
+                                            {
+                                                TongTien = TongTien + item.Quantity * (double)item.Item.UnitPrice;
+                                                <hr class="my-4">
+                                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                    <div class="col-md-2 col-lg-2 col-xl-2 text-center">
+                                                        <img id="imgCart" src="@item.Item.Image" />
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                                        <h6 class="text-black mb-0">@item.Item.ProductName</h6>
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                        <a href="@Url.Action("MinusItem","GioHang",new { id = item.Item.ProductID.Trim()})" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                                           onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                            <i class="fas fa-minus"></i>
+                                                        </a>
+
+                                                        <input id="form1" min="0" name="quantity" value="@item.Quantity" type="number"
+                                                               class="form-control form-control-sm" />
+
+                                                        <a href="@Url.Action("PlusItem","GioHang",new { id = item.Item.ProductID.Trim()})" data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                                           onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                            <i class="fas fa-plus"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                        <h6 class="mb-0">@string.Format("{0:C0}", item.Item.UnitPrice * item.Quantity)</h6>
+                                                    </div>
+                                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                        <a href="@Url.Action("Delete","GioHang",new { id = item.Item.ProductID.Trim()})" class="text-muted"><i class="fas fa-times"></i></a>
+                                                    </div>
+                                                </div>
+
+                                                <hr class="my-4">
+                                            }
+                                            <div class="pt-5">
+                                                <h6 class="mb-0">
+                                                    <a href="@Url.Action("Index","Home")" class="text-body">
+                                                        <i class="fas fa-long-arrow-alt-left me-2"></i>Quay lại
+                                                    </a>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 bg-grey">
+                                        <div class="p-5">
+                                            <h3 class="fw-bold mb-5 mt-2 pt-1">Tạm tính</h3>
+                                            <hr class="my-4">
+
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <h5 class="text-uppercase">Sản phẩm</h5>
+                                                <h5>@string.Format("{0:C0}", TongTien)</h5>
+                                            </div>
+                                            <hr />
+                                            @using (Html.BeginForm("DatHang", "Home", FormMethod.Post))
+                                            {
+                                                <h5 class="text-uppercase mb-3">Thông tin khách hàng</h5>
+                                                <div>
+                                                    <div class="d-flex">
+                                                        <div class="form-check me-2">
+                                                            @Html.RadioButton("GT", "Male", false, new { @class = "form-check-input" })
+                                                            <label class="form-check-label">
+                                                                Anh
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.RadioButton("GT", "Female", false, new { @class = "form-check-input" })
+                                                            <label class="form-check-label">
+                                                                Chị
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="form-group">
+                                                            <label for="InputName">Họ và tên</label>
+                                                            @Html.TextBox("TenKH", null, new { @class = "form-control", placeholder = "Nguyễn Văn A" })
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="inputSDT">Số điện thoại</label>
+                                                            @Html.TextBox("SDT", null, new { @class = "form-control", placeholder = "68 68 68 68" })
+                                                            <small id="nameHelp" class="form-text text-muted">Chỉ dùng với mục đích liên lạc</small>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <hr />
+                                                <h5 class="text-uppercase mb-3">Hình thức giao hàng</h5>
+                                                <div class="d-flex">
+                                                    <div class="form-check me-2">
+                                                        @Html.RadioButton("HT", "GHTN", false, new { @class = "form-check-input", id = "rbtnGH" })
+                                                        <label class="form-check-label" for="rbtnGH">
+                                                            Giao hàng tận nơi
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        @Html.RadioButton("HT", "GHNTCH", false, new { @class = "form-check-input", id = "rbtnDL" })
+                                                        <label class="form-check-label" for="rbtnDL">
+                                                            Lấy tại cửa hàng
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none" id="GH-checked">
+                                                    <div class="d-grid">
+                                                        <div class="d-grid pb-3 gap-2">
+                                                            @Html.DropDownList("ddlTP", new SelectList(new string[] { "Tỉnh/Thành phố" }), new { id = "provinces", onchange = "getProvinces(event)", @class = "form-select" })
+                                                            @Html.DropDownList("ddlQ", new SelectList(new string[] { "Quận/Huyện" }), new { id = "districts", onchange = "getDistricts(event)", @class = "form-select" })
+                                                            @Html.DropDownList("ddlP", new SelectList(new string[] { "Phường/Xã" }), new { id = "wards", @class = "form-select" })
+                                                            @Html.TextBox("txtSoNha", null, new { @class = "form-control" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="display:none" id="DL-checked">
+                                                    <div class="card card-body">
+                                                        @Html.DropDownList("ddlCH", new SelectList(new string[] { "TopZone 633 Lê Văn Việt", "TopZone 374 - 376 Nguyễn Duy Trinh", "TopZone 125 Nguyễn Xí", "TopZone 133 Xô Viết Nghệ Tĩnh", "TopZone 458 Nguyễn Tri Phương", "TopZone 340 Tô Ký", "TopZone 41 - 43 Trường Chinh", "TopZone 532 - 534 Trần Hưng Đạo", "TopZone 874 - 874A Quốc lộ 22", "TopZone 271 - 273 Quốc Lộ 22", "TopZone 229 Nguyễn Thị Tú", "TopZone 449 - 451 Lê Trọng Tấn", "TopZone 171 Nguyễn Sơn", "TopZone 223 - 225 Phan Huy Ích", "TopZone 1044 - 1046 Quang Trung", "TopZone 620 - 628 Nguyễn Oanh", "TopZone 670 Âu Cơ", "TopZone 328 - 328A Chánh Hưng", "TopZone 191 Điện Biên Phủ", "TopZone 163 - 165 Khánh Hội", "TopZone 428 Nguyễn Thị Thập", "TopZone 30 - 32 Quốc lộ 1K" }), new { @class = "form-select" })
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <h5 class="text-uppercase mb-3">Hình thức thanh toán</h5>
+                                                <div>
+                                                    <div class="form-check">
+                                                        @Html.RadioButton("rbtnHTTT", "TTTM", false, new { @class = "form-check-input", id = "rbtnTM" })
+                                                        <label class="form-check-label" for="rbtnTM">Thanh toán khi nhận hàng</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        @Html.RadioButton("rbtnHTTT", "TTCKVDT", false, new { @class = "form-check-input", id = "rbtnCK" })
+                                                        <label class="form-check-label" for="rbtnCK">Chuyển khoản/Ví điện tử</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        @Html.RadioButton("rbtnHTTT", "TTTTD", false, new { @class = "form-check-input", id = "rbtnVDT" })
+                                                        <label class="form-check-label" for="rbtnVDT">Thẻ ATM</label>
+                                                    </div>
+                                                    <button id="OpenModal" hidden type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                                    </button>
+
+                                                    <!-- The Modal -->
+                                                    <div class="modal" id="myModal">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+
+                                                                <!-- Modal Header -->
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Thanh toán đơn hàng</h4>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                </div>
+
+                                                                <!-- Modal body -->
+                                                                <div class="modal-body d-flex justify-content-center">
+                                                                    @{ string link = "https://img.vietqr.io/image/BIDV-3131488052-compact2.jpg?amount=" + TongTien + "&addInfo=dong%20gop%20quy%20vac%20xin&accountName=Thanh%20toan%20don%20hang";}
+                                                                    <img class="w-75 rounded-3" src="@link" />
+                                                                </div>
+
+                                                                <!-- Modal footer -->
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <h5 class="text-uppercase mb-3">Mã giảm giá</h5>
+                                                <div class="mb-5">
+                                                    <div data-mdb-input-init class="form-outline">
+                                                        <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                                                        <label class="form-label" for="form3Examplea2">Nhập mã của bạn</label>
+                                                    </div>
+                                                </div>
+
+                                                <hr class="my-4">
+
+                                                <div class="d-flex justify-content-between mb-5">
+                                                    <h5 class="text-uppercase fw-bold">Tổng tiền:</h5>
+                                                    <h5 class="text-danger fw-bolder">@string.Format("{0:C0}", TongTien)</h5>
+                                                </div>
+                                                <button type="submit" class="btn btn-dark btn-block btn-lg"
+                                                        data-mdb-ripple-color="dark">
+                                                    Đặt hàng
+                                                </button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+}
+

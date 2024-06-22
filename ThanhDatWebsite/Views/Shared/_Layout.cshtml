@@ -3,37 +3,267 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Cửa hàng điện thoại uy tín</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-</head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="~/Scripts/tinh_tp.json"></script>
+    <script type="text/javascript" src="~/Scripts/dvhcvn.json"></script>
+    <script type="text/javascript">
+
+        //Ham show div khi checked Giao Hang
+        $(document).ready(function () {
+            $('input[type="radio"]').click(function () {
+                if ($(this).attr('id') == 'rbtnGH') {
+                    $('#GH-checked').show();
+                }
+
+                else {
+                    $('#GH-checked').hide();
+                }
+            });
+        });
+        //Ham show div khi checked Den Lay
+        $(document).ready(function () {
+            $('input[type="radio"]').click(function () {
+                if ($(this).attr('id') == 'rbtnDL') {
+                    $('#DL-checked').show();
+                }
+
+                else {
+                    $('#DL-checked').hide();
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('input[type="radio"]').click(function () {
+                if ($(this).attr('id') == 'rbtnCK' || $(this).attr('id') == 'rbtnVDT') {
+                    $('#OpenModal').click();
+                    $('#PayOnl').show();
+                }
+
+                else {
+                    $('#PayOnl').hide();
+                }
+            });
+        });
+    </script>
+</head>
+<body class="pt-5 bg-white">
+    <nav class="navbar navbar-expand-md bg-white navbar-light shadow fixed-top">
+        <div class="container">
+                <button class="navbar-toggler position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon" style="color:black;"></span>
+                </button>
+                <div class="logo">
+                    <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
+                </div>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="~/">Trang chủ</a></li>
+                    <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("TraCuuDonDatHang","Home")"><i class="fa-solid fa-truck-fast" style="color:black"></i> Tra cứu đơn hàng</a></li>
+                    <li class="mx-2" nav-item><a class="search-cart-text nav-link text-decoration-none active text-dark" runat="server" href="@Url.Action("DangNhap","Home")">Tìm kiếm</a></li>
+                    <li class="mx-2" nav-item><a class="search-cart-text nav-link text-decoration-none active text-dark" runat="server" href="@Url.Action("GioHang","GioHang")">Giỏ hàng</a></li>
+                </ul>
+            </div>
+            <div class="search-cart-user d-flex justify-content-between align-items-center">
+                <div>
+                    <button id="OpenModal" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
+                    </button>
+                </div>
+                <div class="vertical-divider"></div>
+                <a href="@Url.Action("GioHang","GioHang")" class="cart position-relative">
+                    <i class="fa-solid fa-cart-shopping" style="color: #000000;"></i>
+                </a>
+                <div class="vertical-divider"></div>
+                <a href="@Url.Action("DangNhap","Home")" class="cart">
+                    <i class="ps-1 text-black fa fa-user"></i>
+                </a>
+            </div>
+
+            <div class="d-none spinner-grow text-light"></div>
+        </div>
+    </nav>
+    
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+            <!-- Section: Social media -->
+            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                <!-- Left -->
+                <div class="me-5 d-none d-lg-block">
+                    <span>Get connected with us on social networks:</span>
+                </div>
+                <!-- Left -->
+                <!-- Right -->
+                <div>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </section>
+            <!-- Section: Social media -->
+            <!-- Section: Links  -->
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <!-- Grid row -->
+                    <div class="row mt-3">
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <!-- Content -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                <i class="fas fa-gem me-3"></i>Thanh Dat
+                            </h6>
+                            <p>
+                                Cửa hàng bán điện thoại uy tín với 3 chi nhánh khắp Tp Hồ Chí Minh.
+                                Chuyên các dòng điện thoại Apple chính hãng
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Products
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">iPhones</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">iPads</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Laptops</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Watchs</a>
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Useful links
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">Pricing</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Settings</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Orders</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Help</a>
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                            <p><i class="fas fa-home me-3"></i> VietNam, HCMC</p>
+                            <p>
+                                <i class="fas fa-envelope me-3"></i>
+                                thanhdat.com
+                            </p>
+                            <p><i class="fas fa-phone me-3"></i> + 19006868</p>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
+                </div>
+            </section>
+            <!-- Section: Links  -->
+            <!-- Copyright -->
+            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2024 Copyright: Ma Di Hao
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <script>
+            fetch('../Scripts/dvhcvn.json')
+                .then((response) => response.json())
+                .then(data => {
+                    console.log(data)
+                    let provinces = data.data;
+                    provinces.map(value => document.getElementById('provinces').innerHTML += `<option value='${value.name}'>${value.name}</option>`);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi gọi API:', error);
+                });
+            function fetchDistricts(provincesID) {
+                fetch('../Scripts/dvhcvn.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        let districts = data.data.find(obj => obj.name === provincesID).level2s;
+                        document.getElementById('districts').innerHTML = `<option value=''>Quận/Huyện</option>`;
+                        if (districts !== undefined) {
+
+                            districts.map(value => document.getElementById('districts').innerHTML += `<option value='${value.name}'>${value.name}</option>`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi gọi API:', error);
+                    });
+            }
+
+            function fetchWards(districtsID) {
+                fetch('../Scripts/dvhcvn.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        var provincesID = document.getElementById('provinces').value
+                        let wards = data.data.find(obj => obj.name === provincesID).level2s.find(obj => obj.name === districtsID).level3s;
+                        document.getElementById('wards').innerHTML = `<option value=''>Phường/Xã</option>`;
+                        if (wards !== undefined) {
+                            wards.map(value => document.getElementById('wards').innerHTML += `<option value='${value.name}'>${value.name}</option>`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi gọi API:', error);
+                    });
+            }
+
+            function getProvinces(event) {
+                fetchDistricts(event.target.value);
+            }
+
+            function getDistricts(event) {
+                fetchWards(event.target.value);
+            }
+
+        </script>
+
+    </div>
+
 </body>
+
 </html>

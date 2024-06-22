@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Topzone - Trang quản lý</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script>
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files
+            if (file) {
+                blah.src = URL.createObjectURL(file)
+            }
+        }
+        function fnExcelReport() {
+            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+            var j = 0;
+            var tab = document.getElementById('reportTbl'); // id of table
+
+            for (j = 0; j < tab.rows.length; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                //tab_text=tab_text+"</tr>";
+            }
+
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+            var msie = window.navigator.userAgent.indexOf("MSIE ");
+
+            // If Internet Explorer
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+                txtArea1.document.open("txt/html", "replace");
+                txtArea1.document.write(tab_text);
+                txtArea1.document.close();
+                txtArea1.focus();
+
+                sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+            } else {
+                // other browser not tested on IE 11
+                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+            }
+
+            return sa;
+        }
+    </script>
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="@Url.Action("Dashboard","Home")">Quản lý</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">Cài đặt</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="@Url.Action("DangNhap","Home")">Đăng xuất</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <a class="nav-link" href="@Url.Action("Dashboard","Home")">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Tổng quan
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Index","DonDatHangs")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
+                            Đơn hàng
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-mobile-screen-button"></i></i></div>
+                            Sản phẩm
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link" href="@Url.Action("Index","SanPhams")">
+                                    Quản lý sản phẩm
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","PhieuNhaps")">
+                                    Nhập hàng
+                                </a>
+                            </nav>
+                        </div>
+                        <a class="nav-link" href="@Url.Action("Index","KhachHangs")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
+                            Khách hàng
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Index","KhachHangs")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-ticket"></i></div>
+                            Khuyến mãi
+                        </a>
+                        <a class="nav-link" href="@Url.Action("Index","TaiKhoans")">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
+                            Tài khoản người dùng
+                        </a>
+                        <a class="nav-link" href="@Url.Action("BaoCao","Home")" ">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-newspaper"></i></div>
+                            Báo cáo
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-question"></i></div>
+                            Trợ giúp
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DangNhap.htm">
+                                    Đăng nhập
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DanhMucSanPham.htm">
+                                    Danh mục sản phẩm
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/GioHang.htm">
+                                    Giỏ hàng
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DatHang.htm">
+                                    Đặt hàng
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/ThanhToan.htm">
+                                    Thanh toán
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/TraCuuDonHang.htm">
+                                    Tra cứu đơn hàng
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/TrangQuanLy.htm">
+                                    Trang quản lý
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLySanPham.htm">
+                                    Quản lý sản phẩm
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyDonHang.htm">
+                                    Quản lý đơn hàng
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyKhachHang.htm">
+                                    Quản lý khách hàng
+                                </a>
+                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyTaiKhoan.htm">
+                                    Quản lý tài khoản
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main class="ps-3">
+                @RenderBody()
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Topzone 2024</div>
+                        <div>
+                            <a href="#">Chính sách bảo mật</a>
+                            &middot;
+                            <a href="#">Điều khoản &amp; Điều kiện</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/demo/chart-area-demo.js"></script>
+    <script src="~/Scripts/demo/chart-bar-demo.js"></script>
+    <script src="~/Scripts/demo/chart-pie-demo.js"></script>
+    <script src="~/Scripts/demo/datatables-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="~/Scripts/datatables-simple-demo.js"></script>
+</body>
+</html>

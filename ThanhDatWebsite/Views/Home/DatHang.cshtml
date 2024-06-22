@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "DatHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row container justify-content-center">
+    <div class="col-6 bg-light rounded-3 p-3">
+        <div class="text-center pt-3 pb-3"><i class="fa-solid fa-circle-check fa-5x w-100" style="color: #00a321;"></i></div>
+        <div class=" fw-bold fs-3 mt-2 mb-2 text-dark text-center">ĐẶT HÀNG THÀNH CÔNG</div>
+        <div class="ps-5 pe-5 pb-4">
+            <p class="text-dark opacity-75 fs-6 mt-2 mb-2 ms-5 me-5 justify-content-evenly">
+                Chúng tôi sẽ liên hệ đến số điện thoại @ViewBag.SDT để
+                tiến hành xác nhận đơn hàng
+                Bạn có thể kiểm tra tình trạng đơn hàng với mã: @ViewBag.MaDH
+            </p>
+        </div>
+
+        @*<hr />
+            <h2 class="text-dark  fw-bold fs-4 mt-2 mb-2">Thông tin khách hàng:</h2>
+            <h2 class="text-dark fs-6">Tên KH: @ViewBag.TenKH</h2>
+            <h2 class="text-dark fs-6">SĐT: @ViewBag.SDT</h2>
+            <h2 class="text-dark fs-6">HTTT: @ViewBag.HTTT</h2>
+            <h2 class="text-dark fs-6">Địa chỉ: @ViewBag.DiaChi</h2>
+            <hr />*@
+
+        @*<ul>
+                @foreach (GioHangModel item in (List<GioHangModel>)Session["cart"])
+                {
+                    <li><h4 class="text-dark fs-6">@item.Item.TenSP - @item.Item.GiaBan - x @item.Quantity</h4></li>
+                }
+            </ul>*@
+    </div>
+
+</div>
+

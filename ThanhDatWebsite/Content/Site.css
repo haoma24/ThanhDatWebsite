@@ -18,3 +18,458 @@ select,
 textarea {
     max-width: 280px;
 }
+
+[class^="topzone-"], [class*="topzone-"] {
+    background-image: url(//cdn.tgdd.vn/mwgcart/topzone/images/icon-topzone.webp);
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 40px;
+    width: 150px;
+    line-height: 30px;
+    vertical-align: middle;
+    background-size: 514px 226px;
+}
+
+.cart {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.topzone-cart {
+    background-position: -239px -11px;
+    width: 14px;
+    height: 17px;
+}
+
+.cart i {
+    display: block;
+}
+
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    min-width: 1024px;
+    margin: auto;
+    width: 100%;
+    height: 60px;
+    position: relative;
+}
+
+.logo-topzone {
+    float: left;
+    margin-left: 6%;
+    transition: opacity .1s cubic-bezier(.645,.045,.355,1);
+}
+
+.topzone-search {
+    background-position: -187px -11px;
+    width: 18px;
+    height: 18px;
+}
+
+.search-sp {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px 10px 10px 10px;
+    position: relative;
+    cursor: pointer;
+    background: #2f3033;
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+}
+
+    .search-sp .topzone-search {
+        display: block;
+        margin: 2px auto;
+    }
+
+@media only screen and (min-width: 768px) { /*SCREEN > px*/
+    .search-cart-text {
+        font-size: 0 !important; /*hide the text using font-size*/
+    }
+
+    .Iphone{
+        display:none !important;
+    }
+    .logo {
+        width: 30%;
+        justify-content: center;
+    }
+
+    #imgCart {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) { /*SCREEN < px*/
+    .search-cart {
+        display: none !important;
+    }
+    .toggle-icon {
+        display: none !important;
+    }
+    #search-cart {
+        font-size: 16px !important;
+    }
+    .product-slider{
+        display:none;
+    }
+    .Iphone{
+        display:flex !important;
+    }
+    .logo {
+        display:flex;
+        position:relative;
+        width:100%;
+        justify-content: center;
+    }
+    .ip-item-mobile {
+        font-size: 11px !important;
+        padding: 5px !important;
+        width: 30% !important;
+    }
+
+    .item-btn a {
+        font-size: 12px;
+    }
+
+
+    #imgCart {
+        width: 40%;
+    }
+    .search-cart-user{
+        display:none !important
+    }
+}
+.ip-item {
+    transition: transform 1s;
+}
+
+    .ip-item:hover {
+        box-shadow: 2px 2px 10px #808080;
+    }
+
+.Iphone {
+    overflow-wrap: break-word;
+}
+/*==============DANG NHAP Begin==============*/
+
+/*==============DANG NHAP End==============*/
+
+/*==============GIO HANG Begin==============*/
+@media (min-width: 1025px) {
+    .h-custom {
+        height: 100vh !important;
+    }
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+}
+
+.card-registration .select-arrow {
+    top: 13px;
+}
+
+.bg-grey {
+    background-color: #eae8e8;
+}
+
+@media (min-width: 992px) {
+    .card-registration-2 .bg-grey {
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+}
+
+@media (max-width: 991px) {
+    .card-registration-2 .bg-grey {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+}
+
+
+@import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+body {
+    background-color: #eee;
+    font-family: 'Calibri', sans-serif !important;
+}
+
+.mt-100 {
+    margin-top: 100px;
+}
+
+
+.card {
+    margin-bottom: 30px;
+    border: 0;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    letter-spacing: .5px;
+    border-radius: 8px;
+    -webkit-box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+    box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+}
+
+    .card .card-header {
+        background-color: #fff;
+        border-bottom: none;
+        padding: 24px;
+        border-bottom: 1px solid #f6f7fb;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+.card-header:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+}
+
+
+
+.card .card-body {
+    padding: 30px;
+    background-color: transparent;
+}
+
+.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
+    background-color: #4466f2 !important;
+    border-color: #4466f2 !important;
+}
+
+.gradient-custom-2 {
+    /* fallback for old browsers */
+    background: #a1c4fd;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1));
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1))
+}
+/*==============GIO HANG End==============*/
+/*==============DON DAT HANG Start==============*/
+#progressbar-1 {
+    color: #455A64;
+}
+
+    #progressbar-1 li {
+        list-style-type: none;
+        font-size: 13px;
+        width: 33.33%;
+        float: left;
+        position: relative;
+    }
+
+    #progressbar-1 #step1:before {
+        content: "1";
+        color: #fff;
+        width: 29px;
+        margin-left: 22px;
+        padding-left: 11px;
+    }
+
+    #progressbar-1 #step2:before {
+        content: "2";
+        color: #fff;
+        width: 29px;
+    }
+
+    #progressbar-1 #step3:before {
+        content: "3";
+        color: #fff;
+        width: 29px;
+        margin-right: 22px;
+        text-align: center;
+    }
+
+    #progressbar-1 li:before {
+        line-height: 29px;
+        display: block;
+        font-size: 12px;
+        background: #455A64;
+        border-radius: 50%;
+        margin: auto;
+    }
+
+    #progressbar-1 li:after {
+        content: '';
+        width: 121%;
+        height: 2px;
+        background: #455A64;
+        position: absolute;
+        left: 0%;
+        right: 0%;
+        top: 15px;
+        z-index: -1;
+    }
+
+    #progressbar-1 li:nth-child(2):after {
+        left: 50%
+    }
+
+    #progressbar-1 li:nth-child(1):after {
+        left: 25%;
+        width: 121%
+    }
+
+    #progressbar-1 li:nth-child(3):after {
+        left: 25%;
+        width: 50%;
+    }
+
+    #progressbar-1 li.active:before,
+    #progressbar-1 li.active:after {
+        background: #1266f1;
+    }
+
+.card-stepper {
+    z-index: 0
+}
+/*==============DON DAT HANG End==============*/
+.gradient-text-16 {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    background: -webkit-linear-gradient(#0a8914, #333333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+.vertical-divider {
+    border-left: 1px solid #ccc;
+    height: 24px;
+    margin: 0 15px;
+}
+
+/*==============PRODUCT SLIDER=================*/
+.slider-wrapper {
+    position: relative;
+}
+
+    .slider-wrapper .slide-button {
+        position: absolute;
+        top: 50%;
+        outline: none;
+        border: none;
+        height: 50px;
+        width: 50px;
+        z-index: 5;
+        color: #fff;
+        display: flex;
+        cursor: pointer;
+        font-size: 2.2rem;
+        background: #000;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transform: translateY(-50%);
+    }
+
+        .slider-wrapper .slide-button:hover {
+            background: #404040;
+        }
+
+        .slider-wrapper .slide-button#prev-slide {
+            left: -25px;
+            display: none;
+        }
+
+        .slider-wrapper .slide-button#next-slide {
+            right: -25px;
+        }
+
+    .slider-wrapper .image-list {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 10px;
+        list-style: none;
+        margin-bottom: 30px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+        .slider-wrapper .image-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slider-wrapper .image-list .image-item {
+            width: 275px;
+            height: 350px;
+        }
+
+.container .slider-scrollbar {
+    height: 24px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.slider-scrollbar .scrollbar-track {
+    background: #ccc;
+    width: 100%;
+    height: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    position: relative;
+}
+
+.slider-scrollbar:hover .scrollbar-track {
+    height: 4px;
+}
+
+.slider-scrollbar .scrollbar-thumb {
+    position: absolute;
+    background: #000;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    height: 100%;
+    cursor: grab;
+    border-radius: inherit;
+}
+
+    .slider-scrollbar .scrollbar-thumb:active {
+        cursor: grabbing;
+        height: 8px;
+        top: -2px;
+    }
+
+    .slider-scrollbar .scrollbar-thumb::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -10px;
+        bottom: -10px;
+    }
+/* Styles for mobile and tablets */
+@media only screen and (max-width: 1023px) {
+    .slider-wrapper .slide-button {
+        display: none !important;
+    }
+
+    .slider-wrapper .image-list {
+        gap: 10px;
+        margin-bottom: 15px;
+        scroll-snap-type: x mandatory;
+    }
+
+        .slider-wrapper .image-list .image-item {
+            width: 280px;
+            height: 380px;
+        }
+
+    .slider-scrollbar .scrollbar-thumb {
+        width: 20%;
+    }
+}
