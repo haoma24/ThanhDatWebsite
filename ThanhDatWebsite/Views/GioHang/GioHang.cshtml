@@ -28,7 +28,7 @@
             <div class="container h-100">
                 <div class="row d-flex justify-content-center h-100">
                     <div class="col-12">
-                        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        <div class="card card-registration card-registration-2 shadow" style="border-radius: 15px;">
                             <div class="card-body p-0">
                                 <div class="row g-0">
                                     <div class="col-lg-8">
@@ -116,7 +116,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="inputSDT">Số điện thoại</label>
-                                                            @Html.TextBox("SDT", null, new { @class = "form-control", placeholder = "68 68 68 68" })
+                                                            @Html.TextBox("SDT", null, new { @class = "form-control", placeholder = "68 68 68 68", maxlength = "10" })
                                                             <small id="nameHelp" class="form-text text-muted">Chỉ dùng với mục đích liên lạc</small>
                                                         </div>
                                                     </div>
@@ -150,7 +150,7 @@
                                                 </div>
                                                 <div style="display:none" id="DL-checked">
                                                     <div class="card card-body">
-                                                        @Html.DropDownList("ddlCH", new SelectList(new string[] { "TopZone 633 Lê Văn Việt", "TopZone 374 - 376 Nguyễn Duy Trinh", "TopZone 125 Nguyễn Xí", "TopZone 133 Xô Viết Nghệ Tĩnh", "TopZone 458 Nguyễn Tri Phương", "TopZone 340 Tô Ký", "TopZone 41 - 43 Trường Chinh", "TopZone 532 - 534 Trần Hưng Đạo", "TopZone 874 - 874A Quốc lộ 22", "TopZone 271 - 273 Quốc Lộ 22", "TopZone 229 Nguyễn Thị Tú", "TopZone 449 - 451 Lê Trọng Tấn", "TopZone 171 Nguyễn Sơn", "TopZone 223 - 225 Phan Huy Ích", "TopZone 1044 - 1046 Quang Trung", "TopZone 620 - 628 Nguyễn Oanh", "TopZone 670 Âu Cơ", "TopZone 328 - 328A Chánh Hưng", "TopZone 191 Điện Biên Phủ", "TopZone 163 - 165 Khánh Hội", "TopZone 428 Nguyễn Thị Thập", "TopZone 30 - 32 Quốc lộ 1K" }), new { @class = "form-select" })
+                                                        @Html.DropDownList("ddlCH", new SelectList(new string[] { "Thành Đạt 633 Lê Văn Việt", "Thành Đạt 374 - 376 Điên Biên Phủ", "Thành Đạt 125 3 tháng 2"}), new { @class = "form-select" })
                                                     </div>
                                                 </div>
                                                 <hr />

@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "TraCuuDonDangHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="card card-stepper rounded-3">
+                <div class="card-header p-4 rounded-3">
+                    <div>
+                        <label for="email" class="form-label fw-bold">Mã đơn hàng <span class="text-danger">*</span></label>
+                        <div class="">
+                            @using (Html.BeginForm("DonDatHang", "Home", FormMethod.Post, new { @class = "d-flex justify-content-between" }))
+                            {
+                                @Html.TextBox("MaDH", null, new { @class = "form-control" })
+                                <button id="btnTraCuu" class="btn btn-outline-dark" type="submit">Tra cứu</button>
+                            }
+                            <p></p>
+                        </div>
+
+                    </div>
+                    <hr class="" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <img width="100%" src="https://staranddaisy.in/wp-content/uploads/2022/06/order_track_5227-1.jpg" alt="StarAndDaisy Track Order | StarAndDaisy" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

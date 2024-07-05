@@ -5,15 +5,15 @@
 }
 
 <main>
-    <div class="container-fluid px-4">
-        <div class="card mb-4">
+    <div class="container-fluid pt-2">
+        <div class="card">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Danh sách đơn hàng
+                <span class="fs-3 fw-bold">Danh sách đơn hàng</span>
             </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="bg-info">
                         <tr>
                             <th>Mã</th>
                             <th>Ngày đặt</th>
@@ -28,13 +28,39 @@
                         {
                             <tr>
                                 <td>@dh.OrderID</td>
-                                <td>@dh.OrderDate</td>
+                                <td>@Convert.ToDateTime(dh.OrderDate).ToString("dd/MM/yyyy")</td>
                                 <td>@dh.Customers.FullName</td>
-                                <td>@string.Format("{0:C0}", dh.TotalAmount)</td>
-                                <td><span class="badge bg-secondary">@dh.Status</span></td>
-                                <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Duyệt</button></td>
+                                <td>@string.Format("{0:C0}", dh.TotalAmount)</td> 
+                                @{ 
+                                    string badge = "";
+                                    string btnText = "";
+                                    string btnColor = "";
+                                    string btnState = "";
+                                }
+                                @if (dh.Status == "Đã nhận")
+                                {
+                                    badge = "badge bg-primary";
+                                    btnText = "Gửi hàng";
+                                    btnColor = "btn-primary";
+
+                                }
+                                else if (dh.Status == "Đang xử lý")
+                                {
+                                    badge = "badge bg-secondary";
+                                    btnText = "Duyệt";
+                                    btnColor = "btn-success";
+                                }
+                                else
+                                {
+                                    badge = "badge bg-success";
+                                    btnText = "Chờ xác nhận";
+                                    btnColor = "btn-secondary";
+                                    btnState = "disabled";
+                                }
+                                <td><span class="@badge">@dh.Status</span></td>
+                                <td><button type="button" class="btn @btnColor" @btnState data-bs-toggle="modal" data-bs-target="#exampleModal_@dh.OrderID">@btnText</button></td>
                             </tr>
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="exampleModal_@dh.OrderID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -47,7 +73,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            <a href="@Url.Action("DangKy","Home",new { id = dh.OrderID.Trim()})" class="btn btn-primary">Xác nhận</a>
+                                            <a href="@Url.Action("DuyetDon","Home",new { id = dh.OrderID.Trim()})" class="btn btn-primary">Xác nhận</a>
                                         </div>
                                     </div>
                                 </div>

@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Topzone - Trang quản lý</title>
+    <title>Thành Đạt - Trang quản lý</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.0.0/css/tempus-dominus.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
     <script>
         imgInp.onchange = evt => {
             const [file] = imgInp.files
@@ -90,7 +94,7 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Tổng quan
                         </a>
-                        <a class="nav-link" href="@Url.Action("Index","DonDatHangs")">
+                        <a class="nav-link" href="@Url.Action("Index","Orders")">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
                             Đơn hàng
                         </a>
@@ -101,36 +105,103 @@
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link" href="@Url.Action("Index","SanPhams")">
+                                <a class="nav-link" href="@Url.Action("Index","Products")">
                                     Quản lý sản phẩm
                                 </a>
-                                <a class="nav-link" href="@Url.Action("Index","PhieuNhaps")">
+                                <a class="nav-link" href="@Url.Action("Index","Receipts")">
                                     Nhập hàng
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","Promotions")">
+                                    Khuyến mãi
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","Categories")">
+                                    Danh mục sản phẩm
                                 </a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="@Url.Action("Index","KhachHangs")">
+                        <a class="nav-link" href="@Url.Action("Index","Customers")">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
                             Khách hàng
                         </a>
-                        <a class="nav-link" href="@Url.Action("Index","KhachHangs")">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-ticket"></i></div>
-                            Khuyến mãi
-                        </a>
-                        <a class="nav-link" href="@Url.Action("Index","TaiKhoans")">
+                        <a class="nav-link" href="@Url.Action("Index","AdminAccounts")">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
                             Tài khoản người dùng
                         </a>
-                        <a class="nav-link" href="@Url.Action("BaoCao","Home")" ">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-newspaper"></i></div>
                             Báo cáo
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link" href="@Url.Action("DoanhThu","BaoCao")">
+                                    Doanh thu
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","Payments")">
+                                    Danh sách khách hàng
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
+                                    Danh sách sản phẩm
+                                </a>
+                            </nav>
+                        </div>
+                        @*Multilist*@
+                        <!--<a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages5" aria-expanded="true" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><svg class="svg-inline--fa fa-book-open" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book-open" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"></path></svg>--><!-- <i class="fas fa-book-open"></i> Font Awesome fontawesome.com --><!--</div>
+                            Pages
+                            <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
+                        </a>
+                        <div class="collapse show" id="collapsePages5" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion" style="">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    Authentication
+                                    <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="login.html">Login</a>
+                                        <a class="nav-link" href="register.html">Register</a>
+                                        <a class="nav-link" href="password.html">Forgot Password</a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    Error
+                                    <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="401.html">401 Page</a>
+                                        <a class="nav-link" href="404.html">404 Page</a>
+                                        <a class="nav-link" href="500.html">500 Page</a>
+                                    </nav>
+                                </div>
+                            </nav>
+                        </div>-->
+                        @*Multilist*@
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
+                            Danh mục
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link" href="@Url.Action("Index","Branches")">
+                                    Chi nhánh
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","Payments")">
+                                    Hình thức thanh toán
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
+                                    Hình thức vận chuyển
+                                </a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-question"></i></div>
                             Trợ giúp
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                                 <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DangNhap.htm">
                                     Đăng nhập
@@ -180,7 +251,7 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Topzone 2024</div>
+                        <div class="text-muted">Copyright &copy; ThanhDat 2024</div>
                         <div>
                             <a href="#">Chính sách bảo mật</a>
                             &middot;
@@ -199,6 +270,7 @@
     <script src="~/Scripts/demo/chart-pie-demo.js"></script>
     <script src="~/Scripts/demo/datatables-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="~/Scripts/datatables-simple-demo.js"></script>
+
+
 </body>
 </html>

@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "BaoCaoDT";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<main>
+    <div class="justify-content-center align-content-center h-auto overflow-hidden">
+        <div class="mt-2 mb-2"><a href="@Url.Action("DoanhThu","BaoCao")" class="btn btn-outline-dark">Quay lại</a></div>
+        <section class="h-auto overflow-hidden" aria-labelledby="gettingStartedTitle">
+            @{ string name = ViewBag.Name;
+                string link = "";
+                if (ViewBag.fromDate == null || ViewBag.toDate == null)
+                {
+                    link = "http://localhost/ReportServer/Pages/ReportViewer.aspx?%2fDemoReport%2f" + name + "&rs:Command=Render&rs:Embed=true";
+                }
+                else
+                {
+                    link = "http://localhost/ReportServer/Pages/ReportViewer.aspx?%2fDemoReport%2f" + name + "&FromDate="+ViewBag.fromDate+"&ToDate="+ ViewBag.toDate + "&rs:Command=Render&rs:Embed=true";
+                }
+
+
+
+            }
+            <iframe style="height: 65vw; border: none; width:100%" src="@link"></iframe>
+        </section>
+    </div>
+</main>

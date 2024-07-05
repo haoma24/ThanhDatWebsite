@@ -28,11 +28,11 @@
                                 <div><p class="text-danger fw-bold">@ViewBag.msg</p></div>
                                 <div><p class="text-success fw-bold">@ViewBag.success</p></div>
                                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                @Html.TextBox("TenTK", null, new { @class = "form-control" })
+                                @Html.TextBox("TenTK", "employee@gmail.com", new { @class = "form-control" })
                             </div>
                             <div class="col-12">
                                 <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
-                                @Html.TextBox("MK", null, new { @class = "form-control", type = "password" })
+                                @Html.TextBox("MK", "123456", new { @class = "form-control", type = "password" })
                             </div>
                             <div class="col-12">
                                 <div class="form-check">

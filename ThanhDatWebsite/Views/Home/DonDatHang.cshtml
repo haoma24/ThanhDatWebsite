@@ -1,0 +1,82 @@
+﻿@model ThanhDatWebsite.Models.DonHangModel
+@using System.Globalization
+@{
+    ViewBag.Title = "Đơn đặt hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container h-100 w-auto">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+            <div class="card card-stepper w-auto shadow" style="border-radius: 16px;">
+                <div class="card-header p-4 w-auto">
+                    <div>
+                        <label for="email" class="form-label">Mã đơn hàng <span class="text-danger">*</span></label>
+                        <div class="">
+                            @using (Html.BeginForm("DonDatHang", "Home", FormMethod.Post, new { @class = "d-flex justify-content-between" }))
+                            {
+                                @Html.TextBox("MaDH", null, new { @class = "form-control" })
+                                <button id="btnTraCuu" class="btn btn-outline-dark" type="submit">Tra cứu</button>
+                            }
+                            <p></p>
+                        </div>
+                    </div>
+                    <hr class="" />
+                    <div class="d-flex justify-content-between align-items-center w-auto">
+                        @foreach (var DH in Model.DH)
+                        {
+                            <div class="d-inline-grid">
+                                <p class="text-muted mb-2"> Mã đơn hàng <span class="fw-bold text-body">@DH.OrderID</span></p>
+                                <p class="text-muted mb-0"> Ngày đặt <span class="fw-bold text-body">@DH.OrderDate</span> </p>
+                                <hr />
+                                <p class="text-muted mb-0"> Người nhận <span class="fw-bold text-body">@DH.Customers.FullName</span> </p>
+                                <p class="text-muted mb-0"> Địa chỉ <span class="fw-bold text-body">@DH.Customers.Address</span> </p>
+                                <p class="text-muted mb-0"> Số điện thoại <span class="fw-bold text-body">@DH.Customers.Phone</span> </p>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="card-body p-4 w-auto">
+                    <div class="d-flex flex-row mb-4 pb-2">
+
+                        @foreach (var DH in Model.DH)
+                        {
+                            <div class="flex-fill">
+                                <div id="parent" class="d-flex w-100">
+                                    <div id="child1" class="w-75">
+                                        @foreach (var SP in Model.SanPham)
+                                        {
+                                            <div class="d-flex mt-3">
+                                                <div class="me-3 w-25"><img width="100" src="@SP.Image" /></div>
+                                                <div class="text-center align-content-center">
+                                                    <p>@SP.ProductName</p>
+                                                    <p>@SP.UnitPrice</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div id="child2" class="text-end w-25 d-grid">
+                                        @foreach (var CTDH in Model.CTDH)
+                                        {
+                                            <div class="mt-3">x @CTDH.Quantity</div>
+                                            <div>@string.Format("{0:C0}", CTDH.TotalPrice)</div>
+                                        }
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="text-end">
+                                    <h4 class="mb-3"> @string.Format("{0:C0}", DH.TotalAmount) <span class="small text-muted">  (@DH.Payment.Payment1) </span></h4>
+                                    <p class="text-muted">Tình trạng: <span class="badge bg-secondary">@DH.Status</span></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

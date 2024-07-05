@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ThanhDatWebsite.Receipts>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table table-striped table-hover table-light overflow-scroll table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceiptDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Branches.BranchName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceiptDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Branches.BranchName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID }) |
+            <a href="@Url.Action("Index","ReceiptDetails",new { id=item.ReceiptID })">Details</a> |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReceiptID })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "NgayBaoCao";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<style>
+    label {
+        margin-left: 20px;
+    }
+
+    #datepicker {
+        width: 180px;
+        margin: 0 0 0 5px;
+    }
+
+        #datepicker > span:hover {
+            cursor: pointer;
+        }
+
+    #datepicker2 {
+        width: 180px;
+        margin: 0 0 0 5px;
+    }
+
+        #datepicker2 > span:hover {
+            cursor: pointer;
+        }
+</style>
+<script>
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var startDate = new Date(currYear, currMonth, 1);
+    var lastDate = new Date(currYear, currMonth + 1, 0);
+    $(function () {
+        $("#datepicker").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'dd/mm/yyyy',
+        }).datepicker('setDate', startDate);
+        $("#datepicker2").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'dd/mm/yyyy',
+        }).datepicker('setDate', lastDate);
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Show the modal
+        var myModal = new bootstrap.Modal(document.getElementById('datetimeModal'));
+        myModal.show();
+    });
+</script>
+@{ string controllerName = ViewBag.viewName;}
+@using (Html.BeginForm(controllerName, "BaoCao", FormMethod.Post))
+{
+    <div class="modal fade" id="datetimeModal" tabindex="-1" aria-labelledby="datetimeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="datetimeModalLabel">Chọn ngày xem báo cáo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center align-content-center">
+                    <label>Từ:</label>
+                    <div id="datepicker" class="input-group date justify-content-center align-items-center align-content-center" data-date-format="dd-mm-yyyy">
+                        @Html.TextBox("fromDate", null, new { @class = "form-control", placeholder = "Ngày bắt đầu" })
+                        <span class="input-group-addon btn btn-outline-dark"><i class="fa-solid fa-calendar-days"></i></span>
+                    </div>
+                    <label>Đến:</label>
+                    <div id="datepicker2" class="input-group date justify-content-center align-items-center align-content-center" data-date-format="dd-mm-yyyy">
+                        @Html.TextBox("toDate", null, new { @class = "form-control", placeholder = "Ngày kết thúc" })
+                        <span class="input-group-addon ms-0 btn btn-outline-dark"><i class="fa-solid fa-calendar-days "></i></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

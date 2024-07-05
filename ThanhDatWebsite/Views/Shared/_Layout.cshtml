@@ -55,23 +55,27 @@
                 }
             });
         });
+        window.addEventListener('load', function () {
+            document.getElementById('loadingImg').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        });
+
+
     </script>
 </head>
 <body class="pt-5 bg-white">
-    <nav class="navbar navbar-expand-md bg-white navbar-light shadow fixed-top">
+    <nav class="navbar navbar-expand-md bg-white navbar-light fixed-top">
         <div class="container">
-                <button class="navbar-toggler position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                    <span class="navbar-toggler-icon" style="color:black;"></span>
-                </button>
-                <div class="logo">
-                    <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
-                </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon" style="color:black;"></span>
+            </button>
+            <div class="logo">
+                <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
+            </div>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="~/">Trang chủ</a></li>
                     <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("TraCuuDonDatHang","Home")"><i class="fa-solid fa-truck-fast" style="color:black"></i> Tra cứu đơn hàng</a></li>
-                    <li class="mx-2" nav-item><a class="search-cart-text nav-link text-decoration-none active text-dark" runat="server" href="@Url.Action("DangNhap","Home")">Tìm kiếm</a></li>
-                    <li class="mx-2" nav-item><a class="search-cart-text nav-link text-decoration-none active text-dark" runat="server" href="@Url.Action("GioHang","GioHang")">Giỏ hàng</a></li>
                 </ul>
             </div>
             <div class="search-cart-user d-flex justify-content-between align-items-center">
@@ -91,124 +95,28 @@
             </div>
 
             <div class="d-none spinner-grow text-light"></div>
+
         </div>
     </nav>
-    
+
     <div class="container body-content">
-        @RenderBody()
+        <div id="loadingImg">
+            <div class="spinner">
+            <div class="cube cube1"></div>
+            <div class="cube cube2"></div>
+            <div class="cube cube3"></div>
+            <div class="cube cube4"></div>
+            <div class="cube cube5"></div>
+            <div class="cube cube6"></div>
+            <div class="cube cube7"></div>
+            <div class="cube cube8"></div>
+            <div class="cube cube9"></div>
+        </div>
+        </div>
+        <div id="content">@RenderBody()</div>
+        
         <hr />
-        <footer class="text-center text-lg-start bg-body-tertiary text-muted">
-            <!-- Section: Social media -->
-            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-                <!-- Left -->
-                <div class="me-5 d-none d-lg-block">
-                    <span>Get connected with us on social networks:</span>
-                </div>
-                <!-- Left -->
-                <!-- Right -->
-                <div>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-google"></i>
-                    </a>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="" class="me-4 text-reset">
-                        <i class="fab fa-github"></i>
-                    </a>
-                </div>
-                <!-- Right -->
-            </section>
-            <!-- Section: Social media -->
-            <!-- Section: Links  -->
-            <section class="">
-                <div class="container text-center text-md-start mt-5">
-                    <!-- Grid row -->
-                    <div class="row mt-3">
-                        <!-- Grid column -->
-                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                            <!-- Content -->
-                            <h6 class="text-uppercase fw-bold mb-4">
-                                <i class="fas fa-gem me-3"></i>Thanh Dat
-                            </h6>
-                            <p>
-                                Cửa hàng bán điện thoại uy tín với 3 chi nhánh khắp Tp Hồ Chí Minh.
-                                Chuyên các dòng điện thoại Apple chính hãng
-                            </p>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                            <!-- Links -->
-                            <h6 class="text-uppercase fw-bold mb-4">
-                                Products
-                            </h6>
-                            <p>
-                                <a href="#!" class="text-reset">iPhones</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">iPads</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">Laptops</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">Watchs</a>
-                            </p>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                            <!-- Links -->
-                            <h6 class="text-uppercase fw-bold mb-4">
-                                Useful links
-                            </h6>
-                            <p>
-                                <a href="#!" class="text-reset">Pricing</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">Settings</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">Orders</a>
-                            </p>
-                            <p>
-                                <a href="#!" class="text-reset">Help</a>
-                            </p>
-                        </div>
-                        <!-- Grid column -->
-                        <!-- Grid column -->
-                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                            <!-- Links -->
-                            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                            <p><i class="fas fa-home me-3"></i> VietNam, HCMC</p>
-                            <p>
-                                <i class="fas fa-envelope me-3"></i>
-                                thanhdat.com
-                            </p>
-                            <p><i class="fas fa-phone me-3"></i> + 19006868</p>
-                        </div>
-                        <!-- Grid column -->
-                    </div>
-                    <!-- Grid row -->
-                </div>
-            </section>
-            <!-- Section: Links  -->
-            <!-- Copyright -->
-            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-                © 2024 Copyright: Ma Di Hao
-            </div>
-            <!-- Copyright -->
-        </footer>
+
         <script>
             fetch('../Scripts/dvhcvn.json')
                 .then((response) => response.json())
@@ -263,6 +171,118 @@
         </script>
 
     </div>
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <!-- Left -->
+            <div class="me-5 d-none d-lg-block">
+                <span>Get connected with us on social networks:</span>
+            </div>
+            <!-- Left -->
+            <!-- Right -->
+            <div>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <!-- Right -->
+        </section>
+        <!-- Section: Social media -->
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>Thanh Dat
+                        </h6>
+                        <p>
+                            Cửa hàng bán điện thoại uy tín với 3 chi nhánh khắp Tp Hồ Chí Minh.
+                            Chuyên các dòng điện thoại Apple chính hãng
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Products
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">iPhones</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">iPads</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Laptops</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Watchs</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Useful links
+                        </h6>
+                        <p>
+                            <a href="#!" class="text-reset">Pricing</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Settings</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Orders</a>
+                        </p>
+                        <p>
+                            <a href="#!" class="text-reset">Help</a>
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i> VietNam, HCMC</p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            thanhdat.com
+                        </p>
+                        <p><i class="fas fa-phone me-3"></i> + 19006868</p>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            © 2024 Copyright: Ma Di Hao
+        </div>
+        <!-- Copyright -->
+    </footer>
 
 </body>
 

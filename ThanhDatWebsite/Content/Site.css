@@ -70,6 +70,95 @@ textarea {
     width: 18px;
     height: 18px;
 }
+#content {
+    display:none;
+}
+#content2 {
+    display: none;
+}
+#loadingImg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loadingImg2 {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    margin: 100px auto;
+}
+
+.cube {
+    width: 33%;
+    height: 33%;
+    background-color: #3498db;
+    float: left;
+    animation: sk-cubeGrid 1.3s infinite ease-in-out;
+}
+
+.cube1 {
+    animation-delay: 0.2s;
+}
+
+.cube2 {
+    animation-delay: 0.3s;
+}
+
+.cube3 {
+    animation-delay: 0.4s;
+}
+
+.cube4 {
+    animation-delay: 0.1s;
+}
+
+.cube5 {
+    animation-delay: 0.2s;
+}
+
+.cube6 {
+    animation-delay: 0.3s;
+}
+
+.cube7 {
+    animation-delay: 0s;
+}
+
+.cube8 {
+    animation-delay: 0.1s;
+}
+
+.cube9 {
+    animation-delay: 0.2s;
+}
+
+@keyframes sk-cubeGrid {
+    0%, 70%, 100% {
+        transform: scale3D(1, 1, 1);
+    }
+
+    35% {
+        transform: scale3D(0, 0, 1);
+    }
+}
+
 
 .search-sp {
     display: inline-block;
@@ -116,16 +205,18 @@ textarea {
     #search-cart {
         font-size: 16px !important;
     }
-    .product-slider{
-        display:none;
+    #category .col-2{
+        font-size: 11px !important;
+    }
+    .product-slider {
+        display: none;
     }
     .Iphone{
         display:flex !important;
     }
     .logo {
         display:flex;
-        position:relative;
-        width:100%;
+        width:50%;
         justify-content: center;
     }
     .ip-item-mobile {
@@ -142,8 +233,8 @@ textarea {
     #imgCart {
         width: 40%;
     }
-    .search-cart-user{
-        display:none !important
+    .container{
+        display:flex;
     }
 }
 .ip-item {

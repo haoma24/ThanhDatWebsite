@@ -35,6 +35,28 @@ namespace ThanhDatWebsite.Controllers
         {
             return View();
         }
+        public ActionResult TraCuuDonDatHang()
+        {
+            return View();
+        }
+        public ActionResult DonDatHang(FormCollection form)
+        {
+            string MaDH = form["MaDH"];
+            DonHangModel model = new DonHangModel();
+            model.DH = db.Orders.Where(x => x.OrderID == MaDH.TrimEnd());
+            model.CTDH = db.OrderDetails.Where(x => x.OrderID == MaDH.TrimEnd());
+            List<string> MaSP = db.OrderDetails.Where(x => x.OrderID == MaDH.TrimEnd()).Select(x => x.ProductID).ToList();
+            List<Products> dsSanPham = new List<Products>();
+            for (int i = 0; i < MaSP.Count; i++)
+            {
+                var ID = MaSP[i].TrimEnd();
+                Products SP = db.Products.Where(x => x.ProductID == ID).FirstOrDefault();
+                dsSanPham.Add(SP);
+                model.SanPham = dsSanPham;
+
+            }
+            return View(model);
+        }
         public ActionResult KiemTraUser(FormCollection form)
         {
             string TK = form["TenTK"];
@@ -98,10 +120,10 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult DatHang(FormCollection form)
         {
+            //NOTE
             List<GioHangModel> gioHangModels = (List<GioHangModel>)Session["cart"];
             Orders dh = new Orders();
             Customers kh = new Customers();
-            OrderDetails ctdh = new OrderDetails();
             string MaDH = IdIncrementer.idincreament("Orders");
             string MaKH = IdIncrementer.idincreament("Customers");
             string NgayDH = DateTime.Now.ToString("dd/MM/yyyy");
@@ -129,12 +151,14 @@ namespace ThanhDatWebsite.Controllers
                 double TriGia = 0;
                 foreach (var item in gioHangModels)
                 {
-                    ctdh.ProductID = db.Products.Where(x => x.ProductID == item.Item.ProductID).Select(x => x.ProductID).First();
+                    OrderDetails ctdh = new OrderDetails();
+                    var sp = db.Products.Find(item.Item.ProductID);
+                    ctdh.ProductID = sp.ProductID;
                     ctdh.OrderID = MaDH;
                     ctdh.Quantity = item.Quantity;
                     ctdh.UnitPrice = item.Item.UnitPrice;
                     ctdh.TotalPrice = item.Price;
-                    TriGia += (double)ctdh.TotalPrice;
+                    TriGia += (double)ctdh.TotalPrice;  
                     db.OrderDetails.Add(ctdh);
                     db.SaveChanges();
                 }
@@ -165,7 +189,9 @@ namespace ThanhDatWebsite.Controllers
                 double TriGia = 0;
                 foreach (var item in gioHangModels)
                 {
-                    ctdh.ProductID = db.Products.Where(x => x.ProductID == item.Item.ProductID).Select(x => x.ProductID).First();
+                    OrderDetails ctdh = new OrderDetails();
+                    var sp = db.Products.Find(item.Item.ProductID);
+                    ctdh.ProductID = sp.ProductID;
                     ctdh.OrderID = MaDH;
                     ctdh.Quantity = item.Quantity;
                     ctdh.UnitPrice = item.Item.UnitPrice;
@@ -184,8 +210,18 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult Dashboard()
         {
-            var DonDatHang = db.Orders.OrderBy(x => x.OrderID);
+            var DonDatHang = db.Orders.OrderByDescending(x => x.Status);
             return View(DonDatHang.ToList());
+        }
+        public ActionResult DuyetDon(string id)
+        {
+            Orders dh = db.Orders.Find(id);
+            if (dh.Status == "Đang xử lý")
+                dh.Status = "Đã nhận";
+            else 
+                dh.Status = "Đang giao hàng";
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
         }
 
     }

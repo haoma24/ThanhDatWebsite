@@ -3,7 +3,7 @@
     ViewBag.Title = "Thành Đạt store";
 }
 
-<main class="">
+<main>
     <div id="carouselExampleInterval" class="carousel slide" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active" data-bs-interval="3000">
@@ -27,7 +27,7 @@
     </div>
     <!-- The Modal -->
     <div class="modal fade mt-4" id="myModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-transparent ">
 
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "d-flex justify-content-center text-center gap-3" }))
@@ -46,7 +46,7 @@
         <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPad"><img class="w-100" src="~/Media/IPad_Desktop.png" /></a>iPad</div>
         <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Mac"><img class="w-100" src="~/Media/Mac_Desktop.png" /></a>Macbook</div>
         <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Watch"><img class="w-100" src="~/Media/Watch_Desktop.png" /></a>Watch</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Watch","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe, loa</div>
+        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Watch","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe</div>
         <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Watch","Home")"><img class="w-100" src="~/Media/PK.png" /></a>Phụ kiện</div>
     </div>
     <div class="Iphone justify-content-between d-flex flex-wrap position-sticky row overflow-hidden">

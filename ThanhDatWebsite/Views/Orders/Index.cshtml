@@ -1,0 +1,110 @@
+﻿@model IEnumerable<ThanhDatWebsite.Orders>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-light overflow-scroll d-inline-block table-bordered">
+        <tr>
+            <th class="text-nowrap">
+                Mã đơn hàng
+            </th>
+            <th class="text-nowrap">
+                Ngày đặt
+            </th>
+            <th class="text-nowrap">
+                Người nhận
+            </th>
+            <th class="text-nowrap">
+                Sđt nhận
+            </th>
+            <th class="text-nowrap">
+                Địa chỉ nhận
+            </th>
+            <th class="text-nowrap">
+                Chi nhánh đặt
+            </th>
+            <th class="text-nowrap">
+                Tổng tiền
+            </th>
+            <th class="text-nowrap">
+                Hình thức vận chuyển
+            </th>
+            <th class="text-nowrap">
+                Hình thức thanh toán
+            </th>
+            <th class="text-nowrap">
+                Tình trạng
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderID)
+                </td>
+                <td>
+                    @Convert.ToDateTime(item.OrderDate).ToString("dd/MM/yyyy")
+                </td>
+                <td class="text-nowrap">
+                    @Html.DisplayFor(modelItem => item.Customers.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customers.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customers.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Branches.BranchName)
+                </td>
+                <td class="text-nowrap">
+                    @string.Format("{0:C0}", item.TotalAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryMethod.DeliveryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Payment.Payment1)
+                </td>
+                @{
+                    string badge = "";
+                }
+                @if (item.Status == "Đã nhận")
+                {
+                    badge = "badge bg-primary";
+
+
+                }
+                else if (item.Status == "Đang xử lý")
+                {
+                    badge = "badge bg-secondary";
+                }
+                else
+                {
+                    badge = "badge bg-success";
+
+                }
+                <td class="text-nowrap">
+                    <span class="@badge">@Html.DisplayFor(modelItem => item.Status)</span>
+                </td>
+                <td class="text-nowrap">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+                    <a href="@Url.Action("Index","OrderDetails",new { id=item.OrderID })">Details</a> |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
