@@ -120,7 +120,7 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult DatHang(FormCollection form)
         {
-            //NOTE
+            //NOTE LAN 2
             List<GioHangModel> gioHangModels = (List<GioHangModel>)Session["cart"];
             Orders dh = new Orders();
             Customers kh = new Customers();
