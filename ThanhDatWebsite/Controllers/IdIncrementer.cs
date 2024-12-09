@@ -70,10 +70,10 @@ namespace ThanhDatWebsite.Controllers
                     // Tạo Id mới
                     newId = "KH" + newNumericId.ToString("D4");
                 }
-                if (TenBang == "AdminAccounts")
+                if (TenBang == "Accounts")
                 {
                     // Lấy tất cả các Id từ bảng Orders và bỏ hai ký tự đầu, sau đó chuyển phần còn lại thành số nguyên
-                    var allIds = context.AdminAccounts
+                    var allIds = context.Accounts
                                 .Select(o => o.AccountID)
                                 .ToList();
 

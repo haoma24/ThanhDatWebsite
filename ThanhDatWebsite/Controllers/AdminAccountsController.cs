@@ -17,7 +17,7 @@ namespace ThanhDatWebsite.Controllers
         // GET: AdminAccounts
         public ActionResult Index()
         {
-            return View(db.AdminAccounts.ToList());
+            return View(db.Accounts.ToList());
         }
 
         // GET: AdminAccounts/Details/5
@@ -27,7 +27,7 @@ namespace ThanhDatWebsite.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AdminAccounts adminAccounts = db.AdminAccounts.Find(id);
+            Accounts adminAccounts = db.Accounts.Find(id);
             if (adminAccounts == null)
             {
                 return HttpNotFound();
@@ -46,11 +46,11 @@ namespace ThanhDatWebsite.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AccountID,Email,Phone,Password,Role")] AdminAccounts adminAccounts)
+        public ActionResult Create([Bind(Include = "AccountID,Email,Phone,Password,Role")] Accounts adminAccounts)
         {
             if (ModelState.IsValid)
             {
-                db.AdminAccounts.Add(adminAccounts);
+                db.Accounts.Add(adminAccounts);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -65,7 +65,7 @@ namespace ThanhDatWebsite.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AdminAccounts adminAccounts = db.AdminAccounts.Find(id);
+            Accounts adminAccounts = db.Accounts.Find(id);
             if (adminAccounts == null)
             {
                 return HttpNotFound();
@@ -78,7 +78,7 @@ namespace ThanhDatWebsite.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AccountID,Email,Phone,Password,Role")] AdminAccounts adminAccounts)
+        public ActionResult Edit([Bind(Include = "AccountID,Email,Phone,Password,Role")] Accounts adminAccounts)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace ThanhDatWebsite.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AdminAccounts adminAccounts = db.AdminAccounts.Find(id);
+            Accounts adminAccounts = db.Accounts.Find(id);
             if (adminAccounts == null)
             {
                 return HttpNotFound();
@@ -109,8 +109,8 @@ namespace ThanhDatWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            AdminAccounts adminAccounts = db.AdminAccounts.Find(id);
-            db.AdminAccounts.Remove(adminAccounts);
+            Accounts adminAccounts = db.Accounts.Find(id);
+            db.Accounts.Remove(adminAccounts);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

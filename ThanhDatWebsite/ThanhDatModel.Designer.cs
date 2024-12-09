@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\haoma\OneDrive - UFM\aHocHanh\0_THNN\ThanhDatWebsite\ThanhDatWebsite\ThanhDatModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\haoma\OneDrive - UFM\aHocHanh\0_KLTN\2121012488_KLTN\ThanhDatWebsite\ThanhDatWebsite\ThanhDatModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

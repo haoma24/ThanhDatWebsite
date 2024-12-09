@@ -17,6 +17,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="~/Scripts/tinh_tp.json"></script>
     <script type="text/javascript" src="~/Scripts/dvhcvn.json"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script type="text/javascript">
 
         //Ham show div khi checked Giao Hang
@@ -65,37 +66,74 @@
 </head>
 <body class="pt-5 bg-white">
     <nav class="navbar navbar-expand-md bg-white navbar-light fixed-top">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <div class="container d-flex justify-content-end">
+            <button class="navbar-toggler start-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasLg" aria-controls="navbarOffcanvasLg">
                 <span class="navbar-toggler-icon" style="color:black;"></span>
             </button>
-            <div class="logo">
+            <div class="logo mx-auto ms-md-0">
                 <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
             </div>
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="~/">Trang chủ</a></li>
-                    <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("TraCuuDonDatHang","Home")"><i class="fa-solid fa-truck-fast" style="color:black"></i> Tra cứu đơn hàng</a></li>
-                </ul>
+            <div class="offcanvas offcanvas-start d-block d-md-none" tabindex="-1" id="navbarOffcanvasLg" aria-labelledby="navbarOffcanvasLgLabel">
+                <div class="offcanvas-header">
+                    <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="userAvt gap-3" style="display:none">
+                        <img class="userImage me-1" src="" />
+                        <span>Hello,&nbsp;</span>
+                        <span class="userName"></span>
+                    </div>
+                    <div class="horizontal-divider"></div>
+                    <ul class="navbar-nav">
+                        <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="~/"><i class="fa-solid fa-house me-1"></i> Trang chủ</a></li>
+                        <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("GioHang","GioHang")"><i class="fa-solid fa-cart-shopping me-1" style="color: #000000;"></i> Giỏ hàng</a></li>
+                        <li class="mx-2" nav-item><a class="Login nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("DangNhap","Home")"><i class="ps-1 text-black fa fa-user me-1"></i> Đăng nhập</a></li>
+                        <li class="" nav-item>
+                            <button id="OpenModal" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
+                                <i class="fa-solid fa-magnifying-glass me-1" style="color: #000000;"></i>
+                                <span class="fw-bold fs-6 text-dark">Tìm kiếm</span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
-            <div class="search-cart-user d-flex justify-content-between align-items-center">
-                <div>
+            <div class="search-cart-user d-md-flex d-none mt-1 me-1 justify-content-between align-items-center">
+                <div class="position-relative">
                     <button id="OpenModal" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
                         <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
                     </button>
+                    <div id="userDropdown" class="position-absolute bg-light me-5 py-2 rounded-3 shadow border border-opacity-25 border-dark">
+                        <div class="px-3">
+                            <div><img class="userImage w-50 h-50 rounded-2" src=""/></div>
+                            <div class="mt-2"><span class="userName fw-bold fs-5"></span></div>
+                            <div><span class="userMail text-gray-500"></span></div>
+                        </div>
+                        <div class="horizontal-divider"></div>
+                        <ul class="list-unstyled">
+                            <li class="py-2 px-3 nav-item"><a class="text-decoration-none text-dark" href="#"><i class="me-2 text-dark fa fa-user"></i>Hồ sơ</a></li>
+                            <li class="py-2 px-3 nav-item"><a class="text-decoration-none text-dark" href="#"><i class="me-2 text-dark fa-solid fa-gear"></i>Tùy chỉnh</a></li>
+                            <li class="py-2 px-3"><div class="horizontal-divider"></div></li>
+                            <li class="py-2 px-3 nav-item"><a id="btnLogout" class="text-decoration-none text-dark" href="@Url.Action("DangNhap","Home")"><i class="me-2 text-dark fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="vertical-divider"></div>
                 <a href="@Url.Action("GioHang","GioHang")" class="cart position-relative">
                     <i class="fa-solid fa-cart-shopping" style="color: #000000;"></i>
                 </a>
-                <div class="vertical-divider"></div>
-                <a href="@Url.Action("DangNhap","Home")" class="cart">
+                <div class="vertical-divider position-relative"></div>
+                <a href="@Url.Action("DangNhap","Home")" class="cart Login">
                     <i class="ps-1 text-black fa fa-user"></i>
                 </a>
+                <button class="border-0 bg-transparent" id="btnDropdown">
+                    <div class="userAvt" style="display:none">
+                        <img class="userImage" src="" />
+                    </div>
+                </button>
             </div>
-
             <div class="d-none spinner-grow text-light"></div>
-
         </div>
     </nav>
 
@@ -118,12 +156,111 @@
         <hr />
 
         <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                const btnLogout = document.getElementById('btnLogout');
+                if (btnLogout) {
+                    btnLogout.addEventListener('click', () => {
+                        localStorage.removeItem('authToken');
+                    })
+                }
+
+                const authToken = localStorage.getItem('authToken');
+
+                if (authToken) {
+                    const payload = parseJwt(authToken)
+                    const avatarUrl = payload.picture
+                    var elems = document.querySelectorAll('.userImage');
+                    elems.forEach(elem => {
+                        elem.src = '/Home/GetUserImage?url=' + encodeURIComponent(avatarUrl);
+                        elem.style.width = '30px';
+                        elem.style.height = '30px';
+                        elem.style.borderRadius = '50%'
+                    })
+                    var userAvts = document.querySelectorAll('.userAvt');
+                    userAvts.forEach(userAvt => {
+                        userAvt.style.display = 'block'
+                    })
+                    var Logins = document.querySelectorAll('.Login');
+                    Logins.forEach(Login => {
+                        Login.style.display = 'none';
+                    })
+                    var userNames = document.querySelectorAll('.userName');
+                    userNames.forEach(userName => {
+                        userName.textContent = payload.name;
+                    })
+                    var userMails = document.querySelectorAll('.userMail');
+                    userMails.forEach(userMail => {
+                        userMail.textContent = payload.email;
+                    })
+                }
+            });
+            
+            var btn = document.getElementById('btnDropdown');
+            var userDropdown = document.getElementById('userDropdown')
+            if (btn) {
+                btn.addEventListener('click', (event)=> {
+                    if (userDropdown.style.display === 'block')
+                        userDropdown.style.display = 'none';
+                    else
+                        userDropdown.style.display = 'block';
+                    event.stopPropagation();
+                })
+                
+            }
+            document.addEventListener("click", () => {
+                userDropdown.style.display = "none";
+            });
+            function handleCredentialResponse(response) {
+                // Phân tích token JWT
+                const credential = response.credential;
+                // Giải mã token để lấy thông tin người dùng
+                const payload = parseJwt(credential);
+
+                // Hiển thị thông tin người dùng
+                const avatarUrl = payload.picture
+                var elems = document.querySelectorAll('.userImage');
+                elems.forEach(elem => {
+                    elem.src = '/Home/GetUserImage?url=' + encodeURIComponent(avatarUrl);
+                    elem.style.width = '30px';
+                    elem.style.height = '30px';
+                    elem.style.borderRadius = '50%'
+                })
+                var userAvts = document.querySelectorAll('.userAvt');
+                userAvts.forEach(userAvt => {
+                    userAvt.style.display = 'block'
+                })
+                var Logins = document.querySelectorAll('.Login');
+                Logins.forEach(Login => {
+                    Login.style.display = 'none';
+                })
+
+                localStorage.setItem('authToken', credential);
+                localStorage.setItem('userName', payload.name);
+                localStorage.setItem('userImage', payload.picture);
+                localStorage.setItem('userMail', payload.email);
+            }
+
+            // Hàm để giải mã JWT
+            function parseJwt(token) {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                console.log(jsonPayload)
+                return JSON.parse(jsonPayload);
+            }
+
             fetch('../Scripts/dvhcvn.json')
                 .then((response) => response.json())
                 .then(data => {
                     console.log(data)
                     let provinces = data.data;
-                    provinces.map(value => document.getElementById('provinces').innerHTML += `<option value='${value.name}'>${value.name}</option>`);
+                    var provinceChkbox = document.getElementById('provinces')
+                    if (provinceChkbox) {
+                        provinces.map(value => provinceChkbox.innerHTML += `<option value='${value.name}'>${value.name}</option>`);
+                    }
                 })
                 .catch(error => {
                     console.error('Lỗi khi gọi API:', error);

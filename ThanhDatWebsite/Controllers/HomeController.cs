@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ThanhDatWebsite.Models;
@@ -11,13 +12,17 @@ namespace ThanhDatWebsite.Controllers
     public class HomeController : Controller
     {
         private thanhdatEntities db = new thanhdatEntities();
-        public ActionResult Index(FormCollection form)
+        public ActionResult Index()
+        {  
+            var sanPham2 = db.Products.OrderBy(x => x.CategoryID);       
+            return View(sanPham2.ToList());
+        }
+        public ActionResult TimKiem (FormCollection form)
         {
             string NoiDung = form["txtTimKiem"];
             if (string.IsNullOrEmpty(NoiDung))
             {
-                var sanPham2 = db.Products.OrderBy(x => x.CategoryID);
-                return View(sanPham2.ToList());
+                return RedirectToAction("Index");
             }
             var sanPham = from c in db.Products
                           where c.ProductName.Contains(NoiDung)
@@ -61,9 +66,9 @@ namespace ThanhDatWebsite.Controllers
         {
             string TK = form["TenTK"];
             string MK = form["MK"];
-            string Email = db.AdminAccounts.Where(x => x.Email == TK).Select(x => x.Email).FirstOrDefault();
-            string Pass = db.AdminAccounts.Where(x => x.Password == MK).Select(x => x.Password).FirstOrDefault();
-            string Loai = db.AdminAccounts.Where(x => x.Email == Email).Select(x => x.Role).FirstOrDefault();
+            string Email = db.Accounts.Where(x => x.Email == TK).Select(x => x.Email).FirstOrDefault();
+            string Pass = db.Accounts.Where(x => x.PasswordHash == MK).Select(x => x.PasswordHash).FirstOrDefault();
+            string Loai = db.Accounts.Where(x => x.Email == Email).Select(x => x.Role).FirstOrDefault();
             if (Email != null && Pass != null)
                 if (Loai == "ad" || Loai == "emp")
                     return RedirectToAction("Dashboard", "Home");
@@ -75,7 +80,7 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult DangKyUser(FormCollection form)
         {
-            AdminAccounts taiKhoan = new AdminAccounts();
+            Accounts taiKhoan = new Accounts();
             string TK = form["TenTK"].ToLower();
             string MK = form["MK"];
             string XacNhanMK = form["XacNhanMK"];
@@ -90,7 +95,7 @@ namespace ThanhDatWebsite.Controllers
                 ViewBag.err = "Email không hợp lệ!";
                 return View("DangKy");
             }
-            string ID = db.AdminAccounts.Where(x => x.Email.ToLower() == TK).Select(x => x.Email).FirstOrDefault();
+            string ID = db.Accounts.Where(x => x.Email.ToLower() == TK).Select(x => x.Email).FirstOrDefault();
             if (ID != null)
             {
                 ViewBag.err = "Tài khoản đã tồn tại!";
@@ -104,13 +109,12 @@ namespace ThanhDatWebsite.Controllers
             else
             {
 
-                ID = IdIncrementer.idincreament("AdminAccounts");
+                ID = IdIncrementer.idincreament("Accounts");
                 taiKhoan.AccountID = ID;
                 taiKhoan.Email = TK;
-                taiKhoan.Phone = "";
-                taiKhoan.Password = MK;
+                taiKhoan.PasswordHash = MK;
                 taiKhoan.Role = Loai;
-                db.AdminAccounts.Add(taiKhoan);
+                db.Accounts.Add(taiKhoan);
                 db.SaveChanges();
             }
 
@@ -120,7 +124,6 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult DatHang(FormCollection form)
         {
-            //NOTE LAN 2
             List<GioHangModel> gioHangModels = (List<GioHangModel>)Session["cart"];
             Orders dh = new Orders();
             Customers kh = new Customers();
@@ -222,6 +225,14 @@ namespace ThanhDatWebsite.Controllers
                 dh.Status = "Đang giao hàng";
             db.SaveChanges();
             return RedirectToAction("Dashboard");
+        }
+        public ActionResult GetUserImage(string url)
+        {
+            using (var client = new WebClient())
+            {
+                var imageBytes = client.DownloadData(url);
+                return File(imageBytes, "image/jpeg");
+            }
         }
 
     }

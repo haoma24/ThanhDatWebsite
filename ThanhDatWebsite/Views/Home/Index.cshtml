@@ -5,14 +5,14 @@
 
 <main>
     <div id="carouselExampleInterval" class="carousel slide" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="3000">
+        <div class="carousel-inner mt-2">
+            <div class="carousel-item active" data-bs-interval="5000">
                 <img src="~/Media/Slider_1.png" class="d-block w-100" alt="...">
             </div>
-            <div class="carousel-item" data-bs-interval="3000">
+            <div class="carousel-item" data-bs-interval="5000">
                 <img src="~/Media/Slider_2.png" class="d-block w-100" alt="...">
             </div>
-            <div class="carousel-item" data-bs-interval="3000">
+            <div class="carousel-item" data-bs-interval="5000">
                 <img src="~/Media/Slider_3.png" class="d-block w-100" alt="...">
             </div>
         </div>
@@ -27,10 +27,10 @@
     </div>
     <!-- The Modal -->
     <div class="modal fade mt-4" id="myModal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-transparent ">
+        <div class="modal-dialog modal-dialog-centered bg-transparent ">
+            <div class="modal-content bg-transparent border-0">
 
-                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "d-flex justify-content-center text-center gap-3" }))
+                @using (Html.BeginForm("TimKiem", "Home", FormMethod.Post, new { @class = "d-flex justify-content-center text-center gap-3" }))
                 {
                     @Html.TextBox("txtTimKiem", null, new { @class = "form-control", placeholder = "Tìm kiếm sản phẩm", style = "width:500px" })
                     <button type="submit" class="btn btn-outline-light">Tìm kiếm</button>
@@ -40,98 +40,165 @@
         </div>
     </div>
 
-    <div class=" text-center fw-bold fs-2"><p>Danh mục sản phẩm</p></div>
+    <div class=" text-center fw-bold fs-2 mt-3 ">Danh mục sản phẩm</div>
     <div id="category" class="row d-flex container justify-content-evenly ">
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPhone"><img class="w-100" src="~/Media/IP_Desktop.png" /></a>iPhone</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPad"><img class="w-100" src="~/Media/IPad_Desktop.png" /></a>iPad</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Mac"><img class="w-100" src="~/Media/Mac_Desktop.png" /></a>Macbook</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Watch"><img class="w-100" src="~/Media/Watch_Desktop.png" /></a>Watch</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Watch","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe</div>
-        <div class="col-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Watch","Home")"><img class="w-100" src="~/Media/PK.png" /></a>Phụ kiện</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPhone"><img class="w-100" src="~/Media/IP_Desktop.png" /></a>iPhone</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPad"><img class="w-100" src="~/Media/IPad_Desktop.png" /></a>iPad</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Mac"><img class="w-100" src="~/Media/Mac_Desktop.png" /></a>Macbook</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Watch"><img class="w-100" src="~/Media/Watch_Desktop.png" /></a>Watch</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe</div>
+        <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/PK.png" /></a>Phụ kiện</div>
     </div>
-    <div class="Iphone justify-content-between d-flex flex-wrap position-sticky row overflow-hidden">
+    <div class="Iphone d-flex d-md-none position-sticky row overflow-hidden">
         @foreach (var item in Model)
         {
-            <div class="ip-item-mobile mt-2 w-30 popover align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2 col-3">
-                <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-75" src="@item.Image" /></div>
+            <div class="col-6 col-md-4 col-lg-3 mt-2 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2 col-3">
+                <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
                 <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
                 <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
                 <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
             </div>
         }
     </div>
-    <div class="product-slider">
+    <div class="product-slider d-none d-md-block">
         <p class="fw-bold fs-3 text-danger">@ViewBag.msg</p>
-        <div id="iPhone" class="text-center fw-bold fs-2 mt-3"><p>Điện thoại</p></div>
-        <div class="container">
-            <div class="slider-wrapper">
-                <div class="image-list">
-                    @foreach (var item in Model.Where(x => x.CategoryID == "DMDT"))
-                    {
-                        <div class="image-item ip-item mt-2 w-30 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-1">
-                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-75" src="@item.Image" /></div>
-                            <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                            <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+        <div id="iPhone" class="text-center fw-bold fs-2 my-3">Điện thoại</div>
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMDT").Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < Model.Where(x => x.CategoryID == "DMDT").Count())
+                                {
+                                    var item = Model.Where(x => x.CategoryID == "DMDT").ElementAt(i + j);
+                                    <div class="col-6 col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
+                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
+                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice*item.)</div>
+                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    </div>
+                                }
+                            }
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
 
-        <div id="Mac" class="text-center fw-bold fs-2 mt-3"><p>Laptop</p></div>
-        <div class="container">
-            <div class="slider-wrapper">
-                <div class="image-list">
-                    @foreach (var item in Model.Where(x => x.CategoryID == "DMLT"))
-                    {
-                        <div class="image-item ip-item mt-2 w-30 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-1">
-                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-75" src="@item.Image" /></div>
-                            <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                            <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+        <div id="Mac" class="text-center fw-bold fs-2 my-3">Laptop</div>
+        <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMLT").Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < Model.Where(x => x.CategoryID == "DMLT").Count())
+                                {
+                                    var item = Model.Where(x => x.CategoryID == "DMLT").ElementAt(i + j);
+                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
+                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
+                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    </div>
+                                }
+                            }
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel2" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel2" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
-        <div id="iPad" class="text-center fw-bold fs-2 mt-3"><p>Máy tính bảng</p></div>
-        <div class="container">
-            <div class="slider-wrapper">
-                <div class="image-list">
-                    @foreach (var item in Model.Where(x => x.CategoryID == "DMMTB"))
-                    {
-                        <div class="image-item ip-item mt-2 w-30 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-1">
-                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-75" src="@item.Image" /></div>
-                            <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                            <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+        <div id="iPad" class="text-center fw-bold fs-2 my-3">Máy tính bảng</div>
+        <div id="productCarousel3" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMMTB").Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < Model.Where(x => x.CategoryID == "DMMTB").Count())
+                                {
+                                    var item = Model.Where(x => x.CategoryID == "DMMTB").ElementAt(i + j);
+                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
+                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
+                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    </div>
+                                }
+                            }
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel3" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel3" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
-        <div id="Watch" class="text-center fw-bold fs-2 mt-3"><p>Watch</p></div>
-        <div class="container">
-            <div class="slider-wrapper">
-                <div class="image-list">
-                    @foreach (var item in Model.Where(x => x.CategoryID == "DMPK"))
-                    {
-                        <div class="image-item ip-item mt-2 w-30 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-1">
-                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-75" src="@item.Image" /></div>
-                            <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                            <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+        <div id="Watch" class="text-center fw-bold fs-2 my-3">Watch</div>
+        <div id="productCarousel4" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMPK").Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < Model.Where(x => x.CategoryID == "DMPK").Count())
+                                {
+                                    var item = Model.Where(x => x.CategoryID == "DMPK").ElementAt(i + j);
+                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
+                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
+                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    </div>
+                                }
+                            }
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel4" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel4" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </div>
     <!-- PRODUCT -->
-
-
 </main>

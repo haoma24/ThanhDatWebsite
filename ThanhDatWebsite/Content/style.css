@@ -42,6 +42,75 @@
     --bs-danger: #dc3545;
     --bs-light: #f8f9fa;
     --bs-dark: #212529;
+    --bs-gray-100: rgb(243, 244, 246);
+    --bs-gray-200: rgb(229, 231, 235);
+    --bs-gray-300: rgb(209, 213, 219);
+    --bs-gray-400: rgb(156, 163, 175);
+    --bs-gray-500: rgb(107, 114, 128);
+    --bs-gray-600: rgb(75, 85, 99);
+    --bs-gray-700: rgb(55, 65, 81);
+    --bs-gray-800: rgb(31, 41, 55);
+    --bs-gray-900: rgb(17, 24, 39);
+    /* Red */
+    --bs-red-100: rgb(254, 226, 226);
+    --bs-red-200: rgb(254, 202, 202);
+    --bs-red-300: rgb(252, 165, 165);
+    --bs-red-400: rgb(248, 113, 113);
+    --bs-red-500: rgb(239, 68, 68);
+    --bs-red-600: rgb(220, 38, 38);
+    --bs-red-700: rgb(185, 28, 28);
+    --bs-red-800: rgb(153, 27, 27);
+    --bs-red-900: rgb(127, 29, 29);
+    /* Yellow */
+    --bs-yellow-100: rgb(254, 243, 199);
+    --bs-yellow-200: rgb(253, 230, 138);
+    --bs-yellow-300: rgb(252, 211, 77);
+    --bs-yellow-400: rgb(251, 191, 36);
+    --bs-yellow-500: rgb(245, 158, 11);
+    --bs-yellow-600: rgb(217, 119, 6);
+    --bs-yellow-700: rgb(180, 83, 9);
+    --bs-yellow-800: rgb(146, 64, 14);
+    --bs-yellow-900: rgb(120, 53, 15);
+    /* Green */
+    --bs-green-100: rgb(209, 250, 229);
+    --bs-green-200: rgb(167, 243, 208);
+    --bs-green-300: rgb(110, 231, 183);
+    --bs-green-400: rgb(52, 211, 153);
+    --bs-green-500: rgb(16, 185, 129);
+    --bs-green-600: rgb(5, 150, 105);
+    --bs-green-700: rgb(4, 120, 87);
+    --bs-green-800: rgb(6, 95, 70);
+    --bs-green-900: rgb(6, 78, 59);
+    /* Blue */
+    --bs-blue-100: rgb(219, 234, 254);
+    --bs-blue-200: rgb(191, 219, 254);
+    --bs-blue-300: rgb(147, 197, 253);
+    --bs-blue-400: rgb(96, 165, 250);
+    --bs-blue-500: rgb(59, 130, 246);
+    --bs-blue-600: rgb(37, 99, 235);
+    --bs-blue-700: rgb(29, 78, 216);
+    --bs-blue-800: rgb(30, 64, 175);
+    --bs-blue-900: rgb(30, 58, 138);
+    /* Purple */
+    --bs-purple-100: rgb(237, 233, 254);
+    --bs-purple-200: rgb(221, 214, 254);
+    --bs-purple-300: rgb(196, 181, 253);
+    --bs-purple-400: rgb(167, 139, 250);
+    --bs-purple-500: rgb(139, 92, 246);
+    --bs-purple-600: rgb(124, 58, 237);
+    --bs-purple-700: rgb(109, 40, 217);
+    --bs-purple-800: rgb(91, 33, 182);
+    --bs-purple-900: rgb(76, 29, 149);
+    /* Pink */
+    --bs-pink-100: rgb(252, 231, 243);
+    --bs-pink-200: rgb(251, 207, 232);
+    --bs-pink-300: rgb(249, 168, 212);
+    --bs-pink-400: rgb(244, 114, 182);
+    --bs-pink-500: rgb(236, 72, 153);
+    --bs-pink-600: rgb(219, 39, 119);
+    --bs-pink-700: rgb(190, 24, 93);
+    --bs-pink-800: rgb(157, 23, 77);
+    --bs-pink-900: rgb(131, 24, 67);
     --bs-primary-rgb: 13, 110, 253;
     --bs-secondary-rgb: 108, 117, 125;
     --bs-success-rgb: 25, 135, 84;
@@ -6618,6 +6687,7 @@ textarea.form-control-lg {
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: 100% 100%;
+    background-color: rgba(0, 0, 0, 0.125)
 }
 
 /* rtl:options: {
@@ -6629,11 +6699,11 @@ textarea.form-control-lg {
   } ]
 } */
 .carousel-control-prev-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23444444'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
 }
 
 .carousel-control-next-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23444444'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
 .carousel-indicators {
@@ -8013,7 +8083,6 @@ textarea.form-control-lg {
     --bs-border-opacity: 1;
     border-color: rgba(var(--bs-dark-rgb), var(--bs-border-opacity)) !important;
 }
-
 .border-white {
     --bs-border-opacity: 1;
     border-color: rgba(var(--bs-white-rgb), var(--bs-border-opacity)) !important;
@@ -8875,7 +8944,6 @@ textarea.form-control-lg {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
 }
-
 .text-black {
     --bs-text-opacity: 1;
     color: rgba(var(--bs-black-rgb), var(--bs-text-opacity)) !important;

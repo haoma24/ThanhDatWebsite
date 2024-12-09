@@ -1,9 +1,4 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
-}
+﻿
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -182,9 +177,6 @@ textarea {
         font-size: 0 !important; /*hide the text using font-size*/
     }
 
-    .Iphone{
-        display:none !important;
-    }
     .logo {
         width: 30%;
         justify-content: center;
@@ -195,48 +187,6 @@ textarea {
     }
 }
 
-@media only screen and (max-width: 768px) { /*SCREEN < px*/
-    .search-cart {
-        display: none !important;
-    }
-    .toggle-icon {
-        display: none !important;
-    }
-    #search-cart {
-        font-size: 16px !important;
-    }
-    #category .col-2{
-        font-size: 11px !important;
-    }
-    .product-slider {
-        display: none;
-    }
-    .Iphone{
-        display:flex !important;
-    }
-    .logo {
-        display:flex;
-        width:50%;
-        justify-content: center;
-    }
-    .ip-item-mobile {
-        font-size: 11px !important;
-        padding: 5px !important;
-        width: 30% !important;
-    }
-
-    .item-btn a {
-        font-size: 12px;
-    }
-
-
-    #imgCart {
-        width: 40%;
-    }
-    .container{
-        display:flex;
-    }
-}
 .ip-item {
     transition: transform 1s;
 }
@@ -440,6 +390,11 @@ body {
     height: 24px;
     margin: 0 15px;
 }
+.horizontal-divider {
+    border-top: 1px solid #ccc;
+    width: 100%;
+    margin: 5px 0;
+}
 
 /*==============PRODUCT SLIDER=================*/
 .slider-wrapper {
@@ -563,4 +518,14 @@ body {
     .slider-scrollbar .scrollbar-thumb {
         width: 20%;
     }
+}
+#userDropdown{
+    width: 200px;
+}
+.nav-item:hover{
+    background:#dfdfdf;
+    border-radius:10px;
+}
+#userDropdown{
+    display:none;
 }

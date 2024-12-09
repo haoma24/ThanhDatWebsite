@@ -12,24 +12,23 @@ namespace ThanhDatWebsite
     using System;
     using System.Collections.Generic;
     
-    public partial class Customers
+    public partial class Accounts
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customers()
+        public Accounts()
         {
-            this.Orders = new HashSet<Orders>();
+            this.Employees = new HashSet<Employees>();
+            this.Customers = new HashSet<Customers>();
         }
     
-        public string CustomerID { get; set; }
         public string AccountID { get; set; }
-        public string FullName { get; set; }
-        public string Phone { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
-        public string Sex { get; set; }
+        public string PasswordHash { get; set; }
+        public string Role { get; set; }
     
-        public virtual Accounts Accounts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Employees> Employees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Customers> Customers { get; set; }
     }
 }

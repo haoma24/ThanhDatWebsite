@@ -126,7 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdminAccounts.cs">
+    <Compile Include="Accounts.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -153,10 +153,14 @@
     <Compile Include="Controllers\PromotionsController.cs" />
     <Compile Include="Controllers\ReceiptDetailsController.cs" />
     <Compile Include="Controllers\ReceiptsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Customers.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DeliveryMethod.cs">
+      <DependentUpon>ThanhDatModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employees.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -167,6 +171,7 @@
     </Compile>
     <Compile Include="Models\DonHangModel.cs" />
     <Compile Include="Models\GioHangModel.cs" />
+    <Compile Include="Models\KhachHangModel.cs" />
     <Compile Include="OrderDetails.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
@@ -406,6 +411,8 @@
     <Content Include="Views\AdminAccounts\Index.cshtml" />
     <Content Include="Views\BaoCao\DoanhThu.cshtml" />
     <Content Include="Views\BaoCao\BaoCaoDT.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Home\TimKiem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

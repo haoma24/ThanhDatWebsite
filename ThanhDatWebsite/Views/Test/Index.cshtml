@@ -1,0 +1,207 @@
+﻿@model ThanhDatWebsite.Models.KhachHangModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<style>
+    .dropdown{
+        position:relative;
+    }
+
+    .dropdown2 {
+        position: relative;
+    }
+    .form-select:hover{
+        cursor:pointer;
+    }
+    .grid-kh {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+        position: absolute;
+    }
+        .grid-kh tr {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 200px;
+        }
+        .grid-kh tr:hover {
+            background-color:lightskyblue;
+            cursor:pointer;
+        }
+    .grid-sp {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+        position: absolute;
+    }
+
+        .grid-sp tr {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 200px;
+        }
+
+            .grid-sp tr:hover {
+                background-color: lightskyblue;
+                cursor: pointer;
+            }
+</style>
+<div class="d-flex justify-content-around">
+    <div class="dropdown border border-danger">
+        <div class="d-flex">
+            <div id="select-kh" class="form-select form-select-md col-3 d-flex mt-3 mb-1">Mã khách hàng</div>
+            <div class="border border-dark col-12">
+                <span id="khName"></span>
+            </div>
+        </div>
+        
+        <div id="grid-kh" class="grid grid-kh">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.listCustomers)
+                    {
+                        <tr>
+                            <td>
+                                @item.CustomerID
+                            </td>
+                            <td>
+                                @item.FullName
+                            </td>
+                            <td>
+                                @item.Address
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dropdown2">
+        <div class="d-flex">
+            <div id="select-sp" class="form-select form-select-md col-3 d-flex mt-3 mb-1">Mã sản phẩm</div>
+            <div class="border border-dark col-12">
+                <span id="spName"></span>
+            </div>
+        </div>
+        <div id="grid-sp" class="grid grid-sp">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.listProducts)
+                    {
+                        <tr>
+                            <td>
+                                @item.ProductID
+                            </td>
+                            <td>
+                                @item.ProductName
+                            </td>
+                            <td>
+                                @item.UnitPrice
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    //Select: là combobox, nơi người dùng nhấp vào
+    //Grid: là div chứa bảng
+    document.getElementById('select-kh').addEventListener('click', function () {
+        var grid = document.getElementsByClassName('grid')
+        for (var i = 0; i < grid.length; i++) {
+            grid[i].style.visibility = 'hidden';
+        }
+        var dropdownContent = document.getElementById('grid-kh');
+        if (dropdownContent.style.visibility === 'visible') {
+            dropdownContent.style.visibility = 'hidden';
+            dropdownContent.style.opacity = 0;
+        } else {
+            dropdownContent.style.visibility = 'visible';
+            dropdownContent.style.opacity = 1;
+        }
+    });
+
+    var rows = document.querySelectorAll('.grid-kh tbody tr');
+    rows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            var selectedName = this.cells[1].innerText;
+            var selectedUd = this.cells[0].innerText;
+            document.getElementById('select-kh').innerText = selectedUd;
+            document.getElementById('grid-kh').style.visibility = 'hidden';
+            document.getElementById('khName').innerText = selectedName;
+        });
+    });
+
+    document.getElementById('select-sp').addEventListener('click', function () {
+        var grid = document.getElementsByClassName('grid')
+        for (var i = 0; i < grid.length; i++) {
+            grid[i].style.visibility = 'hidden';
+        }
+        var dropdownContent = document.getElementById('grid-sp');
+        if (dropdownContent.style.visibility === 'visible') {
+            dropdownContent.style.visibility = 'hidden';
+            dropdownContent.style.opacity = 0;
+        } else {
+            dropdownContent.style.visibility = 'visible';
+            dropdownContent.style.opacity = 1;
+        }
+    });
+
+    var rows = document.querySelectorAll('.grid-sp tbody tr');
+    rows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            var selectedName = this.cells[1].innerText;
+            var selectedUd = this.cells[0].innerText;
+            document.getElementById('select-sp').innerText = selectedUd;
+            document.getElementById('grid-sp').style.visibility = 'hidden';
+            document.getElementById('spName').innerText = selectedName;
+        });
+    });
+
+    window.onclick = function (event) {
+        if (!event.target.matches('#select-sp') && !event.target.matches('#select-kh')) {
+            var grid = document.getElementsByClassName('grid')
+            for (var i = 0; i < grid.length; i++) {
+                grid[i].style.visibility = 'hidden';
+            }
+        }
+    };
+
+</script>
+
+

@@ -4,16 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="thanhdatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="AdminAccounts">
+    <Schema Namespace="thanhdatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accounts">
           <Key>
             <PropertyRef Name="AccountID" />
           </Key>
           <Property Name="AccountID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Branches">
           <Key>
@@ -36,11 +35,12 @@
             <PropertyRef Name="CustomerID" />
           </Key>
           <Property Name="CustomerID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="AccountID" Type="nvarchar" MaxLength="10" />
           <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="10" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="Password" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="DeliveryMethod">
           <Key>
@@ -48,6 +48,20 @@
           </Key>
           <Property Name="DeliveryMethodID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="DeliveryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="AccountID" Type="nvarchar" MaxLength="10" />
+          <Property Name="BranchID" Type="nvarchar" MaxLength="10" />
+          <Property Name="FullName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Address" Type="varchar" MaxLength="100" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="10" />
+          <Property Name="Position" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Inventory">
           <Key>
@@ -106,6 +120,7 @@
           </Key>
           <Property Name="ProductID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="UnitPrice" Type="float" />
           <Property Name="Discontinued" Type="bit" />
           <Property Name="CategoryID" Type="nvarchar" MaxLength="10" />
@@ -138,7 +153,31 @@
           <Property Name="BranchID" Type="nvarchar" MaxLength="10" />
           <Property Name="ReceiptDate" Type="date" />
         </EntityType>
-        <Association Name="FK__Inventory__Branc__351DDF8C">
+        <Association Name="FK__Customers__Accou__7A521F79">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employees__Accou__7E22B05D">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventory__Branc__758D6A5C">
           <End Role="Branches" Type="Self.Branches" Multiplicity="1" />
           <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
           <ReferentialConstraint>
@@ -150,7 +189,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Inventory__Produ__361203C5">
+        <Association Name="FK__Inventory__Produ__76818E95">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
           <ReferentialConstraint>
@@ -162,7 +201,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Order__45544755">
+        <Association Name="FK__OrderDeta__Order__07AC1A97">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -174,7 +213,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__Produ__46486B8E">
+        <Association Name="FK__OrderDeta__Produ__08A03ED0">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -186,7 +225,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__BranchID__4277DAAA">
+        <Association Name="FK__Orders__BranchID__04CFADEC">
           <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -198,7 +237,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Customer__4183B671">
+        <Association Name="FK__Orders__Customer__03DB89B3">
           <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -210,7 +249,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Delivery__408F9238">
+        <Association Name="FK__Orders__Delivery__02E7657A">
           <End Role="DeliveryMethod" Type="Self.DeliveryMethod" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -222,7 +261,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__PaymentI__3F9B6DFF">
+        <Association Name="FK__Orders__PaymentI__01F34141">
           <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -234,7 +273,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ProductPr__Produ__51BA1E3A">
+        <Association Name="FK__ProductPr__Produ__71BCD978">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
           <ReferentialConstraint>
@@ -246,7 +285,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ProductPr__Promo__52AE4273">
+        <Association Name="FK__ProductPr__Promo__72B0FDB1">
           <End Role="Promotions" Type="Self.Promotions" Multiplicity="1" />
           <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
           <ReferentialConstraint>
@@ -258,7 +297,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Products__Catego__30592A6F">
+        <Association Name="FK__Products__Catego__6EE06CCD">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
@@ -270,7 +309,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReceiptDe__Produ__4CF5691D">
+        <Association Name="FK__ReceiptDe__Produ__0F4D3C5F">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -282,7 +321,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReceiptDe__Recei__4C0144E4">
+        <Association Name="FK__ReceiptDe__Recei__0E591826">
           <End Role="Receipts" Type="Self.Receipts" Multiplicity="1" />
           <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -294,7 +333,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Receipts__Branch__4924D839">
+        <Association Name="FK__Receipts__Branch__0B7CAB7B">
           <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
           <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
           <ReferentialConstraint>
@@ -307,11 +346,12 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="thanhdatModelStoreContainer">
-          <EntitySet Name="AdminAccounts" EntityType="Self.AdminAccounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Inventory" EntityType="Self.Inventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
@@ -321,78 +361,75 @@
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Receipts" EntityType="Self.Receipts" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Inventory__Branc__351DDF8C" Association="Self.FK__Inventory__Branc__351DDF8C">
+          <AssociationSet Name="FK__Customers__Accou__7A521F79" Association="Self.FK__Customers__Accou__7A521F79">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employees__Accou__7E22B05D" Association="Self.FK__Employees__Accou__7E22B05D">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventory__Branc__758D6A5C" Association="Self.FK__Inventory__Branc__758D6A5C">
             <End Role="Branches" EntitySet="Branches" />
             <End Role="Inventory" EntitySet="Inventory" />
           </AssociationSet>
-          <AssociationSet Name="FK__Inventory__Produ__361203C5" Association="Self.FK__Inventory__Produ__361203C5">
+          <AssociationSet Name="FK__Inventory__Produ__76818E95" Association="Self.FK__Inventory__Produ__76818E95">
             <End Role="Products" EntitySet="Products" />
             <End Role="Inventory" EntitySet="Inventory" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Order__45544755" Association="Self.FK__OrderDeta__Order__45544755">
+          <AssociationSet Name="FK__OrderDeta__Order__07AC1A97" Association="Self.FK__OrderDeta__Order__07AC1A97">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Produ__46486B8E" Association="Self.FK__OrderDeta__Produ__46486B8E">
+          <AssociationSet Name="FK__OrderDeta__Produ__08A03ED0" Association="Self.FK__OrderDeta__Produ__08A03ED0">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__BranchID__4277DAAA" Association="Self.FK__Orders__BranchID__4277DAAA">
+          <AssociationSet Name="FK__Orders__BranchID__04CFADEC" Association="Self.FK__Orders__BranchID__04CFADEC">
             <End Role="Branches" EntitySet="Branches" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Customer__4183B671" Association="Self.FK__Orders__Customer__4183B671">
+          <AssociationSet Name="FK__Orders__Customer__03DB89B3" Association="Self.FK__Orders__Customer__03DB89B3">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Delivery__408F9238" Association="Self.FK__Orders__Delivery__408F9238">
+          <AssociationSet Name="FK__Orders__Delivery__02E7657A" Association="Self.FK__Orders__Delivery__02E7657A">
             <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__PaymentI__3F9B6DFF" Association="Self.FK__Orders__PaymentI__3F9B6DFF">
+          <AssociationSet Name="FK__Orders__PaymentI__01F34141" Association="Self.FK__Orders__PaymentI__01F34141">
             <End Role="Payment" EntitySet="Payment" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__ProductPr__Produ__51BA1E3A" Association="Self.FK__ProductPr__Produ__51BA1E3A">
+          <AssociationSet Name="FK__ProductPr__Produ__71BCD978" Association="Self.FK__ProductPr__Produ__71BCD978">
             <End Role="Products" EntitySet="Products" />
             <End Role="ProductPromotions" EntitySet="ProductPromotions" />
           </AssociationSet>
-          <AssociationSet Name="FK__ProductPr__Promo__52AE4273" Association="Self.FK__ProductPr__Promo__52AE4273">
+          <AssociationSet Name="FK__ProductPr__Promo__72B0FDB1" Association="Self.FK__ProductPr__Promo__72B0FDB1">
             <End Role="Promotions" EntitySet="Promotions" />
             <End Role="ProductPromotions" EntitySet="ProductPromotions" />
           </AssociationSet>
-          <AssociationSet Name="FK__Products__Catego__30592A6F" Association="Self.FK__Products__Catego__30592A6F">
+          <AssociationSet Name="FK__Products__Catego__6EE06CCD" Association="Self.FK__Products__Catego__6EE06CCD">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReceiptDe__Produ__4CF5691D" Association="Self.FK__ReceiptDe__Produ__4CF5691D">
+          <AssociationSet Name="FK__ReceiptDe__Produ__0F4D3C5F" Association="Self.FK__ReceiptDe__Produ__0F4D3C5F">
             <End Role="Products" EntitySet="Products" />
             <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReceiptDe__Recei__4C0144E4" Association="Self.FK__ReceiptDe__Recei__4C0144E4">
+          <AssociationSet Name="FK__ReceiptDe__Recei__0E591826" Association="Self.FK__ReceiptDe__Recei__0E591826">
             <End Role="Receipts" EntitySet="Receipts" />
             <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Receipts__Branch__4924D839" Association="Self.FK__Receipts__Branch__4924D839">
+          <AssociationSet Name="FK__Receipts__Branch__0B7CAB7B" Association="Self.FK__Receipts__Branch__0B7CAB7B">
             <End Role="Branches" EntitySet="Branches" />
             <End Role="Receipts" EntitySet="Receipts" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="thanhdatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="AdminAccounts">
-          <Key>
-            <PropertyRef Name="AccountID" />
-          </Key>
-          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Branches">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -412,18 +449,6 @@
           <Property Name="CategoryID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__30592A6F" FromRole="Categories" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Customers">
-          <Key>
-            <PropertyRef Name="CustomerID" />
-          </Key>
-          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Customer__4183B671" FromRole="Customers" ToRole="Orders" />
         </EntityType>
         <EntityType Name="DeliveryMethod">
           <Key>
@@ -473,10 +498,10 @@
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Branches" Relationship="Self.FK__Orders__BranchID__4277DAAA" FromRole="Orders" ToRole="Branches" />
-          <NavigationProperty Name="Customers" Relationship="Self.FK__Orders__Customer__4183B671" FromRole="Orders" ToRole="Customers" />
           <NavigationProperty Name="DeliveryMethod" Relationship="Self.FK__Orders__Delivery__408F9238" FromRole="Orders" ToRole="DeliveryMethod" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__45544755" FromRole="Orders" ToRole="OrderDetails" />
           <NavigationProperty Name="Payment" Relationship="Self.FK__Orders__PaymentI__3F9B6DFF" FromRole="Orders" ToRole="Payment" />
+          <NavigationProperty Name="Customers" Relationship="thanhdatModel.FK__Orders__Customer__03DB89B3" FromRole="Orders" ToRole="Customers" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -501,6 +526,7 @@
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__46486B8E" FromRole="Products" ToRole="OrderDetails" />
           <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK__ReceiptDe__Produ__4CF5691D" FromRole="Products" ToRole="ReceiptDetails" />
           <NavigationProperty Name="Promotions" Relationship="Self.ProductPromotions" FromRole="Products" ToRole="Promotions" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Promotions">
           <Key>
@@ -579,18 +605,6 @@
             </Principal>
             <Dependent Role="Products">
               <PropertyRef Name="CategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__Customer__4183B671">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="CustomerID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -683,10 +697,8 @@
           <End Role="Promotions" Type="Self.Promotions" Multiplicity="*" />
         </Association>
         <EntityContainer Name="thanhdatEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AdminAccounts" EntityType="Self.AdminAccounts" />
           <EntitySet Name="Branches" EntityType="Self.Branches" />
           <EntitySet Name="Categories" EntityType="Self.Categories" />
-          <EntitySet Name="Customers" EntityType="Self.Customers" />
           <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" />
           <EntitySet Name="Inventory" EntityType="Self.Inventory" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
@@ -711,10 +723,6 @@
           <AssociationSet Name="FK__Products__Catego__30592A6F" Association="Self.FK__Products__Catego__30592A6F">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__Customer__4183B671" Association="Self.FK__Orders__Customer__4183B671">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK__Orders__Delivery__408F9238" Association="Self.FK__Orders__Delivery__408F9238">
             <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
@@ -748,24 +756,104 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Promotions" EntitySet="Promotions" />
           </AssociationSet>
+          <EntitySet Name="Accounts" EntityType="thanhdatModel.Accounts" />
+          <EntitySet Name="Employees" EntityType="thanhdatModel.Employees" />
+          <AssociationSet Name="FK__Employees__Accou__7E22B05D" Association="thanhdatModel.FK__Employees__Accou__7E22B05D">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <EntitySet Name="Customers" EntityType="thanhdatModel.Customers" />
+          <AssociationSet Name="FK__Customers__Accou__7A521F79" Association="thanhdatModel.FK__Customers__Accou__7A521F79">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Customer__03DB89B3" Association="thanhdatModel.FK__Orders__Customer__03DB89B3">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="AccountID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="thanhdatModel.FK__Employees__Accou__7E22B05D" FromRole="Accounts" ToRole="Employees" />
+          <NavigationProperty Name="Customers" Relationship="thanhdatModel.FK__Customers__Accou__7A521F79" FromRole="Accounts" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Accounts" Relationship="thanhdatModel.FK__Employees__Accou__7E22B05D" FromRole="Employees" ToRole="Accounts" />
+        </EntityType>
+        <Association Name="FK__Employees__Accou__7E22B05D">
+          <End Type="thanhdatModel.Accounts" Role="Accounts" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Employees" Role="Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accounts" Relationship="thanhdatModel.FK__Customers__Accou__7A521F79" FromRole="Customers" ToRole="Accounts" />
+          <NavigationProperty Name="Orders" Relationship="thanhdatModel.FK__Orders__Customer__03DB89B3" FromRole="Customers" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK__Customers__Accou__7A521F79">
+          <End Type="thanhdatModel.Accounts" Role="Accounts" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Customers" Role="Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Customer__03DB89B3">
+          <End Type="thanhdatModel.Customers" Role="Customers" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="thanhdatModelStoreContainer" CdmEntityContainer="thanhdatEntities">
-          <EntitySetMapping Name="AdminAccounts">
-            <EntityTypeMapping TypeName="thanhdatModel.AdminAccounts">
-              <MappingFragment StoreEntitySet="AdminAccounts">
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Role" ColumnName="Role" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Branches">
             <EntityTypeMapping TypeName="thanhdatModel.Branches">
               <MappingFragment StoreEntitySet="Branches">
@@ -781,18 +869,6 @@
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="thanhdatModel.Customers">
-              <MappingFragment StoreEntitySet="Customers">
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -852,6 +928,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="thanhdatModel.Products">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
@@ -898,6 +975,44 @@
               <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="thanhdatModel.Accounts">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="thanhdatModel.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="thanhdatModel.Customers">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
