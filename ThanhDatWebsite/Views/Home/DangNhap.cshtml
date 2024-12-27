@@ -1,11 +1,32 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "DangNhap";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <section class="ps-3 pe-3">
     <div class="container bg-light rounded-5">
+        <button id="btnOpen" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        </button>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog =">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Thông báo</h5>
+                    </div>
+                    <div class="modal-body align-content-center text-center">
+                        <div class="align-content-center"><img src="~/Media/employee-engagement.png" /></div>
+                        <h3 class="fw-bold text-green-600 mt-2">Đăng nhập thành công!</h3>
+                        <p class="mt-2 px-4">
+                            Bạn vừa đăng nhập thành công! Bước tiếp theo
+                            cần làm đó là hãy cập nhật thông tin cá nhân của bạn trước nhé
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="~/UserDashboard/Index" class="btn btn-primary fw-bold">Tiếp tục</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12 col-md-6 d-none d-md-block">
                 <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
@@ -22,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    @using (Html.BeginForm("KiemTraUser", "Home", FormMethod.Post, new { @class = "d-flex justify-content-between" }))
+                    @using (Html.BeginForm("DangNhapThuong", "Home", FormMethod.Post, new { @class = "d-flex justify-content-between" }))
                     {<div class="row gy-3 gy-md-4 overflow-hidden">
                             <div class="col-12">
                                 <div><p class="text-danger fw-bold">@ViewBag.msg</p></div>
@@ -64,7 +85,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p class="mt-5 mb-4">Hoặc đăng nhập với</p>
+                            <p class="mt-2 mb-2">Hoặc đăng nhập với</p>
                             <div class="d-flex flex-column flex-xl-row">
                                 <div id="g_id_onload"
                                      data-client_id="824519759585-jaqiu67aov72prhp8jc14ph9070u9uck.apps.googleusercontent.com"

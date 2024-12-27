@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ThanhDatWebsite.Products>
+@{
+    ViewBag.Title = "WishList";
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+}
+<div class="my-2">
+    <h2>Sản phẩm bạn yêu thích</h2>
+</div>
+<div class="Iphone position-sticky row overflow-hidden">
+    @foreach (var item in Model)
+    {
+        <div class="col-6 col-md-3 px-3 my-2">
+            <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                <div class="text-center fs-6 text-gray-500 text-ellipsis px-3">@item.Description</div>
+                @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                {
+                    <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                        <div class="text-decoration-line-through fs-6">
+                            @string.Format("{0:C0}", item.UnitPrice)
+                        </div>
+                        &nbsp;
+                        <div class="text-danger">
+                            -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                        </div>
+                    </div>
+                    <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                }
+                else
+                { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                        <div class="fw-bold text-danger fs-5">
+                            @string.Format("{0:C0}", item.UnitPrice)
+                        </div>
+                    </div>
+                }
+                <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Mua ngay</a></div>
+            </div>
+        </div>
+    }
+</div>
+

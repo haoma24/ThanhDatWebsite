@@ -31,12 +31,14 @@ namespace ThanhDatWebsite
         public Nullable<System.DateTime> OrderDate { get; set; }
         public Nullable<double> TotalAmount { get; set; }
         public string Status { get; set; }
+        public string EmployeeID { get; set; }
     
         public virtual Branches Branches { get; set; }
+        public virtual Customers Customers { get; set; }
         public virtual DeliveryMethod DeliveryMethod { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual Payment Payment { get; set; }
-        public virtual Customers Customers { get; set; }
+        public virtual Employees Employees { get; set; }
     }
 }

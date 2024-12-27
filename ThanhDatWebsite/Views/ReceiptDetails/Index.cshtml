@@ -8,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new {@class="btn btn-primary"})
 </p>
 <table class="table table-striped table-hover table-light overflow-scroll table-bordered">
     <tr>
@@ -42,9 +42,9 @@
             @Html.DisplayFor(modelItem => item.Receipts.BranchID)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReceiptID, id2=item.ProductID  }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ReceiptID, id2 = item.ProductID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ReceiptID, id2 = item.ProductID })
         </td>
     </tr>
 }

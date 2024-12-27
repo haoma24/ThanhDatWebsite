@@ -41,7 +41,7 @@
         </dt>
 
         <dd>
-            <img width="100" id="output" src="@Html.DisplayFor(model => model.Image).ToString().Substring(3)" />
+            <img width="100" id="output" src="@Html.DisplayFor(model => model.Image).ToString()" />
         </dd>
 
         <dt>
@@ -58,7 +58,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

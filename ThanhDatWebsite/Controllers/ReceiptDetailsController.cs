@@ -12,7 +12,7 @@ namespace ThanhDatWebsite.Controllers
 {
     public class ReceiptDetailsController : Controller
     {
-        private thanhdatEntities db = new thanhdatEntities();
+        private thanhdatEntities1 db = new thanhdatEntities1();
 
         // GET: ReceiptDetails
         public ActionResult Index()
@@ -65,13 +65,13 @@ namespace ThanhDatWebsite.Controllers
         }
 
         // GET: ReceiptDetails/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, string id2)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id);
+            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id,id2);
             if (receiptDetails == null)
             {
                 return HttpNotFound();
@@ -100,13 +100,13 @@ namespace ThanhDatWebsite.Controllers
         }
 
         // GET: ReceiptDetails/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string id, string id2)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id);
+            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id, id2);
             if (receiptDetails == null)
             {
                 return HttpNotFound();
@@ -117,9 +117,9 @@ namespace ThanhDatWebsite.Controllers
         // POST: ReceiptDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(string id, string id2)
         {
-            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id);
+            ReceiptDetails receiptDetails = db.ReceiptDetails.Find(id, id2);
             db.ReceiptDetails.Remove(receiptDetails);
             db.SaveChanges();
             return RedirectToAction("Index");

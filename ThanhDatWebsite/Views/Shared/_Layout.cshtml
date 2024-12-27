@@ -64,31 +64,31 @@
 
     </script>
 </head>
-<body class="pt-5 bg-white">
+<body class="pt-5">
     <nav class="navbar navbar-expand-md bg-white navbar-light fixed-top">
         <div class="container d-flex justify-content-end">
             <button class="navbar-toggler start-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasLg" aria-controls="navbarOffcanvasLg">
                 <span class="navbar-toggler-icon" style="color:black;"></span>
             </button>
             <div class="logo mx-auto ms-md-0">
-                <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
+                <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT Store</div></a>
             </div>
             <div class="offcanvas offcanvas-start d-block d-md-none" tabindex="-1" id="navbarOffcanvasLg" aria-labelledby="navbarOffcanvasLgLabel">
                 <div class="offcanvas-header">
-                    <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT store</div></a>
+                    <a class="navbar-brand-md d-flex align-items-center text-decoration-none" runat="server" href="~/"><img width="50" src="~/Media/Logo.png" /><div class="gradient-text-16">THANH DAT Store</div></a>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div class="userAvt gap-3" style="display:none">
-                        <img class="userImage me-1" src="" />
+                        <img id="userImageMobile" class="userImage me-1" src="" />
                         <span>Hello,&nbsp;</span>
                         <span class="userName"></span>
                     </div>
                     <div class="horizontal-divider"></div>
                     <ul class="navbar-nav">
                         <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="~/"><i class="fa-solid fa-house me-1"></i> Trang chủ</a></li>
-                        <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("GioHang","GioHang")"><i class="fa-solid fa-cart-shopping me-1" style="color: #000000;"></i> Giỏ hàng</a></li>
-                        <li class="mx-2" nav-item><a class="Login nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("DangNhap","Home")"><i class="ps-1 text-black fa fa-user me-1"></i> Đăng nhập</a></li>
+                        <li class="mx-2" nav-item><a class="nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("GioHang", "GioHang")"><i class="fa-solid fa-cart-shopping me-1" style="color: #000000;"></i> Giỏ hàng</a></li>
+                        <li class="mx-2" nav-item><a class="Login nav-link text-decoration-none active fw-bold fs-6 text-dark" runat="server" href="@Url.Action("DangNhap", "Home")"><i class="ps-1 text-black fa fa-user me-1"></i> Đăng nhập</a></li>
                         <li class="" nav-item>
                             <button id="OpenModal" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal">
                                 <i class="fa-solid fa-magnifying-glass me-1" style="color: #000000;"></i>
@@ -106,76 +106,152 @@
                     </button>
                     <div id="userDropdown" class="position-absolute bg-light me-5 py-2 rounded-3 shadow border border-opacity-25 border-dark">
                         <div class="px-3">
-                            <div><img class="userImage w-50 h-50 rounded-2" src=""/></div>
-                            <div class="mt-2"><span class="userName fw-bold fs-5"></span></div>
-                            <div><span class="userMail text-gray-500"></span></div>
+                            <div><img class="userImage w-50 h-50 rounded-2" src="" /></div>
+                            <div class="mt-2 d-flex align-items-center">
+                                <span class="userName fw-bold fs-6"></span>
+                                &nbsp;
+                                <div class="text-gray-400 fs-7">#<span class="userID"></span></div>
+                            </div>
+                            <div><span class="userMail text-gray-500 fs-7"></span></div>
                         </div>
                         <div class="horizontal-divider"></div>
                         <ul class="list-unstyled">
-                            <li class="py-2 px-3 nav-item"><a class="text-decoration-none text-dark" href="#"><i class="me-2 text-dark fa fa-user"></i>Hồ sơ</a></li>
+                            <li class="py-2 px-3 nav-item"><a id="btnProfile" class="text-decoration-none text-dark" href="@Url.Action("Index", "UserDashboard")"><i class="me-2 text-dark fa fa-user"></i>Trang cá nhân</a></li>
                             <li class="py-2 px-3 nav-item"><a class="text-decoration-none text-dark" href="#"><i class="me-2 text-dark fa-solid fa-gear"></i>Tùy chỉnh</a></li>
                             <li class="py-2 px-3"><div class="horizontal-divider"></div></li>
-                            <li class="py-2 px-3 nav-item"><a id="btnLogout" class="text-decoration-none text-dark" href="@Url.Action("DangNhap","Home")"><i class="me-2 text-dark fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></li>
+                            <li class="py-2 px-3 nav-item"><a id="btnLogout" class="text-decoration-none text-dark" href="@Url.Action("DangNhap", "Home")"><i class="me-2 text-dark fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="vertical-divider"></div>
-                <a href="@Url.Action("GioHang","GioHang")" class="cart position-relative">
+                <a href="@Url.Action("GioHang", "GioHang")" class="cart position-relative">
                     <i class="fa-solid fa-cart-shopping" style="color: #000000;"></i>
                 </a>
                 <div class="vertical-divider position-relative"></div>
-                <a href="@Url.Action("DangNhap","Home")" class="cart Login">
+                <a href="@Url.Action("DangNhap", "Home")" class="cart Login">
                     <i class="ps-1 text-black fa fa-user"></i>
                 </a>
                 <button class="border-0 bg-transparent" id="btnDropdown">
                     <div class="userAvt" style="display:none">
-                        <img class="userImage" src="" />
+                        <img id="userImageNavBar" class="userImage" src="" />
                     </div>
                 </button>
             </div>
             <div class="d-none spinner-grow text-light"></div>
         </div>
     </nav>
-
     <div class="container body-content">
         <div id="loadingImg">
             <div class="spinner">
-            <div class="cube cube1"></div>
-            <div class="cube cube2"></div>
-            <div class="cube cube3"></div>
-            <div class="cube cube4"></div>
-            <div class="cube cube5"></div>
-            <div class="cube cube6"></div>
-            <div class="cube cube7"></div>
-            <div class="cube cube8"></div>
-            <div class="cube cube9"></div>
-        </div>
+                <div class="cube cube1"></div>
+                <div class="cube cube2"></div>
+                <div class="cube cube3"></div>
+                <div class="cube cube4"></div>
+                <div class="cube cube5"></div>
+                <div class="cube cube6"></div>
+                <div class="cube cube7"></div>
+                <div class="cube cube8"></div>
+                <div class="cube cube9"></div>
+            </div>
         </div>
         <div id="content">@RenderBody()</div>
-        
         <hr />
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
+                const btnAddToWishlists = document.querySelectorAll('.btnAddToWishlist')
+                const btnRemoveFromWishlists = document.querySelectorAll('.btnRemoveFromWishlist')
+                const customerid = localStorage.getItem("customerid");
+                console.log(customerid)
+                if (customerid) {
+                    btnRemoveFromWishlists.forEach(btn => {
+                        btn.href += `/${customerid}`
+                    });
+                    btnAddToWishlists.forEach(btn => {
+                        btn.href += `/${customerid}`
+                    });
 
+                }
+                if (btnAddToWishlists) {
+                    btnAddToWishlists.forEach(btn => {
+                        const pathname = btn.getAttribute('href');
+
+                        const segments = pathname.split("/");
+
+                        const id = segments[segments.length - 2];
+                        const customerId = segments[segments.length - 1];
+                        fetch(`/Home/isLiked/${id}/${customerId}`)
+                            .then(res => {
+                                if (!res.ok) {
+                                    throw new Error("Network response not ok")
+                                }
+                                return res.json();
+                            }).then(data => {
+                                if (data.isLiked) {
+                                    btn.style.display = 'none'
+                                }
+                            })
+                    })
+                }
+                if (btnRemoveFromWishlists) {
+                    btnRemoveFromWishlists.forEach(btn => {
+                        const pathname = btn.getAttribute('href');
+
+                        const segments = pathname.split("/");
+
+                        const id = segments[segments.length - 2];
+                        const customerId = segments[segments.length - 1];
+                        fetch(`/Home/isLiked/${id}/${customerId}`)
+                            .then(res => {
+                                if (!res.ok) {
+                                    throw new Error("Network response not ok")
+                                }
+                                return res.json();
+                            }).then(data => {
+                                if (data.isLiked == false) {
+                                    btn.style.display = 'none'
+                                }
+                            })
+                    })
+                }
                 const btnLogout = document.getElementById('btnLogout');
                 if (btnLogout) {
                     btnLogout.addEventListener('click', () => {
                         localStorage.removeItem('authToken');
+                        localStorage.removeItem('customerid')
+                        fetch('/Home/Logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Chuyển hướng người dùng đến trang đăng nhập
+                                    window.location.href = '/Home/DangNhap';
+                                } else {
+                                    alert('Đăng xuất thất bại!');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
                     })
                 }
 
                 const authToken = localStorage.getItem('authToken');
-
+                const sessionCusid = '@Session["cusid"]';
+                const isNew = '@Session["isNew"]';
+                console.log(sessionCusid)
                 if (authToken) {
                     const payload = parseJwt(authToken)
+                    const customerid = localStorage.getItem("customerid");
+                    const isNew = localStorage.getItem("isNew");
                     const avatarUrl = payload.picture
                     var elems = document.querySelectorAll('.userImage');
                     elems.forEach(elem => {
                         elem.src = '/Home/GetUserImage?url=' + encodeURIComponent(avatarUrl);
-                        elem.style.width = '30px';
-                        elem.style.height = '30px';
-                        elem.style.borderRadius = '50%'
                     })
                     var userAvts = document.querySelectorAll('.userAvt');
                     userAvts.forEach(userAvt => {
@@ -188,25 +264,86 @@
                     var userNames = document.querySelectorAll('.userName');
                     userNames.forEach(userName => {
                         userName.textContent = payload.name;
+                        userName.value = payload.name;
                     })
                     var userMails = document.querySelectorAll('.userMail');
                     userMails.forEach(userMail => {
                         userMail.textContent = payload.email;
+                        userMail.value = payload.email;
                     })
+                    var userIDs = document.querySelectorAll('.userID');
+                    userIDs.forEach(userID => {
+                        userID.textContent = customerid;
+                    })
+                    if (isNew == "true") {
+                        $("#btnOpen").click();
+                    }
+                } else if (sessionCusid) {
+                    localStorage.setItem("customerid", sessionCusid)
+
+                    var elems = document.querySelectorAll('.userImage');
+                    elems.forEach(elem => {
+                        elem.src = 'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.jpg';
+                    })
+                    var userAvts = document.querySelectorAll('.userAvt');
+                    userAvts.forEach(userAvt => {
+                        userAvt.style.display = 'block'
+                    })
+                    var Logins = document.querySelectorAll('.Login');
+                    Logins.forEach(Login => {
+                        Login.style.display = 'none';
+                    })
+                    fetch(`/UserDashboard/users?id=${sessionCusid}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error("Network response not ok")
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data.status == '200') {
+                                var userNames = document.querySelectorAll('.userName');
+                                userNames.forEach(userName => {
+                                    userName.textContent = data.cus.Fullname;
+                                    userName.value = data.cus.Fullname;
+                                })
+                                var userMails = document.querySelectorAll('.userMail');
+                                userMails.forEach(userMail => {
+                                    userMail.textContent = data.cus.Email;
+                                    userMail.value = data.cus.Email;
+                                })
+                            }
+                        }).catch(err => console.log(err))
+
+
+                    var userIDs = document.querySelectorAll('.userID');
+                    userIDs.forEach(userID => {
+                        userID.textContent = sessionCusid;
+                    })
+                    if (isNew == 'true') {
+                        localStorage.setItem("isNew", "true");
+                        $("#btnOpen").click();
+                    }
+                    
                 }
             });
-            
+
             var btn = document.getElementById('btnDropdown');
             var userDropdown = document.getElementById('userDropdown')
             if (btn) {
-                btn.addEventListener('click', (event)=> {
+                btn.addEventListener('click', (event) => {
                     if (userDropdown.style.display === 'block')
                         userDropdown.style.display = 'none';
                     else
                         userDropdown.style.display = 'block';
                     event.stopPropagation();
                 })
-                
+
             }
             document.addEventListener("click", () => {
                 userDropdown.style.display = "none";
@@ -216,7 +353,35 @@
                 const credential = response.credential;
                 // Giải mã token để lấy thông tin người dùng
                 const payload = parseJwt(credential);
-
+                const data = {
+                    username: payload.name,
+                    email: payload.email,
+                };
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                };
+                fetch("@Url.Action("KiemTraUser","Home")", requestOptions)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error("Network response not ok")
+                        }
+                        return res.json();
+                    }).then(data => {
+                        if (data.customerid) {
+                            localStorage.setItem("customerid", data.customerid)
+                            if (data.isNew == true) {
+                                console.log(data.isNew)
+                                localStorage.setItem("isNew", "true");
+                                $("#btnOpen").click();
+                            }
+                        }
+                    }).catch(err => {
+                        console.error('Error:'+err)
+                    })
                 // Hiển thị thông tin người dùng
                 const avatarUrl = payload.picture
                 var elems = document.querySelectorAll('.userImage');
@@ -248,14 +413,12 @@
                 const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
-                console.log(jsonPayload)
                 return JSON.parse(jsonPayload);
             }
 
             fetch('../Scripts/dvhcvn.json')
                 .then((response) => response.json())
                 .then(data => {
-                    console.log(data)
                     let provinces = data.data;
                     var provinceChkbox = document.getElementById('provinces')
                     if (provinceChkbox) {
@@ -420,7 +583,7 @@
         </div>
         <!-- Copyright -->
     </footer>
-
+    <script src="https://ddosnotification.github.io/snow-theme/snow.js"></script>
 </body>
 
 </html>

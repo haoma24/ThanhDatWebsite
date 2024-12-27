@@ -1,4 +1,4 @@
-﻿@model ThanhDatWebsite.AdminAccounts
+﻿@model ThanhDatWebsite.Accounts
 
 @{
     ViewBag.Title = "Delete";
@@ -21,19 +21,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Phone)
+            @Html.DisplayNameFor(model => model.PasswordHash)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.PasswordHash)
         </dd>
 
         <dt>

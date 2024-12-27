@@ -3,9 +3,9 @@
     ViewBag.Title = "Thành Đạt store";
 }
 
-<main>
+<main class="shadow px-3 pb-3 rounded-2 bg-white mt-3">
     <div id="carouselExampleInterval" class="carousel slide" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
-        <div class="carousel-inner mt-2">
+        <div class="carousel-inner mt-2 rounded-2">
             <div class="carousel-item active" data-bs-interval="5000">
                 <img src="~/Media/Slider_1.png" class="d-block w-100" alt="...">
             </div>
@@ -44,11 +44,32 @@
     <div class="Iphone d-flex position-sticky row overflow-hidden ">
         @foreach (var item in Model)
         {
-            <div class="col-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3 my-2 py-2 ip-item align-content-center bg-opacity-25 bg-light justify-content-center rounded-2">
-                <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
-                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+            <div class="col-6 col-md-3 px-3 my-2">
+                <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow">
+                    <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                    <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                    @if (item.Promotions.Select(x => x.DiscountPercentage).Any())
+                    {
+                        <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                            <div class="text-decoration-line-through fs-6">
+                                @string.Format("{0:C0}", item.UnitPrice)
+                            </div>
+                            &nbsp;
+                            <div class="text-danger">
+                                -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                            </div>
+                        </div>
+                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                    }
+                    else
+                    { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                            <div class="text-danger">
+                                @string.Format("{0:C0}", item.UnitPrice)
+                            </div>
+                        </div>
+                    }
+                    <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                </div>
             </div>
         }
     </div>

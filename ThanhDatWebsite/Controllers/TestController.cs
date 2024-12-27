@@ -9,7 +9,7 @@ namespace ThanhDatWebsite.Controllers
 {
     public class TestController : Controller
     {
-        thanhdatEntities db = new thanhdatEntities();
+        thanhdatEntities1 db = new thanhdatEntities1();
         // GET: Test
         public ActionResult Index()
         {

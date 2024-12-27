@@ -10,7 +10,8 @@
             <PropertyRef Name="AccountID" />
           </Key>
           <Property Name="AccountID" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
@@ -20,7 +21,7 @@
           </Key>
           <Property Name="BranchID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="BranchName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
           <Property Name="Phone" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Categories">
@@ -57,7 +58,7 @@
           <Property Name="AccountID" Type="nvarchar" MaxLength="10" />
           <Property Name="BranchID" Type="nvarchar" MaxLength="10" />
           <Property Name="FullName" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Phone" Type="varchar" MaxLength="15" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
           <Property Name="Address" Type="varchar" MaxLength="100" />
           <Property Name="Sex" Type="nvarchar" MaxLength="10" />
@@ -89,15 +90,16 @@
           </Key>
           <Property Name="OrderID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="CustomerID" Type="nvarchar" MaxLength="10" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="10" />
           <Property Name="BranchID" Type="nvarchar" MaxLength="10" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="100" />
           <Property Name="PaymentID" Type="nvarchar" MaxLength="10" />
           <Property Name="DeliveryMethodID" Type="nvarchar" MaxLength="10" />
           <Property Name="OrderDate" Type="date" />
           <Property Name="TotalAmount" Type="float" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -124,7 +126,7 @@
           <Property Name="UnitPrice" Type="float" />
           <Property Name="Discontinued" Type="bit" />
           <Property Name="CategoryID" Type="nvarchar" MaxLength="10" />
-          <Property Name="Image" Type="nvarchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Promotions">
           <Key>
@@ -151,7 +153,555 @@
           </Key>
           <Property Name="ReceiptID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="BranchID" Type="nvarchar" MaxLength="10" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="10" />
           <Property Name="ReceiptDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="nvarchar" MaxLength="10" />
+          <Property Name="CustomerID" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK__Customers__Accou__611C5D5B">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employees__Accou__64ECEE3F">
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accounts">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employees__Branc__65E11278">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventory__Branc__5C57A83E">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="1" />
+          <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Inventory">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inventory__Produ__5D4BCC77">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Inventory">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Order__705EA0EB">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Produ__7152C524">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__BranchID__6D823440">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Customer__6B99EBCE">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Delivery__6AA5C795">
+          <End Role="DeliveryMethod" Type="Self.DeliveryMethod" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryMethod">
+              <PropertyRef Name="DeliveryMethodID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryMethodID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Employee__6C8E1007">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__PaymentI__69B1A35C">
+          <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="PaymentID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="PaymentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductPr__Produ__5887175A">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ProductPromotions">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductPr__Promo__597B3B93">
+          <End Role="Promotions" Type="Self.Promotions" Multiplicity="1" />
+          <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Promotions">
+              <PropertyRef Name="PromotionID" />
+            </Principal>
+            <Dependent Role="ProductPromotions">
+              <PropertyRef Name="PromotionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__55AAAAAF">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptDe__Produ__78F3E6EC">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="ReceiptDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReceiptDe__Recei__77FFC2B3">
+          <End Role="Receipts" Type="Self.Receipts" Multiplicity="1" />
+          <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Receipts">
+              <PropertyRef Name="ReceiptID" />
+            </Principal>
+            <Dependent Role="ReceiptDetails">
+              <PropertyRef Name="ReceiptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipts__Branch__742F31CF">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
+          <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Receipts">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipts__Employ__75235608">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Receipts">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__Custom__04659998">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__Produc__0371755F">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="Wishlist" Type="Self.Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="thanhdatModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inventory" EntityType="Self.Inventory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductPromotions" EntityType="Self.ProductPromotions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Receipts" EntityType="Self.Receipts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Customers__Accou__611C5D5B" Association="Self.FK__Customers__Accou__611C5D5B">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employees__Accou__64ECEE3F" Association="Self.FK__Employees__Accou__64ECEE3F">
+            <End Role="Accounts" EntitySet="Accounts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employees__Branc__65E11278" Association="Self.FK__Employees__Branc__65E11278">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventory__Branc__5C57A83E" Association="Self.FK__Inventory__Branc__5C57A83E">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Inventory" EntitySet="Inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inventory__Produ__5D4BCC77" Association="Self.FK__Inventory__Produ__5D4BCC77">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Inventory" EntitySet="Inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Order__705EA0EB" Association="Self.FK__OrderDeta__Order__705EA0EB">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Produ__7152C524" Association="Self.FK__OrderDeta__Produ__7152C524">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__BranchID__6D823440" Association="Self.FK__Orders__BranchID__6D823440">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Customer__6B99EBCE" Association="Self.FK__Orders__Customer__6B99EBCE">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Delivery__6AA5C795" Association="Self.FK__Orders__Delivery__6AA5C795">
+            <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Employee__6C8E1007" Association="Self.FK__Orders__Employee__6C8E1007">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__PaymentI__69B1A35C" Association="Self.FK__Orders__PaymentI__69B1A35C">
+            <End Role="Payment" EntitySet="Payment" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductPr__Produ__5887175A" Association="Self.FK__ProductPr__Produ__5887175A">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductPromotions" EntitySet="ProductPromotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductPr__Promo__597B3B93" Association="Self.FK__ProductPr__Promo__597B3B93">
+            <End Role="Promotions" EntitySet="Promotions" />
+            <End Role="ProductPromotions" EntitySet="ProductPromotions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__55AAAAAF" Association="Self.FK__Products__Catego__55AAAAAF">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptDe__Produ__78F3E6EC" Association="Self.FK__ReceiptDe__Produ__78F3E6EC">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReceiptDe__Recei__77FFC2B3" Association="Self.FK__ReceiptDe__Recei__77FFC2B3">
+            <End Role="Receipts" EntitySet="Receipts" />
+            <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Receipts__Branch__742F31CF" Association="Self.FK__Receipts__Branch__742F31CF">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Receipts" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Receipts__Employ__75235608" Association="Self.FK__Receipts__Employ__75235608">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Receipts" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__Custom__04659998" Association="Self.FK__Wishlist__Custom__04659998">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__Produc__0371755F" Association="Self.FK__Wishlist__Produc__0371755F">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="thanhdatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK__Customers__Accou__7A521F79" FromRole="Accounts" ToRole="Customers" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK__Employees__Accou__7E22B05D" FromRole="Accounts" ToRole="Employees" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Branches">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BranchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Inventory" Relationship="Self.FK__Inventory__Branc__758D6A5C" FromRole="Branches" ToRole="Inventory" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__BranchID__04CFADEC" FromRole="Branches" ToRole="Orders" />
+          <NavigationProperty Name="Receipts" Relationship="Self.FK__Receipts__Branch__0B7CAB7B" FromRole="Branches" ToRole="Receipts" />
+          <NavigationProperty Name="Employees" Relationship="thanhdatModel.FK__Employees__Branc__4E3E9311" FromRole="Branches" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__6EE06CCD" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK__Customers__Accou__7A521F79" FromRole="Customers" ToRole="Accounts" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Customer__03DB89B3" FromRole="Customers" ToRole="Orders" />
+          <NavigationProperty Name="Wishlist" Relationship="thanhdatModel.FK__Wishlist__Custom__04659998" FromRole="Customers" ToRole="Wishlist" />
+        </EntityType>
+        <EntityType Name="DeliveryMethod">
+          <Key>
+            <PropertyRef Name="DeliveryMethodID" />
+          </Key>
+          <Property Name="DeliveryMethodID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeliveryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Delivery__02E7657A" FromRole="DeliveryMethod" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK__Employees__Accou__7E22B05D" FromRole="Employees" ToRole="Accounts" />
+          <NavigationProperty Name="Branches" Relationship="thanhdatModel.FK__Employees__Branc__4E3E9311" FromRole="Employees" ToRole="Branches" />
+          <NavigationProperty Name="Orders" Relationship="thanhdatModel.FK__Orders__Employee__54EB90A0" FromRole="Employees" ToRole="Orders" />
+          <NavigationProperty Name="Receipts" Relationship="thanhdatModel.FK__Receipts__Employ__5D80D6A1" FromRole="Employees" ToRole="Receipts" />
+        </EntityType>
+        <EntityType Name="Inventory">
+          <Key>
+            <PropertyRef Name="BranchID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <NavigationProperty Name="Branches" Relationship="Self.FK__Inventory__Branc__758D6A5C" FromRole="Inventory" ToRole="Branches" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Inventory__Produ__76818E95" FromRole="Inventory" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="TotalPrice" Type="Double" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__OrderDeta__Order__07AC1A97" FromRole="OrderDetails" ToRole="Orders" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__OrderDeta__Produ__08A03ED0" FromRole="OrderDetails" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryMethodID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OrderDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branches" Relationship="Self.FK__Orders__BranchID__04CFADEC" FromRole="Orders" ToRole="Branches" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK__Orders__Customer__03DB89B3" FromRole="Orders" ToRole="Customers" />
+          <NavigationProperty Name="DeliveryMethod" Relationship="Self.FK__Orders__Delivery__02E7657A" FromRole="Orders" ToRole="DeliveryMethod" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__07AC1A97" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="Payment" Relationship="Self.FK__Orders__PaymentI__01F34141" FromRole="Orders" ToRole="Payment" />
+          <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="thanhdatModel.FK__Orders__Employee__54EB90A0" FromRole="Orders" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Payment1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__PaymentI__01F34141" FromRole="Payment" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="Discontinued" Type="Boolean" />
+          <Property Name="CategoryID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Categories" Relationship="Self.FK__Products__Catego__6EE06CCD" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="Inventory" Relationship="Self.FK__Inventory__Produ__76818E95" FromRole="Products" ToRole="Inventory" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__08A03ED0" FromRole="Products" ToRole="OrderDetails" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK__ReceiptDe__Produ__0F4D3C5F" FromRole="Products" ToRole="ReceiptDetails" />
+          <NavigationProperty Name="Promotions" Relationship="Self.ProductPromotions" FromRole="Products" ToRole="Promotions" />
+          <NavigationProperty Name="Wishlist" Relationship="thanhdatModel.FK__Wishlist__Produc__0371755F" FromRole="Products" ToRole="Wishlist" />
+        </EntityType>
+        <EntityType Name="Promotions">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+          </Key>
+          <Property Name="PromotionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PromotionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="DiscountPercentage" Type="Double" />
+          <NavigationProperty Name="Products" Relationship="Self.ProductPromotions" FromRole="Promotions" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="ReceiptDetails">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ReceiptID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__ReceiptDe__Produ__0F4D3C5F" FromRole="ReceiptDetails" ToRole="Products" />
+          <NavigationProperty Name="Receipts" Relationship="Self.FK__ReceiptDe__Recei__0E591826" FromRole="ReceiptDetails" ToRole="Receipts" />
+        </EntityType>
+        <EntityType Name="Receipts">
+          <Key>
+            <PropertyRef Name="ReceiptID" />
+          </Key>
+          <Property Name="ReceiptID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Branches" Relationship="Self.FK__Receipts__Branch__0B7CAB7B" FromRole="Receipts" ToRole="Branches" />
+          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK__ReceiptDe__Recei__0E591826" FromRole="Receipts" ToRole="ReceiptDetails" />
+          <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="thanhdatModel.FK__Receipts__Employ__5D80D6A1" FromRole="Receipts" ToRole="Employees" />
         </EntityType>
         <Association Name="FK__Customers__Accou__7A521F79">
           <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
@@ -186,6 +736,66 @@
             </Principal>
             <Dependent Role="Inventory">
               <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__BranchID__04CFADEC">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipts__Branch__0B7CAB7B">
+          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
+          <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="Receipts">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__6EE06CCD">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Customer__03DB89B3">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__Delivery__02E7657A">
+          <End Role="DeliveryMethod" Type="Self.DeliveryMethod" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryMethod">
+              <PropertyRef Name="DeliveryMethodID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryMethodID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -225,42 +835,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__BranchID__04CFADEC">
-          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branches">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__Customer__03DB89B3">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="CustomerID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="CustomerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__Delivery__02E7657A">
-          <End Role="DeliveryMethod" Type="Self.DeliveryMethod" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DeliveryMethod">
-              <PropertyRef Name="DeliveryMethodID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="DeliveryMethodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Orders__PaymentI__01F34141">
           <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
@@ -270,42 +844,6 @@
             </Principal>
             <Dependent Role="Orders">
               <PropertyRef Name="PaymentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ProductPr__Produ__71BCD978">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="ProductPromotions">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ProductPr__Promo__72B0FDB1">
-          <End Role="Promotions" Type="Self.Promotions" Multiplicity="1" />
-          <End Role="ProductPromotions" Type="Self.ProductPromotions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Promotions">
-              <PropertyRef Name="PromotionID" />
-            </Principal>
-            <Dependent Role="ProductPromotions">
-              <PropertyRef Name="PromotionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Products__Catego__6EE06CCD">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categories">
-              <PropertyRef Name="CategoryID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="CategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -333,34 +871,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Receipts__Branch__0B7CAB7B">
-          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
-          <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branches">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="Receipts">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
+        <Association Name="ProductPromotions">
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <End Role="Promotions" Type="Self.Promotions" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="thanhdatModelStoreContainer">
-          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Inventory" EntityType="Self.Inventory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductPromotions" EntityType="Self.ProductPromotions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetails" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Receipts" EntityType="Self.Receipts" Schema="dbo" store:Type="Tables" />
+        <EntityContainer Name="thanhdatEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" />
+          <EntitySet Name="Branches" EntityType="Self.Branches" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" />
+          <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" />
+          <EntitySet Name="Inventory" EntityType="Self.Inventory" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="Promotions" EntityType="Self.Promotions" />
+          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetails" />
+          <EntitySet Name="Receipts" EntityType="Self.Receipts" />
           <AssociationSet Name="FK__Customers__Accou__7A521F79" Association="Self.FK__Customers__Accou__7A521F79">
             <End Role="Accounts" EntitySet="Accounts" />
             <End Role="Customers" EntitySet="Customers" />
@@ -372,6 +901,26 @@
           <AssociationSet Name="FK__Inventory__Branc__758D6A5C" Association="Self.FK__Inventory__Branc__758D6A5C">
             <End Role="Branches" EntitySet="Branches" />
             <End Role="Inventory" EntitySet="Inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__BranchID__04CFADEC" Association="Self.FK__Orders__BranchID__04CFADEC">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Receipts__Branch__0B7CAB7B" Association="Self.FK__Receipts__Branch__0B7CAB7B">
+            <End Role="Branches" EntitySet="Branches" />
+            <End Role="Receipts" EntitySet="Receipts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__6EE06CCD" Association="Self.FK__Products__Catego__6EE06CCD">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Customer__03DB89B3" Association="Self.FK__Orders__Customer__03DB89B3">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__Delivery__02E7657A" Association="Self.FK__Orders__Delivery__02E7657A">
+            <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK__Inventory__Produ__76818E95" Association="Self.FK__Inventory__Produ__76818E95">
             <End Role="Products" EntitySet="Products" />
@@ -385,33 +934,9 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__BranchID__04CFADEC" Association="Self.FK__Orders__BranchID__04CFADEC">
-            <End Role="Branches" EntitySet="Branches" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__Customer__03DB89B3" Association="Self.FK__Orders__Customer__03DB89B3">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__Delivery__02E7657A" Association="Self.FK__Orders__Delivery__02E7657A">
-            <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
           <AssociationSet Name="FK__Orders__PaymentI__01F34141" Association="Self.FK__Orders__PaymentI__01F34141">
             <End Role="Payment" EntitySet="Payment" />
             <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ProductPr__Produ__71BCD978" Association="Self.FK__ProductPr__Produ__71BCD978">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ProductPromotions" EntitySet="ProductPromotions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ProductPr__Promo__72B0FDB1" Association="Self.FK__ProductPr__Promo__72B0FDB1">
-            <End Role="Promotions" EntitySet="Promotions" />
-            <End Role="ProductPromotions" EntitySet="ProductPromotions" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Products__Catego__6EE06CCD" Association="Self.FK__Products__Catego__6EE06CCD">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <AssociationSet Name="FK__ReceiptDe__Produ__0F4D3C5F" Association="Self.FK__ReceiptDe__Produ__0F4D3C5F">
             <End Role="Products" EntitySet="Products" />
@@ -421,430 +946,99 @@
             <End Role="Receipts" EntitySet="Receipts" />
             <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Receipts__Branch__0B7CAB7B" Association="Self.FK__Receipts__Branch__0B7CAB7B">
-            <End Role="Branches" EntitySet="Branches" />
-            <End Role="Receipts" EntitySet="Receipts" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema></edmx:StorageModels>
-    <!-- CSDL content -->
-    <edmx:ConceptualModels>
-      <Schema Namespace="thanhdatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Branches">
-          <Key>
-            <PropertyRef Name="BranchID" />
-          </Key>
-          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BranchName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Inventory" Relationship="Self.FK__Inventory__Branc__351DDF8C" FromRole="Branches" ToRole="Inventory" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__BranchID__4277DAAA" FromRole="Branches" ToRole="Orders" />
-          <NavigationProperty Name="Receipts" Relationship="Self.FK__Receipts__Branch__4924D839" FromRole="Branches" ToRole="Receipts" />
-        </EntityType>
-        <EntityType Name="Categories">
-          <Key>
-            <PropertyRef Name="CategoryID" />
-          </Key>
-          <Property Name="CategoryID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__30592A6F" FromRole="Categories" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="DeliveryMethod">
-          <Key>
-            <PropertyRef Name="DeliveryMethodID" />
-          </Key>
-          <Property Name="DeliveryMethodID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeliveryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Delivery__408F9238" FromRole="DeliveryMethod" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="Inventory">
-          <Key>
-            <PropertyRef Name="BranchID" />
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <NavigationProperty Name="Branches" Relationship="Self.FK__Inventory__Branc__351DDF8C" FromRole="Inventory" ToRole="Branches" />
-          <NavigationProperty Name="Products" Relationship="Self.FK__Inventory__Produ__361203C5" FromRole="Inventory" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="OrderDetails">
-          <Key>
-            <PropertyRef Name="OrderID" />
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="UnitPrice" Type="Double" />
-          <Property Name="TotalPrice" Type="Double" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__OrderDeta__Order__45544755" FromRole="OrderDetails" ToRole="Orders" />
-          <NavigationProperty Name="Products" Relationship="Self.FK__OrderDeta__Produ__46486B8E" FromRole="OrderDetails" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="Orders">
-          <Key>
-            <PropertyRef Name="OrderID" />
-          </Key>
-          <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryMethodID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="OrderDate" Type="DateTime" Precision="0" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Branches" Relationship="Self.FK__Orders__BranchID__4277DAAA" FromRole="Orders" ToRole="Branches" />
-          <NavigationProperty Name="DeliveryMethod" Relationship="Self.FK__Orders__Delivery__408F9238" FromRole="Orders" ToRole="DeliveryMethod" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__45544755" FromRole="Orders" ToRole="OrderDetails" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK__Orders__PaymentI__3F9B6DFF" FromRole="Orders" ToRole="Payment" />
-          <NavigationProperty Name="Customers" Relationship="thanhdatModel.FK__Orders__Customer__03DB89B3" FromRole="Orders" ToRole="Customers" />
-        </EntityType>
-        <EntityType Name="Payment">
-          <Key>
-            <PropertyRef Name="PaymentID" />
-          </Key>
-          <Property Name="PaymentID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Payment1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__PaymentI__3F9B6DFF" FromRole="Payment" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="Products">
-          <Key>
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" />
-          <Property Name="Discontinued" Type="Boolean" />
-          <Property Name="CategoryID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Categories" Relationship="Self.FK__Products__Catego__30592A6F" FromRole="Products" ToRole="Categories" />
-          <NavigationProperty Name="Inventory" Relationship="Self.FK__Inventory__Produ__361203C5" FromRole="Products" ToRole="Inventory" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__46486B8E" FromRole="Products" ToRole="OrderDetails" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK__ReceiptDe__Produ__4CF5691D" FromRole="Products" ToRole="ReceiptDetails" />
-          <NavigationProperty Name="Promotions" Relationship="Self.ProductPromotions" FromRole="Products" ToRole="Promotions" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Promotions">
-          <Key>
-            <PropertyRef Name="PromotionID" />
-          </Key>
-          <Property Name="PromotionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PromotionName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Precision="0" />
-          <Property Name="DiscountPercentage" Type="Double" />
-          <NavigationProperty Name="Products" Relationship="Self.ProductPromotions" FromRole="Promotions" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="ReceiptDetails">
-          <Key>
-            <PropertyRef Name="ReceiptID" />
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ReceiptID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <NavigationProperty Name="Products" Relationship="Self.FK__ReceiptDe__Produ__4CF5691D" FromRole="ReceiptDetails" ToRole="Products" />
-          <NavigationProperty Name="Receipts" Relationship="Self.FK__ReceiptDe__Recei__4C0144E4" FromRole="ReceiptDetails" ToRole="Receipts" />
-        </EntityType>
-        <EntityType Name="Receipts">
-          <Key>
-            <PropertyRef Name="ReceiptID" />
-          </Key>
-          <Property Name="ReceiptID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ReceiptDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Branches" Relationship="Self.FK__Receipts__Branch__4924D839" FromRole="Receipts" ToRole="Branches" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK__ReceiptDe__Recei__4C0144E4" FromRole="Receipts" ToRole="ReceiptDetails" />
-        </EntityType>
-        <Association Name="FK__Inventory__Branc__351DDF8C">
-          <End Role="Branches" Type="Self.Branches" Multiplicity="1" />
-          <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branches">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="Inventory">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__BranchID__4277DAAA">
-          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branches">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Receipts__Branch__4924D839">
-          <End Role="Branches" Type="Self.Branches" Multiplicity="0..1" />
-          <End Role="Receipts" Type="Self.Receipts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Branches">
-              <PropertyRef Name="BranchID" />
-            </Principal>
-            <Dependent Role="Receipts">
-              <PropertyRef Name="BranchID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Products__Catego__30592A6F">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Categories">
-              <PropertyRef Name="CategoryID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="CategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__Delivery__408F9238">
-          <End Role="DeliveryMethod" Type="Self.DeliveryMethod" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DeliveryMethod">
-              <PropertyRef Name="DeliveryMethodID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="DeliveryMethodID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Inventory__Produ__361203C5">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="Inventory" Type="Self.Inventory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="Inventory">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__OrderDeta__Order__45544755">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__OrderDeta__Produ__46486B8E">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__PaymentI__3F9B6DFF">
-          <End Role="Payment" Type="Self.Payment" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Payment">
-              <PropertyRef Name="PaymentID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="PaymentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ReceiptDe__Produ__4CF5691D">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="ReceiptDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ReceiptDe__Recei__4C0144E4">
-          <End Role="Receipts" Type="Self.Receipts" Multiplicity="1" />
-          <End Role="ReceiptDetails" Type="Self.ReceiptDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Receipts">
-              <PropertyRef Name="ReceiptID" />
-            </Principal>
-            <Dependent Role="ReceiptDetails">
-              <PropertyRef Name="ReceiptID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="ProductPromotions">
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <End Role="Promotions" Type="Self.Promotions" Multiplicity="*" />
-        </Association>
-        <EntityContainer Name="thanhdatEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Branches" EntityType="Self.Branches" />
-          <EntitySet Name="Categories" EntityType="Self.Categories" />
-          <EntitySet Name="DeliveryMethod" EntityType="Self.DeliveryMethod" />
-          <EntitySet Name="Inventory" EntityType="Self.Inventory" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
-          <EntitySet Name="Orders" EntityType="Self.Orders" />
-          <EntitySet Name="Payment" EntityType="Self.Payment" />
-          <EntitySet Name="Products" EntityType="Self.Products" />
-          <EntitySet Name="Promotions" EntityType="Self.Promotions" />
-          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetails" />
-          <EntitySet Name="Receipts" EntityType="Self.Receipts" />
-          <AssociationSet Name="FK__Inventory__Branc__351DDF8C" Association="Self.FK__Inventory__Branc__351DDF8C">
-            <End Role="Branches" EntitySet="Branches" />
-            <End Role="Inventory" EntitySet="Inventory" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__BranchID__4277DAAA" Association="Self.FK__Orders__BranchID__4277DAAA">
-            <End Role="Branches" EntitySet="Branches" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Receipts__Branch__4924D839" Association="Self.FK__Receipts__Branch__4924D839">
-            <End Role="Branches" EntitySet="Branches" />
-            <End Role="Receipts" EntitySet="Receipts" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Products__Catego__30592A6F" Association="Self.FK__Products__Catego__30592A6F">
-            <End Role="Categories" EntitySet="Categories" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__Delivery__408F9238" Association="Self.FK__Orders__Delivery__408F9238">
-            <End Role="DeliveryMethod" EntitySet="DeliveryMethod" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Inventory__Produ__361203C5" Association="Self.FK__Inventory__Produ__361203C5">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Inventory" EntitySet="Inventory" />
-          </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Order__45544755" Association="Self.FK__OrderDeta__Order__45544755">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__Produ__46486B8E" Association="Self.FK__OrderDeta__Produ__46486B8E">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__PaymentI__3F9B6DFF" Association="Self.FK__Orders__PaymentI__3F9B6DFF">
-            <End Role="Payment" EntitySet="Payment" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ReceiptDe__Produ__4CF5691D" Association="Self.FK__ReceiptDe__Produ__4CF5691D">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ReceiptDe__Recei__4C0144E4" Association="Self.FK__ReceiptDe__Recei__4C0144E4">
-            <End Role="Receipts" EntitySet="Receipts" />
-            <End Role="ReceiptDetails" EntitySet="ReceiptDetails" />
-          </AssociationSet>
           <AssociationSet Name="ProductPromotions" Association="Self.ProductPromotions">
             <End Role="Products" EntitySet="Products" />
             <End Role="Promotions" EntitySet="Promotions" />
           </AssociationSet>
-          <EntitySet Name="Accounts" EntityType="thanhdatModel.Accounts" />
-          <EntitySet Name="Employees" EntityType="thanhdatModel.Employees" />
-          <AssociationSet Name="FK__Employees__Accou__7E22B05D" Association="thanhdatModel.FK__Employees__Accou__7E22B05D">
-            <End Role="Accounts" EntitySet="Accounts" />
+          <AssociationSet Name="FK__Employees__Branc__4E3E9311" Association="thanhdatModel.FK__Employees__Branc__4E3E9311">
+            <End Role="Branches" EntitySet="Branches" />
             <End Role="Employees" EntitySet="Employees" />
           </AssociationSet>
-          <EntitySet Name="Customers" EntityType="thanhdatModel.Customers" />
-          <AssociationSet Name="FK__Customers__Accou__7A521F79" Association="thanhdatModel.FK__Customers__Accou__7A521F79">
-            <End Role="Accounts" EntitySet="Accounts" />
-            <End Role="Customers" EntitySet="Customers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Orders__Customer__03DB89B3" Association="thanhdatModel.FK__Orders__Customer__03DB89B3">
-            <End Role="Customers" EntitySet="Customers" />
+          <AssociationSet Name="FK__Orders__Employee__54EB90A0" Association="thanhdatModel.FK__Orders__Employee__54EB90A0">
+            <End Role="Employees" EntitySet="Employees" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
+          <AssociationSet Name="FK__Receipts__Employ__5D80D6A1" Association="thanhdatModel.FK__Receipts__Employ__5D80D6A1">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Receipts" EntitySet="Receipts" />
+          </AssociationSet>
+          <EntitySet Name="Wishlist" EntityType="thanhdatModel.Wishlist" />
+          <AssociationSet Name="FK__Wishlist__Custom__04659998" Association="thanhdatModel.FK__Wishlist__Custom__04659998">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wishlist__Produc__0371755F" Association="thanhdatModel.FK__Wishlist__Produc__0371755F">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Wishlist" EntitySet="Wishlist" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Accounts">
-          <Key>
-            <PropertyRef Name="AccountID" />
-          </Key>
-          <Property Name="AccountID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Employees" Relationship="thanhdatModel.FK__Employees__Accou__7E22B05D" FromRole="Accounts" ToRole="Employees" />
-          <NavigationProperty Name="Customers" Relationship="thanhdatModel.FK__Customers__Accou__7A521F79" FromRole="Accounts" ToRole="Customers" />
-        </EntityType>
-        <EntityType Name="Employees">
-          <Key>
-            <PropertyRef Name="EmployeeID" />
-          </Key>
-          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="BranchID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Accounts" Relationship="thanhdatModel.FK__Employees__Accou__7E22B05D" FromRole="Employees" ToRole="Accounts" />
-        </EntityType>
-        <Association Name="FK__Employees__Accou__7E22B05D">
-          <End Type="thanhdatModel.Accounts" Role="Accounts" Multiplicity="0..1" />
+        <Association Name="FK__Employees__Branc__4E3E9311">
+          <End Type="thanhdatModel.Branches" Role="Branches" Multiplicity="0..1" />
           <End Type="thanhdatModel.Employees" Role="Employees" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Accounts">
-              <PropertyRef Name="AccountID" />
+            <Principal Role="Branches">
+              <PropertyRef Name="BranchID" />
             </Principal>
             <Dependent Role="Employees">
-              <PropertyRef Name="AccountID" />
+              <PropertyRef Name="BranchID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Customers">
-          <Key>
-            <PropertyRef Name="CustomerID" />
-          </Key>
-          <Property Name="CustomerID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="AccountID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Accounts" Relationship="thanhdatModel.FK__Customers__Accou__7A521F79" FromRole="Customers" ToRole="Accounts" />
-          <NavigationProperty Name="Orders" Relationship="thanhdatModel.FK__Orders__Customer__03DB89B3" FromRole="Customers" ToRole="Orders" />
-        </EntityType>
-        <Association Name="FK__Customers__Accou__7A521F79">
-          <End Type="thanhdatModel.Accounts" Role="Accounts" Multiplicity="0..1" />
-          <End Type="thanhdatModel.Customers" Role="Customers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Accounts">
-              <PropertyRef Name="AccountID" />
-            </Principal>
-            <Dependent Role="Customers">
-              <PropertyRef Name="AccountID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Orders__Customer__03DB89B3">
-          <End Type="thanhdatModel.Customers" Role="Customers" Multiplicity="0..1" />
+        <Association Name="FK__Orders__Employee__54EB90A0">
+          <End Type="thanhdatModel.Employees" Role="Employees" Multiplicity="0..1" />
           <End Type="thanhdatModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Receipts__Employ__5D80D6A1">
+          <End Type="thanhdatModel.Employees" Role="Employees" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Receipts" Role="Receipts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="Receipts">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customers" Relationship="thanhdatModel.FK__Wishlist__Custom__04659998" FromRole="Wishlist" ToRole="Customers" />
+          <NavigationProperty Name="Products" Relationship="thanhdatModel.FK__Wishlist__Produc__0371755F" FromRole="Wishlist" ToRole="Products" />
+        </EntityType>
+        <Association Name="FK__Wishlist__Custom__04659998">
+          <End Type="thanhdatModel.Customers" Role="Customers" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Wishlist" Role="Wishlist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customers">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="Orders">
+            <Dependent Role="Wishlist">
               <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Wishlist__Produc__0371755F">
+          <End Type="thanhdatModel.Products" Role="Products" Multiplicity="0..1" />
+          <End Type="thanhdatModel.Wishlist" Role="Wishlist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Wishlist">
+              <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -853,7 +1047,18 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="thanhdatModelStoreContainer" CdmEntityContainer="thanhdatEntities">
+        <EntityContainerMapping StorageEntityContainer="thanhdatModelStoreContainer" CdmEntityContainer="thanhdatEntities1">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="thanhdatModel.Accounts">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Branches">
             <EntityTypeMapping TypeName="thanhdatModel.Branches">
               <MappingFragment StoreEntitySet="Branches">
@@ -872,11 +1077,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="thanhdatModel.Customers">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="DeliveryMethod">
             <EntityTypeMapping TypeName="thanhdatModel.DeliveryMethod">
               <MappingFragment StoreEntitySet="DeliveryMethod">
                 <ScalarProperty Name="DeliveryMethodID" ColumnName="DeliveryMethodID" />
                 <ScalarProperty Name="DeliveryName" ColumnName="DeliveryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="thanhdatModel.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -903,6 +1136,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="thanhdatModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
@@ -928,9 +1162,9 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="thanhdatModel.Products">
               <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Discontinued" ColumnName="Discontinued" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
@@ -961,6 +1195,7 @@
           <EntitySetMapping Name="Receipts">
             <EntityTypeMapping TypeName="thanhdatModel.Receipts">
               <MappingFragment StoreEntitySet="Receipts">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ReceiptID" ColumnName="ReceiptID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
@@ -975,41 +1210,12 @@
               <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Accounts">
-            <EntityTypeMapping TypeName="thanhdatModel.Accounts">
-              <MappingFragment StoreEntitySet="Accounts">
-                <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="thanhdatModel.Employees">
-              <MappingFragment StoreEntitySet="Employees">
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="thanhdatModel.Customers">
-              <MappingFragment StoreEntitySet="Customers">
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <EntitySetMapping Name="Wishlist">
+            <EntityTypeMapping TypeName="thanhdatModel.Wishlist">
+              <MappingFragment StoreEntitySet="Wishlist">
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

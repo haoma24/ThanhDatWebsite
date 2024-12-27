@@ -3,17 +3,37 @@
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
+
+#userImageNavBar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%
+}
+#userImageMobile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%
+}
 .dl-horizontal dt {
     white-space: normal;
 }
-
+body {
+    background-image: url("../Media/ChristmasBg.png");
+}
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
     max-width: 280px;
 }
-
+.text-ellipsis {
+    white-space: nowrap; /* Không cho xuống dòng */
+    overflow: hidden; /* Ẩn phần văn bản tràn ra */
+    text-overflow: ellipsis; /* Thêm dấu ... */
+}
+.item-name{
+    height:55px;
+}
 [class^="topzone-"], [class*="topzone-"] {
     background-image: url(//cdn.tgdd.vn/mwgcart/topzone/images/icon-topzone.webp);
     background-repeat: no-repeat;
@@ -171,7 +191,12 @@ textarea {
         display: block;
         margin: 2px auto;
     }
-
+.item-container {
+    height: 300px;
+}
+#flashSaleImg {
+    width: 300px;
+}
 @media only screen and (min-width: 768px) { /*SCREEN > px*/
     .search-cart-text {
         font-size: 0 !important; /*hide the text using font-size*/
@@ -185,14 +210,20 @@ textarea {
     #imgCart {
         width: 100%;
     }
+    .item-container {
+        height: 350px;
+    }
+    #flashSaleImg{
+        width:400px;
+    }
 }
 
 .ip-item {
-    transition: transform 1s;
+    transition: transform .3s;
 }
 
     .ip-item:hover {
-        box-shadow: 2px 2px 10px #808080;
+        transform: scale(1.05);
     }
 
 .Iphone {
@@ -526,6 +557,10 @@ body {
     background:#dfdfdf;
     border-radius:10px;
 }
-#userDropdown{
-    display:none;
+.nav-link:hover {
+    background: #dfdfdf !important;
+    border-radius: 10px !important;
+}
+#userDropdown {
+    display: none;
 }

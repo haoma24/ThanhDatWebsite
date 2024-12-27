@@ -3,18 +3,29 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using ThanhDatWebsite.Models;
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
+using FluentEmail.Core;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Web.Helpers;
+using FluentEmail.Smtp;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace ThanhDatWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private thanhdatEntities db = new thanhdatEntities();
+        private thanhdatEntities1 db = new thanhdatEntities1();
+        private IEmailSender _emailSender;
         public ActionResult Index()
         {  
-            var sanPham2 = db.Products.OrderBy(x => x.CategoryID);       
+            var sanPham2 = db.Products.OrderBy(x => x.CategoryID);
             return View(sanPham2.ToList());
         }
         public ActionResult TimKiem (FormCollection form)
@@ -22,7 +33,9 @@ namespace ThanhDatWebsite.Controllers
             string NoiDung = form["txtTimKiem"];
             if (string.IsNullOrEmpty(NoiDung))
             {
-                return RedirectToAction("Index");
+                var allSanPham = from c in db.Products
+                                 select c;
+                return View(allSanPham.ToList());
             }
             var sanPham = from c in db.Products
                           where c.ProductName.Contains(NoiDung)
@@ -34,6 +47,7 @@ namespace ThanhDatWebsite.Controllers
         }
         public ActionResult DangNhap()
         {
+            
             return View();
         }
         public ActionResult DangKy()
@@ -62,21 +76,109 @@ namespace ThanhDatWebsite.Controllers
             }
             return View(model);
         }
-        public ActionResult KiemTraUser(FormCollection form)
+        public ActionResult DangNhapThuong(FormCollection form)
         {
             string TK = form["TenTK"];
             string MK = form["MK"];
-            string Email = db.Accounts.Where(x => x.Email == TK).Select(x => x.Email).FirstOrDefault();
+            string _customerid = "";
+            string Email = db.Accounts.Where(x => x.Email == TK || x.UserName == TK).Select(x => x.Email).FirstOrDefault();
+            string AccountID = db.Accounts.Where(x => x.Email == TK || x.UserName == TK).Select(x => x.AccountID).FirstOrDefault();
             string Pass = db.Accounts.Where(x => x.PasswordHash == MK).Select(x => x.PasswordHash).FirstOrDefault();
             string Loai = db.Accounts.Where(x => x.Email == Email).Select(x => x.Role).FirstOrDefault();
             if (Email != null && Pass != null)
                 if (Loai == "ad" || Loai == "emp")
                     return RedirectToAction("Dashboard", "Home");
-                else return RedirectToAction("Index", "Home");
+                else
+                {
+                    _customerid = db.Customers.Where(c => c.AccountID == AccountID).Select(c => c.CustomerID).FirstOrDefault();
+                    Session["cusid"] = _customerid;
+                    var phoneNumber1 = db.Customers.Where(c => c.CustomerID == _customerid).Select(c => c.Phone).FirstOrDefault();
+                    if (phoneNumber1 == null)
+                    {
+                        Session["isNew"] = "true";
+                    }
+                    else Session["isNew"] = "false";
+                }
+            else
+            {
+                ViewBag.msg = "Sai tài khoản hoặc mật khẩu";
+                return RedirectToAction("DangNhap", "Home");
+            }
+            
+
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        public JsonResult Logout()
+        {
+            Session.Remove("cusid");
+            return Json(new { success = true });
+        }
+        public ActionResult KiemTraUser(FormCollection form, UserModel model)
+        {
+            string TK = form["TenTK"];
+            string MK = form["MK"];
+            string _customerid="";
+            string Email = db.Accounts.Where(x => x.Email == TK || x.UserName==TK).Select(x => x.Email).FirstOrDefault();
+            string AccountID = db.Accounts.Where(x => x.Email == TK || x.UserName == TK).Select(x => x.AccountID).FirstOrDefault();
+            string Pass = db.Accounts.Where(x => x.PasswordHash == MK).Select(x => x.PasswordHash).FirstOrDefault();
+            string Loai = db.Accounts.Where(x => x.Email == Email).Select(x => x.Role).FirstOrDefault();
+            if (Email != null && Pass != null)
+                if (Loai == "ad" || Loai == "emp")
+                    return RedirectToAction("Dashboard", "Home");
+                else
+                {
+                    _customerid = db.Customers.Where(c => c.AccountID == AccountID).Select(c=>c.CustomerID).FirstOrDefault();
+                    Session["cusid"] = _customerid;
+                    var phoneNumber1 = db.Customers.Where(c => c.Email == model.Email).Select(c => c.Phone).FirstOrDefault();
+                    if (phoneNumber1 == null)
+                    {
+
+                        return Json(new { success = true, customerid = _customerid, isNew = true });
+                    }
+                    return Json(new { success = true, customerid = _customerid, isNew = false });
+                }
 
             ViewBag.msg = "Sai tài khoản hoặc mật khẩu";
-            return View("DangNhap");
 
+            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Email))
+            {
+                return Json(new { success = false, message = "Invalid data" });
+            }
+            if (IdIncrementer.isExist(model.Email, "Customers"))
+            {
+                var cusID = db.Customers.Where(c=>c.Email == model.Email).Select(c=>c.CustomerID).FirstOrDefault();
+                var phoneNumber = db.Customers.Where(c=>c.Email == model.Email).Select(c=>c.Phone).FirstOrDefault();
+                if (phoneNumber==null)
+                {
+                    return Json(new { success = true, customerid = cusID, isNew = true });
+                }
+                return Json(new { success = true, customerid = cusID, isNew = false });
+            }
+            using (var context = new thanhdatEntities1())
+            {
+                // Tạo đối tượng Account từ payload
+                var newAccount = new Accounts
+                {
+                    AccountID = IdIncrementer.idincreament("Accounts"),
+                    UserName = model.Email,
+                    Email = model.Email,
+                    PasswordHash = "google", // Có thể set giá trị tùy theo logic của bạn
+                    Role = "cus"
+                };
+                var newCustomer = new Customers
+                {
+                    CustomerID = IdIncrementer.idincreament("Customers"),
+                    AccountID = newAccount.AccountID,
+                    FullName = model.Username,
+                    Email = model.Email,
+                };
+                // Thêm đối tượng vào DbSet
+                context.Customers.Add(newCustomer);
+                context.Accounts.Add(newAccount);
+                context.SaveChanges();
+                return Json(new { success = true, customerid = newCustomer.CustomerID });
+            }
         }
         public ActionResult DangKyUser(FormCollection form)
         {
@@ -122,7 +224,7 @@ namespace ThanhDatWebsite.Controllers
             return View("DangNhap");
 
         }
-        public ActionResult DatHang(FormCollection form)
+        public async Task<ActionResult> DatHang(FormCollection form)
         {
             List<GioHangModel> gioHangModels = (List<GioHangModel>)Session["cart"];
             Orders dh = new Orders();
@@ -135,7 +237,9 @@ namespace ThanhDatWebsite.Controllers
             string SDT = form["SDT"];
             string HTTT = form["rbtnHTTT"];
             string HTVC = form["rbtnHT"];
-            string DiaChi = form["txtSoNha"] + ", " + form["ddlP"] + ", " + form["ddlQ"] + ", " + form["ddlTP"];
+            string DiaChi = form["txtSoNha"];
+            string Email = form["Email"];
+            double TriGia = 0;
             if (SDT == db.Customers.Where(x => x.Phone == SDT).Select(x => x.Phone).FirstOrDefault())
             {
                 dh.OrderID = MaDH;
@@ -151,7 +255,7 @@ namespace ThanhDatWebsite.Controllers
                 dh.CustomerID = _MaKH;
                 db.Orders.Add(dh);
                 db.SaveChanges();
-                double TriGia = 0;
+                
                 foreach (var item in gioHangModels)
                 {
                     OrderDetails ctdh = new OrderDetails();
@@ -173,7 +277,7 @@ namespace ThanhDatWebsite.Controllers
             {
                 kh.Phone = SDT;
                 kh.FullName = TenKH;
-                kh.Email = null;
+                kh.Email = Email;
                 kh.CustomerID = MaKH;
                 db.Customers.Add(kh);
                 db.SaveChanges();
@@ -189,7 +293,6 @@ namespace ThanhDatWebsite.Controllers
                 dh.CustomerID = MaKH;
                 db.Orders.Add(dh);
                 db.SaveChanges();
-                double TriGia = 0;
                 foreach (var item in gioHangModels)
                 {
                     OrderDetails ctdh = new OrderDetails();
@@ -207,7 +310,90 @@ namespace ThanhDatWebsite.Controllers
                 donDatHang.TotalAmount = TriGia;
                 db.SaveChanges();
             }
-            ViewBag.SDT = SDT;
+            try
+            {
+                string emailBody = $@"
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                background-color: #f9f9f9;
+                color: #333;
+                padding: 20px;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 0 auto;
+                background: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }}
+            .header {{
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border-radius: 8px 8px 0 0;
+                text-align: center;
+            }}
+            .header h2 {{
+                margin: 0;
+            }}
+            .details {{
+                margin: 20px 0;
+            }}
+            .details p {{
+                margin: 5px 0;
+            }}
+            .footer {{
+                text-align: center;
+                font-size: 12px;
+                color: #777;
+                margin-top: 20px;
+            }}
+            .footer a {{
+                color: #4CAF50;
+                text-decoration: none;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='email-container'>
+            <div class='header'>
+                <h2>Xác nhận đơn hàng</h2>
+            </div>
+            <div class='details'>
+                <p><strong>Mã đơn hàng:</strong> {MaDH}</p>
+                <p><strong>Ngày đặt:</strong> {NgayDH}</p>
+                <p><strong>Tên khách hàng:</strong> {TenKH}</p>
+                <p><strong>Địa chỉ:</strong> {DiaChi}</p>
+                <p><strong>Số điện thoại:</strong> {SDT}</p>
+                <p>-------------------------------</p>
+                <p style='color:red'><strong>Tổng giá trị hóa đơn: {TriGia}</strong></p>
+            </div>
+            <div>
+                <p>Cảm ơn bạn đã tin tưởng và mua hàng tại <strong>Thành Đạt</strong>! Chúng tôi sẽ liên hệ với bạn sớm để xác nhận thông tin.</p>
+            </div>
+            <div class='footer'>
+                <p>Đây là email tự động, vui lòng không trả lời trực tiếp.</p>
+                <p>Liên hệ: <a href='mailto:support@thanhdat.com'>support@thanhdat.com</a> | Hotline: 19006868</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+                IEmailSender emailSender = new EmailSender();
+                _emailSender = emailSender;
+                await _emailSender.SendEmailAsync(Email, "Đặt hàng thành công", emailBody);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            ViewBag.Email = Email;
             ViewBag.MaDH = MaDH;
             return View();
         }
@@ -233,6 +419,47 @@ namespace ThanhDatWebsite.Controllers
                 var imageBytes = client.DownloadData(url);
                 return File(imageBytes, "image/jpeg");
             }
+        }
+        public ActionResult AddToWishlist(string id, string cusid)
+        {
+            if (string.IsNullOrEmpty(cusid))
+            {
+                return RedirectToAction("DangNhap", "Home");
+            }
+            else
+            {
+                var Wishlist = new Wishlist
+                {
+                    ProductID = id,
+                    CustomerID = cusid,
+                };
+                db.Wishlist.Add(Wishlist);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public ActionResult RemoveFromWishlist(string id, string cusid)
+        {
+            if (string.IsNullOrEmpty(cusid))
+            {
+                return RedirectToAction("DangNhap", "Home");
+            }
+            else
+            {
+                var Wishlist = db.Wishlist.FirstOrDefault(w => w.ProductID == id && w.CustomerID == cusid);
+                db.Wishlist.Remove(Wishlist);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public ActionResult isLiked(string id, string cusid)
+        {
+            var Wishlist = db.Wishlist.FirstOrDefault(w => w.ProductID == id && w.CustomerID == cusid);
+            if (Wishlist != null)
+            {
+                return Json(new { isLiked = true },JsonRequestBehavior.AllowGet);
+            }else 
+                return Json(new {isLiked = false}, JsonRequestBehavior.AllowGet);
         }
 
     }

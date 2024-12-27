@@ -1,0 +1,318 @@
+﻿@model IEnumerable<ThanhDatWebsite.Models.OrderProductViewModel>
+@{
+    ViewBag.Title = "OrderHistory";
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+}
+
+<div class="">
+    <div class="d-flex">
+        <img class="userImage rounded-2" />
+        <div class="ms-3">
+            <span class="userName fw-bold fs-5"></span>
+            <span class="userPhome fs-6 text-gray-500"></span>
+        </div>
+    </div>
+    <div class="d-flex mt-4 gap-2 row">
+        <button id="btnAll" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-1 active">
+            Tất cả
+        </button>
+        <button id="btnPending" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-2">
+            Chờ xác nhận
+        </button>
+        <button id="btnReceived" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-2">
+            Đã xác nhận
+        </button>
+        <button id="btnDelivering" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-2">
+            Đang vận chuyển
+        </button>
+        <button id="btnDelivered" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-2">
+            Đã giao hàng
+        </button>
+        <button id="btnCancelled" class="btn btn-outline-secondary btn-sm col-4 col-sm-5 col-md-1">
+            Đã hủy
+        </button>
+    </div>
+    <div id="listAll" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model)
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="listPending" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model.Where(o =>o.Status== "Đang xử lý"))
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="listReceived" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model.Where(o=>o.Status=="Đã nhận"))
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="listDelivering" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model.Where(o=>o.Status=="Đang giao hàng"))
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="listDelivered" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model.Where(o=>o.Status=="Đã giao"))
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex mt-1">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom me-2"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="listCancelled" class="mt-4 gap-3 listOrder">
+        @foreach (var orders in Model.Where(o=>o.Status=="Đã hủy"))
+        {
+            <div class="border border-1 border-dark mt-3 rounded-2 border-opacity-100 py-3 pe-3 ps-1">
+                <div class="d-flex">
+                    <div class="badge bg-secondary ms-3">@orders.Status</div>
+                    <div class="ms-auto">
+                        @Convert.ToDateTime(orders.OrderDate).ToString("dd/MM/yyyy hh:MM")
+                    </div>
+                </div>
+                @foreach (var item in orders.Products)
+                {
+                    <div class="rounded-2 mt-2 d-flex">
+                        <div class="align-content-center d-flex hover-zoom"><img width="100" src="@Url.Content(item.Image)" /></div>
+                        <div class="d-block w-50">
+                            <div class="fw-bold">
+                                @item.ProductName
+                            </div>
+                            <div class="fs-7 text-gray-400">
+                                @item.Description
+                            </div>
+                        </div>
+
+                        <div class="ms-auto">
+                            <div class="text-gray-400 fs-6 text-end">
+                                x @item.Quantity
+                            </div>
+                            <div class="text-red-600 mt-auto">@string.Format("{0:C0}", item.TotalPrice)</div>
+                        </div>
+                    </div>
+                }
+                <div class="d-flex mt-3">
+                    <div class="ms-auto fw-bold">
+                        Tổng tiền (@orders.Products.Count() sản phẩm): @string.Format("{0:C0}", orders.TotalAmount)
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const buttons = document.querySelectorAll("button");
+        const listOrder = document.querySelectorAll('.listOrder')
+        const hideList = () => {
+            listOrder.forEach(item => {
+                item.classList.add('d-none')
+            })
+        }
+        const showList = (listElement) => {
+            listElement.classList.add('d-block');
+            listElement.classList.remove('d-none');
+        }
+        hideList();
+        showList(document.getElementById('listAll'))
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                buttons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+                if (button.getAttribute('id') == 'btnPending') {
+                    hideList();
+                    showList(document.getElementById('listPending'))
+                }
+                if (button.getAttribute('id') == 'btnAll') {
+                    hideList();
+                    showList(document.getElementById('listAll'))
+                }
+                if (button.getAttribute('id') == 'btnReceived') {
+                    hideList();
+                    showList(document.getElementById('listReceived'))
+                }
+                if (button.getAttribute('id') == 'btnDelivering') {
+                    hideList();
+                    showList(document.getElementById('listDelivering'))
+                }
+                if (button.getAttribute('id') == 'btnDelivered') {
+                    hideList();
+                    showList(document.getElementById('listDelivered'))
+                }
+                if (button.getAttribute('id') == 'btnCancelled') {
+                    hideList();
+                    showList(document.getElementById('listCancelled'))
+                }
+            });
+        });
+    });//DOMContentLoaded
+</script>
+

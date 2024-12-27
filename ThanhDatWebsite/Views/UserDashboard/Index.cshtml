@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+}
+<div class="">
+    <div class="d-flex">
+        <img class="userImage rounded-2" />
+        <div class="ms-3">
+            <span class="userName fw-bold fs-5"></span>
+            <span class="userPhone fs-6 text-gray-500"></span>
+        </div>
+    </div>
+    <div class="mt-3">
+        <span class="fw-bold fs-6 text-red-600" id="validation"></span>
+    </div>
+    <div class="row">
+        <div class="mt-4 col-md-5 col-12">
+            <div><span>Họ và tên</span>&nbsp;<span class="text-red-700">&lowast;</span></div>
+            <div><input id="userName" type="text" class="userName form-control input-group" /></div>
+        </div>
+        <div class="mt-4 col-md-5 col-12">
+            <div><span>Số điện thoại</span>&nbsp;<span class="text-red-700">&lowast;</span></div>
+            <div><input id="userPhone" type="text" class="userPhone form-control input-group" /></div>
+        </div>
+        <div class="mt-4 col-md-5 col-12">
+            <div><span>Giới tính</span>&nbsp;<span class="text-red-700">&lowast;</span></div>
+            <div><input id="userSex" type="text" class="userSex form-select" /></div>
+        </div>
+        <div class="mt-4 col-md-5 col-12">
+            <div><span>Email</span>&nbsp;<span class="text-red-700">&lowast;</span></div>
+            <div><input id="userMail" type="text" class="userMail form-control" /></div>
+        </div>
+        <div class="mt-4 col-md-5 col-12">
+            <div><span>Địa chỉ</span>&nbsp;<span class="text-red-700">&lowast;</span></div>
+            <div><input id="userAddress" type="text" class="userAddress form-control" /></div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button id="btnUpdate" class="btn btn-primary fw-bold">Cập nhật</button>
+            <button id="btnCancle" class="btn btn-danger fw-bold">Hủy</button>
+            <button id="btnSave" class="btn btn-primary fw-bold">Lưu</button>
+        </div>
+        <div class="mt-5">
+            (<span class="text-red-700">&lowast;</span>):&nbsp; Trường bắt buộc
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnUpdate = document.getElementById('btnUpdate');
+        const btnCanle = document.getElementById('btnCancle');
+        const btnSave = document.getElementById('btnSave');
+        const Msg = document.getElementById('validation');
+        const userID = localStorage.getItem('customerid');
+        const bindData = () => {
+            fetch(`/UserDashboard/users?id=${userID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Network response not ok")
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.status == '200') {
+                        document.getElementById('userName').value = data.cus.Fullname;
+                        document.getElementById('userMail').value = data.cus.Email;
+                        document.getElementById('userPhone').value = data.cus.Phone;
+                        document.getElementById('userSex').value = data.cus.Sex;
+                        document.getElementById('userAddress').value = data.cus.Address;
+                    }
+                }).catch(err => console.log(err))
+        }
+        bindData();
+        const setDisabled = (isEnable) => {
+            document.getElementById('userName').disabled = isEnable;
+            document.getElementById('userMail').disabled = isEnable;
+            document.getElementById('userPhone').disabled = isEnable;
+            document.getElementById('userSex').disabled = isEnable;
+            document.getElementById('userAddress').disabled = isEnable;
+        }
+        
+        setDisabled(true);
+        btnSave.classList.toggle('d-none');
+        btnCanle.classList.toggle('d-none');
+        btnUpdate.addEventListener('click', () => {
+            btnSave.classList.remove('d-none');
+            btnCanle.classList.remove('d-none');
+            btnUpdate.classList.toggle('d-none');
+            setDisabled(false);
+        })
+        btnCanle.addEventListener('click', () => {
+            setDisabled(true)
+            btnSave.classList.toggle('d-none');
+            btnCanle.classList.toggle('d-none');
+            btnUpdate.classList.remove('d-none');
+        })
+        btnSave.addEventListener('click', () => {
+            const userName = document.getElementById('userName').value;
+            const userMail = document.getElementById('userMail').value;
+            const userPhone = document.getElementById('userPhone').value;
+            const userSex = document.getElementById('userSex').value;
+            const userAddress = document.getElementById('userAddress').value;
+            const user = {
+                id: userID,
+                fullname: userName,
+                sex: userSex,
+                email: userMail,
+                phone: userPhone,
+                address: userAddress
+            }
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            };
+            console.log(userPhone)
+            if (userAddress == '' || userMail == '' || userName == '' || userPhone == '' || userSex == '') {
+                Msg.textContent = 'Vui lòng nhập đầy đủ các trường!'
+                setTimeout(() => {
+                    Msg.textContent = '';
+                }, 3000)
+            } else {
+                btnSave.classList.toggle('d-none');
+                btnCanle.classList.toggle('d-none');
+                btnUpdate.classList.remove('d-none');
+                fetch("/UserDashboard/users", requestOptions)
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data =>
+                    {
+                        if (data.status == '200') {
+                            Msg.textContent = 'Cập nhật thông tin thành công!';
+                            Msg.classList.remove('text-red-600');
+                            Msg.classList.toggle('text-green-600');
+                            setDisabled(true);
+                            bindData()
+                            localStorage.setItem("isNew", "false");
+                            setTimeout(() => {
+                                Msg.textContent = '';
+                            },3000)
+                        }
+                    }).catch(err => console.log(err))
+            }
+        })
+    });//DOMContentLoaded
+</script>
+

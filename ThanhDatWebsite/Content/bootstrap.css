@@ -20,7 +20,11 @@
     --bs-white: #fff;
     --bs-gray: #6c757d;
     --bs-gray-dark: #343a40;
-
+    --bs-copper: rgb(184, 115, 51); /* Đồng */
+    --bs-silver: rgb(192, 192, 192); /* Bạc */
+    --bs-gold: rgb(255, 215, 0); /* Vàng */
+    --bs-platinum: rgb(229, 228, 226); /* Bạch kim */
+    --bs-diamond: rgb(185, 242, 255); /* Kim cương (ánh xanh nhạt) */
     --bs-gray-100: rgb(243, 244, 246);
     --bs-gray-200: rgb(229, 231, 235);
     --bs-gray-300: rgb(209, 213, 219);
@@ -8047,7 +8051,15 @@ textarea.form-control-lg {
 .fs-6 {
   font-size: 1rem !important;
 }
-
+.fs-7 {
+    font-size: 0.85rem !important;
+}
+.fs-8 {
+    font-size: 0.65rem !important;
+}
+.fs-9 {
+    font-size: 0.45rem !important;
+}
 .fst-italic {
   font-style: italic !important;
 }
@@ -8598,7 +8610,119 @@ textarea.form-control-lg {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
 }
+.bg-copper {
+    --bs-bg-opacity: 1;
+    background-color: rgba(184, 115, 51, var(--bs-bg-opacity)) !important; /* Đồng */
+}
 
+.bg-silver {
+    --bs-bg-opacity: 1;
+    background-color: rgba(192, 192, 192, var(--bs-bg-opacity)) !important; /* Bạc */
+}
+
+.bg-gold {
+    --bs-bg-opacity: 1;
+    background-color: rgba(255, 215, 0, var(--bs-bg-opacity)) !important; /* Vàng */
+}
+
+.bg-platinum {
+    --bs-bg-opacity: 1;
+    background-color: rgba(229, 228, 226, var(--bs-bg-opacity)) !important; /* Bạch kim */
+}
+.bg-gray-100 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(245, 245, 245, var(--bs-bg-opacity)) !important; /* Rất nhạt */
+}
+
+.bg-gray-200 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(235, 235, 235, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-300 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(215, 215, 215, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-400 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(190, 190, 190, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-500 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(160, 160, 160, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-600 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(130, 130, 130, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-700 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(100, 100, 100, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-800 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(70, 70, 70, var(--bs-bg-opacity)) !important;
+}
+
+.bg-gray-900 {
+    --bs-bg-opacity: 1;
+    background-color: rgba(40, 40, 40, var(--bs-bg-opacity)) !important; /* Rất đậm */
+}
+
+.bg-diamond {
+    --bs-bg-opacity: 1;
+    background-color: rgba(185, 242, 255, var(--bs-bg-opacity)) !important; /* Kim cương */
+}
+
+.bg-red-100 {
+    --bs-text-opacity: 1;
+    background-color: rgba(254, 226, 226, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-200 {
+    --bs-text-opacity: 1;
+    background-color: rgba(254, 202, 202, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-300 {
+    --bs-text-opacity: 1;
+    background-color: rgba(252, 165, 165, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-400 {
+    --bs-text-opacity: 1;
+    background-color: rgba(248, 113, 113, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-500 {
+    --bs-text-opacity: 1;
+    background-color: rgba(239, 68, 68, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-600 {
+    --bs-text-opacity: 1;
+    background-color: rgba(220, 38, 38, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-700 {
+    --bs-text-opacity: 1;
+    background-color: rgba(185, 28, 28, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-800 {
+    --bs-text-opacity: 1;
+    background-color: rgba(153, 27, 27, var(--bs-text-opacity)) !important;
+}
+
+.bg-red-900 {
+    --bs-text-opacity: 1;
+    background-color: rgba(127, 29, 29, var(--bs-text-opacity)) !important;
+}
 .bg-black {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-black-rgb), var(--bs-bg-opacity)) !important;

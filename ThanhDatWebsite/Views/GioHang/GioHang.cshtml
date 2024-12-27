@@ -10,6 +10,48 @@
 
 }
 @{
+    <button id="btnOpenLogin" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+    </button>
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog =">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Thông báo</h5>
+                </div>
+                <div class="modal-body align-content-center text-center">
+                    <div class="align-content-center"><img src="~/Media/profile.png" /></div>
+                    <h3 class="fw-bold text-green-600 mt-3">Chưa đăng nhập!</h3>
+                    <p class="mt-2 mx-5 px-5">
+                        Vui lòng đăng nhập trước khi đặt hàng!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a href="~/Home/DangNhap" class="btn btn-primary fw-bold">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="btnOpen" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    </button>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog =">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Thông báo</h5>
+                </div>
+                <div class="modal-body align-content-center text-center">
+                    <div class="align-content-center"><img src="~/Media/profile.png" /></div>
+                    <h3 class="fw-bold text-green-600 mt-3">Chưa cập nhật thông tin!</h3>
+                    <p class="mt-2 mx-5 px-5">
+                        Sau khi đăng nhập, bạn vui lòng cập nhật số điện thoại, địa chỉ giao hàng nhé!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a href="~/UserDashboard/Index" class="btn btn-primary fw-bold">Tiếp tục</a>
+                </div>
+            </div>
+        </div>
+    </div>
     if (Session["cart"] == null)
     {
         <div class="container bg-light p-5 rounded-5 text-center mb-3">
@@ -43,7 +85,7 @@
                                                 <hr class="my-4">
                                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                     <div class="col-md-2 col-lg-2 col-xl-2 text-center">
-                                                        <img id="imgCart" src="@item.Item.Image" />
+                                                        <img id="imgCart" class="col-3 col-md-6" src="@item.Item.Image" />
                                                     </div>
                                                     <div class="col-md-3 col-lg-3 col-xl-3">
                                                         <h6 class="text-black mb-0">@item.Item.ProductName</h6>
@@ -97,13 +139,13 @@
                                                 <div>
                                                     <div class="d-flex">
                                                         <div class="form-check me-2">
-                                                            @Html.RadioButton("GT", "Male", false, new { @class = "form-check-input" })
+                                                            @Html.RadioButton("GT", "Male", false, new { @class = "form-check-input", id = "male" })
                                                             <label class="form-check-label">
                                                                 Anh
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            @Html.RadioButton("GT", "Female", false, new { @class = "form-check-input" })
+                                                            @Html.RadioButton("GT", "Female", false, new { @class = "form-check-input", id = "female" })
                                                             <label class="form-check-label">
                                                                 Chị
                                                             </label>
@@ -117,6 +159,10 @@
                                                         <div class="form-group">
                                                             <label for="inputSDT">Số điện thoại</label>
                                                             @Html.TextBox("SDT", null, new { @class = "form-control", placeholder = "68 68 68 68", maxlength = "10" })
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="inputSDT">Email</label>
+                                                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "example@gmail.com" })
                                                             <small id="nameHelp" class="form-text text-muted">Chỉ dùng với mục đích liên lạc</small>
                                                         </div>
                                                     </div>
@@ -141,16 +187,13 @@
                                                 <div style="display:none" id="GH-checked">
                                                     <div class="d-grid">
                                                         <div class="d-grid pb-3 gap-2">
-                                                            @Html.DropDownList("ddlTP", new SelectList(new string[] { "Tỉnh/Thành phố" }), new { id = "provinces", onchange = "getProvinces(event)", @class = "form-select" })
-                                                            @Html.DropDownList("ddlQ", new SelectList(new string[] { "Quận/Huyện" }), new { id = "districts", onchange = "getDistricts(event)", @class = "form-select" })
-                                                            @Html.DropDownList("ddlP", new SelectList(new string[] { "Phường/Xã" }), new { id = "wards", @class = "form-select" })
                                                             @Html.TextBox("txtSoNha", null, new { @class = "form-control" })
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div style="display:none" id="DL-checked">
                                                     <div class="card card-body">
-                                                        @Html.DropDownList("ddlCH", new SelectList(new string[] { "Thành Đạt 633 Lê Văn Việt", "Thành Đạt 374 - 376 Điên Biên Phủ", "Thành Đạt 125 3 tháng 2"}), new { @class = "form-select" })
+                                                        @Html.DropDownList("ddlCH", new SelectList(new string[] { "Thành Đạt 633 Lê Văn Việt", "Thành Đạt 374 - 376 Điên Biên Phủ", "Thành Đạt 125 3 tháng 2" }), new { @class = "form-select" })
                                                     </div>
                                                 </div>
                                                 <hr />
@@ -158,7 +201,7 @@
                                                 <div>
                                                     <div class="form-check">
                                                         @Html.RadioButton("rbtnHTTT", "TTTM", false, new { @class = "form-check-input", id = "rbtnTM" })
-                                                        <label class="form-check-label" for="rbtnTM">Thanh toán khi nhận hàng</label>
+                                                        <label class="form-check-label" for="rbtnTM">Tiền mặt khi nhận hàng</label>
                                                     </div>
                                                     <div class="form-check">
                                                         @Html.RadioButton("rbtnHTTT", "TTCKVDT", false, new { @class = "form-check-input", id = "rbtnCK" })
@@ -226,6 +269,42 @@
                 </div>
             </div>
         </section>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                
+                const userID = localStorage.getItem('customerid');
+                if (userID == null) {
+                    $("#btnOpenLogin").click();
+                }
+                const bindData = () => {
+                    fetch(`/UserDashboard/users?id=${userID}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error("Network response not ok")
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data.status == '200') {
+                                document.getElementById('TenKH').value = data.cus.Fullname;
+                                document.getElementById('Email').value = data.cus.Email;
+                                document.getElementById('SDT').value = data.cus.Phone;
+                                if (data.cus.Sex == "Nam") {
+                                    document.getElementById("male").checked = true;
+                                }
+                                else document.getElementById("female").checked = true;
+                                document.getElementById('txtSoNha').value = data.cus.Address;
+                            }
+                        }).catch(err => console.log(err))
+                }
+                bindData();
+            })
+        </script>
     }
 
 }

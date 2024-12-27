@@ -7,7 +7,7 @@ namespace ThanhDatWebsite.Models
 {
     public class KhachHangModel
     {
-        public List<Customers> listCustomers { get; set; }
+        public List<CustomersModel> listCustomers { get; set; }
         public List<Products> listProducts { get; set; }
     }
 }

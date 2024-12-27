@@ -8,9 +8,28 @@ namespace ThanhDatWebsite.Controllers
 {
     public class IdIncrementer
     {
+        public static bool isExist(string _email, string TenBang)
+        {
+            bool isExist = false;
+            using (var db = new thanhdatEntities1())
+            {
+                if (TenBang == "Accounts")
+                {
+                    var email = db.Accounts.Where(a => a.Email == _email).FirstOrDefault();
+                    if (email != null)
+                        isExist = true;
+                }else if (TenBang == "Customers")
+                {
+                    var email = db.Accounts.Where(a => a.Email == _email).FirstOrDefault();
+                    if (email != null)
+                        isExist = true;
+                }
+            }
+            return isExist;
+        }
         public static string idincreament(string TenBang)
         {
-            using (var context = new thanhdatEntities())
+            using (var context = new thanhdatEntities1())
             {
                 string newId = "Error";
                 if (TenBang == "Orders")

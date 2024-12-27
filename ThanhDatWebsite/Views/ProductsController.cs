@@ -14,7 +14,7 @@ namespace ThanhDatWebsite.Views
 {
     public class ProductsController : Controller
     {
-        private thanhdatEntities db = new thanhdatEntities();
+        private thanhdatEntities1 db = new thanhdatEntities1();
 
         // GET: Products
         public ActionResult Index()

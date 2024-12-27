@@ -21,15 +21,16 @@ namespace ThanhDatWebsite
             this.OrderDetails = new HashSet<OrderDetails>();
             this.ReceiptDetails = new HashSet<ReceiptDetails>();
             this.Promotions = new HashSet<Promotions>();
+            this.Wishlist = new HashSet<Wishlist>();
         }
     
         public string ProductID { get; set; }
         public string ProductName { get; set; }
+        public string Description { get; set; }
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<bool> Discontinued { get; set; }
         public string CategoryID { get; set; }
         public string Image { get; set; }
-        public string Description { get; set; }
     
         public virtual Categories Categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -40,5 +41,7 @@ namespace ThanhDatWebsite
         public virtual ICollection<ReceiptDetails> ReceiptDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Promotions> Promotions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Wishlist> Wishlist { get; set; }
     }
 }

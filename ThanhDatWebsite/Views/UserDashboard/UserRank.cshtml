@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "UserRank";
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+}
+
+<div>
+    <div class="d-flex">
+        <img class="userImage rounded-2" />
+        <div class="ms-3">
+            <span class="userName fw-bold fs-5"></span>
+            <span class="userPhome fs-6 text-gray-500"></span>
+        </div>
+    </div>
+    <div class="d-flex mt-3">
+        <span class="fw-semibold">Hạng của bạn:</span>&nbsp;
+        <div  id="badge" class="badge bg-copper">Đồng</div>
+    </div>
+    <div class="d-flex mt-3">
+        <span class="fw-semibold">Tổng tiền đã mua:</span>&nbsp;
+        <div class="text-green-600 amount">0</div>
+    </div>
+    <div class="mt-3">
+        <div class="border border-1 rounded-2 border-dark p-3">
+            <div class="text-center fw-bold text-gray-500 fs-4">
+                <span>Tích lũy thêm</span>&nbsp;
+                <span id="neededAmount"></span>&nbsp;
+                <span>để lên hạn</span>
+            </div>
+            <div class="text-end">
+                <img src="~/Media/flag.png" />
+            </div>
+            <div class="text-end currentAmount" style="width:12%">
+                <div class="text-dark">&nabla;</div>
+            </div>
+            <div class="border-2 border-dark border-top d-flex">
+                <div class="text-end currentAmount" style="width:12%">
+                    <div class="text-dark amount">0</div>
+                </div>
+                <div class="ms-auto">
+                    <div id="totalamount" class="text-dark ">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="horizontal-divider my-5"></div>
+    <div>
+        <div class="fw-bold">Các hạng thành viên</div>
+        <div class="row gap-3 mt-3">
+            <div class="col-md-1 col-3 p-2 fs-6 fw-bold badge bg-copper">Đồng</div>
+            <div class="col-md-1 col-3 p-2 fs-6 fw-bold badge bg-silver">Bạc</div>
+            <div class="col-md-2 col-3 p-2 fs-6 fw-bold badge bg-gold">Vàng</div>
+            <div class="col-md-2 col-3 p-2 fs-6 fw-bold badge bg-platinum text-dark">Bạch kim</div>
+            <div class="col-md-2 col-3 p-2 fs-6 fw-bold badge bg-diamond text-dark">Kim cương</div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const userID = localStorage.getItem('customerid');
+        var txtAmount = document.querySelectorAll('.amount');
+        var txtBadge = document.getElementById('badge');
+        var txtToTal = document.getElementById('totalamount')
+        var txtCurrentAmount = document.querySelectorAll('.currentAmount')
+        var txtNeededAmount = document.getElementById('neededAmount')
+        fetch(`/UserDashboard/getAmount/${userID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error("Network response not ok")
+            }
+            return res.json();
+        })
+            .then(data => {
+                const formatter = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    minimumFractionDigits: 0 // Không hiển thị số thập phân
+                });
+
+                const formattedAmount = formatter.format(data.amount); // Định dạng số
+
+                // Gán giá trị đã định dạng vào txtAmount
+                txtAmount.forEach(amount => {
+                    amount.textContent = formattedAmount;
+                })
+                if (data.amount > 0 && data.amount < 3000000) {
+                    txtBadge.textContent = 'Đồng';
+                    txtBadge.className = '';
+                    txtToTal.textContent = formatter.format(3000000)
+                    txtBadge.classList.add('badge', 'bg-copper')
+                    txtNeededAmount.textContent = formatter.format(3000000 - data.amount)
+                    txtCurrentAmount.forEach(current => {
+                        current.style.width = `${data.amount * 100 / 3000000}%`
+                    })
+                } else if (data.amount > 3000000 && data.amount < 10000000) {
+                    txtBadge.textContent = 'Bạc';
+                    txtBadge.className = '';
+                    txtBadge.classList.add('badge', 'bg-silver')
+                    txtToTal.textContent = formatter.format(10000000)
+                    txtNeededAmount.textContent = formatter.format(10000000 - data.amount)
+                    txtCurrentAmount.forEach(current => {
+                        current.style.width = `${data.amount * 100 / 10000000}%`
+                    })
+                } else if (data.amount > 10000000 && data.amount < 30000000) {
+                    txtBadge.textContent = 'Vàng';
+                    txtBadge.className = '';
+                    txtBadge.classList.add('badge', 'bg-gold')
+                    txtToTal.textContent = formatter.format(30000000)
+                    txtNeededAmount.textContent = formatter.format(30000000 - data.amount)
+                    txtCurrentAmount.forEach(current => {
+                        current.style.width = `${data.amount * 100 / 30000000}%`
+                    })
+                } else if (data.amount > 30000000 && data.amount < 60000000) {
+                    txtBadge.textContent = 'Bạch kim';
+                    txtBadge.className = '';
+                    txtBadge.classList.add('badge', 'bg-platinum', 'text-dark')
+                    txtToTal.textContent = formatter.format(60000000)
+                    txtNeededAmount.textContent = formatter.format(60000000 - data.amount)
+                    txtCurrentAmount.forEach(current => {
+                        current.style.width = `${data.amount*100/60000000}%`
+                    })
+                } else {
+                    txtBadge.textContent = 'Kim cương';
+                    txtBadge.className = '';
+                    txtBadge.classList.add('badge', 'bg-diamond')
+                }
+            }).catch(err => console.log(err))
+    })
+    
+</script>
+

@@ -13,10 +13,10 @@ namespace ThanhDatWebsite
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class thanhdatEntities : DbContext
+    public partial class thanhdatEntities1 : DbContext
     {
-        public thanhdatEntities()
-            : base("name=thanhdatEntities")
+        public thanhdatEntities1()
+            : base("name=thanhdatEntities1")
         {
         }
     
@@ -25,9 +25,12 @@ namespace ThanhDatWebsite
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Branches> Branches { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
+        public virtual DbSet<Customers> Customers { get; set; }
         public virtual DbSet<DeliveryMethod> DeliveryMethod { get; set; }
+        public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
@@ -36,8 +39,6 @@ namespace ThanhDatWebsite
         public virtual DbSet<Promotions> Promotions { get; set; }
         public virtual DbSet<ReceiptDetails> ReceiptDetails { get; set; }
         public virtual DbSet<Receipts> Receipts { get; set; }
-        public virtual DbSet<Accounts> Accounts { get; set; }
-        public virtual DbSet<Employees> Employees { get; set; }
-        public virtual DbSet<Customers> Customers { get; set; }
+        public virtual DbSet<Wishlist> Wishlist { get; set; }
     }
 }

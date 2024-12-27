@@ -10,7 +10,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
     @RenderSection("scripts", required: false)
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tempus-dominus/6.0.0/css/tempus-dominus.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
@@ -18,52 +18,154 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
-    <script>
-        imgInp.onchange = evt => {
-            const [file] = imgInp.files
-            if (file) {
-                blah.src = URL.createObjectURL(file)
-            }
+    <style>
+        :root {
+            --bs-blue: #0d6efd;
+            --bs-indigo: #6610f2;
+            --bs-purple: #6f42c1;
+            --bs-pink: #d63384;
+            --bs-red: #dc3545;
+            --bs-orange: #fd7e14;
+            --bs-yellow: #ffc107;
+            --bs-green: #198754;
+            --bs-teal: #20c997;
+            --bs-cyan: #0dcaf0;
+            --bs-black: #000;
+            --bs-white: #fff;
+            --bs-gray: #6c757d;
+            --bs-gray-dark: #343a40;
+            --bs-gray-100: #f8f9fa;
+            --bs-gray-200: #e9ecef;
+            --bs-gray-300: #dee2e6;
+            --bs-gray-400: #ced4da;
+            --bs-gray-500: #adb5bd;
+            --bs-gray-600: #6c757d;
+            --bs-gray-700: #495057;
+            --bs-gray-800: #343a40;
+            --bs-gray-900: #212529;
+            --bs-primary: #0d6efd;
+            --bs-secondary: #6c757d;
+            --bs-success: #198754;
+            --bs-info: #0dcaf0;
+            --bs-warning: #ffc107;
+            --bs-danger: #dc3545;
+            --bs-light: #f8f9fa;
+            --bs-dark: #212529;
+            --bs-gray-100: rgb(243, 244, 246);
+            --bs-gray-200: rgb(229, 231, 235);
+            --bs-gray-300: rgb(209, 213, 219);
+            --bs-gray-400: rgb(156, 163, 175);
+            --bs-gray-500: rgb(107, 114, 128);
+            --bs-gray-600: rgb(75, 85, 99);
+            --bs-gray-700: rgb(55, 65, 81);
+            --bs-gray-800: rgb(31, 41, 55);
+            --bs-gray-900: rgb(17, 24, 39);
+            /* Red */
+            --bs-red-100: rgb(254, 226, 226);
+            --bs-red-200: rgb(254, 202, 202);
+            --bs-red-300: rgb(252, 165, 165);
+            --bs-red-400: rgb(248, 113, 113);
+            --bs-red-500: rgb(239, 68, 68);
+            --bs-red-600: rgb(220, 38, 38);
+            --bs-red-700: rgb(185, 28, 28);
+            --bs-red-800: rgb(153, 27, 27);
+            --bs-red-900: rgb(127, 29, 29);
+            /* Yellow */
+            --bs-yellow-100: rgb(254, 243, 199);
+            --bs-yellow-200: rgb(253, 230, 138);
+            --bs-yellow-300: rgb(252, 211, 77);
+            --bs-yellow-400: rgb(251, 191, 36);
+            --bs-yellow-500: rgb(245, 158, 11);
+            --bs-yellow-600: rgb(217, 119, 6);
+            --bs-yellow-700: rgb(180, 83, 9);
+            --bs-yellow-800: rgb(146, 64, 14);
+            --bs-yellow-900: rgb(120, 53, 15);
+            /* Green */
+            --bs-green-100: rgb(209, 250, 229);
+            --bs-green-200: rgb(167, 243, 208);
+            --bs-green-300: rgb(110, 231, 183);
+            --bs-green-400: rgb(52, 211, 153);
+            --bs-green-500: rgb(16, 185, 129);
+            --bs-green-600: rgb(5, 150, 105);
+            --bs-green-700: rgb(4, 120, 87);
+            --bs-green-800: rgb(6, 95, 70);
+            --bs-green-900: rgb(6, 78, 59);
+            /* Blue */
+            --bs-blue-100: rgb(219, 234, 254);
+            --bs-blue-200: rgb(191, 219, 254);
+            --bs-blue-300: rgb(147, 197, 253);
+            --bs-blue-400: rgb(96, 165, 250);
+            --bs-blue-500: rgb(59, 130, 246);
+            --bs-blue-600: rgb(37, 99, 235);
+            --bs-blue-700: rgb(29, 78, 216);
+            --bs-blue-800: rgb(30, 64, 175);
+            --bs-blue-900: rgb(30, 58, 138);
+            /* Purple */
+            --bs-purple-100: rgb(237, 233, 254);
+            --bs-purple-200: rgb(221, 214, 254);
+            --bs-purple-300: rgb(196, 181, 253);
+            --bs-purple-400: rgb(167, 139, 250);
+            --bs-purple-500: rgb(139, 92, 246);
+            --bs-purple-600: rgb(124, 58, 237);
+            --bs-purple-700: rgb(109, 40, 217);
+            --bs-purple-800: rgb(91, 33, 182);
+            --bs-purple-900: rgb(76, 29, 149);
+            /* Pink */
+            --bs-pink-100: rgb(252, 231, 243);
+            --bs-pink-200: rgb(251, 207, 232);
+            --bs-pink-300: rgb(249, 168, 212);
+            --bs-pink-400: rgb(244, 114, 182);
+            --bs-pink-500: rgb(236, 72, 153);
+            --bs-pink-600: rgb(219, 39, 119);
+            --bs-pink-700: rgb(190, 24, 93);
+            --bs-pink-800: rgb(157, 23, 77);
+            --bs-pink-900: rgb(131, 24, 67);
+            --bs-primary-rgb: 13, 110, 253;
+            --bs-secondary-rgb: 108, 117, 125;
+            --bs-success-rgb: 25, 135, 84;
+            --bs-info-rgb: 13, 202, 240;
+            --bs-warning-rgb: 255, 193, 7;
+            --bs-danger-rgb: 220, 53, 69;
+            --bs-light-rgb: 248, 249, 250;
+            --bs-dark-rgb: 33, 37, 41;
+            --bs-white-rgb: 255, 255, 255;
+            --bs-black-rgb: 0, 0, 0;
+            --bs-body-color-rgb: 33, 37, 41;
+            --bs-body-bg-rgb: 255, 255, 255;
+            --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+            --bs-body-font-family: var(--bs-font-sans-serif);
+            --bs-body-font-size: 1rem;
+            --bs-body-font-weight: 400;
+            --bs-body-line-height: 1.5;
+            --bs-body-color: #212529;
+            --bs-body-bg: #fff;
+            --bs-border-width: 1px;
+            --bs-border-style: solid;
+            --bs-border-color: #dee2e6;
+            --bs-border-color-translucent: rgba(0, 0, 0, 0.175);
+            --bs-border-radius: 0.375rem;
+            --bs-border-radius-sm: 0.25rem;
+            --bs-border-radius-lg: 0.5rem;
+            --bs-border-radius-xl: 1rem;
+            --bs-border-radius-2xl: 2rem;
+            --bs-border-radius-pill: 50rem;
+            --bs-link-color: #0d6efd;
+            --bs-link-hover-color: #0a58ca;
+            --bs-code-color: #d63384;
+            --bs-highlight-bg: #fff3cd;
         }
-        function fnExcelReport() {
-            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
-            var j = 0;
-            var tab = document.getElementById('reportTbl'); // id of table
-
-            for (j = 0; j < tab.rows.length; j++) {
-                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
-                //tab_text=tab_text+"</tr>";
-            }
-
-            tab_text = tab_text + "</table>";
-            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-
-            var msie = window.navigator.userAgent.indexOf("MSIE ");
-
-            // If Internet Explorer
-            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-                txtArea1.document.open("txt/html", "replace");
-                txtArea1.document.write(tab_text);
-                txtArea1.document.close();
-                txtArea1.focus();
-
-                sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-            } else {
-                // other browser not tested on IE 11
-                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-            }
-
-            return sa;
+        .nav-link{
+            color:var(--bs-gray-700);
+            font-weight:600;
         }
-    </script>
+    </style>
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand bg-white">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="@Url.Action("Dashboard","Home")">Quản lý</a>
+        <a class="navbar-brand ps-3 fw-bold text-green-700" href="@Url.Action("Index","Home")">THÀNH ĐẠT Store</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -87,24 +189,31 @@
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <nav class="sb-sidenav bg-white accordion shadow" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <a class="nav-link" href="@Url.Action("Dashboard","Home")">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseQLBH" aria-expanded="false" aria-controls="collapseQLBH">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Tổng quan
+                            Quản lý bán hàng
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <a class="nav-link" href="@Url.Action("Index","Orders")">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-box"></i></div>
-                            Đơn hàng
-                        </a>
+                        <div class="collapse" id="collapseQLBH">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="@Url.Action("Dashboard","Home")">
+                                    Duyệt đơn
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","Orders")">
+                                    Quản lý đơn hàng
+                                </a>
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
                             Sản phẩm
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo">
+                            <nav class="sb-sidenav-menu-nested nav accordion">
                                 <a class="nav-link" href="@Url.Action("Index","Products")">
                                     Quản lý sản phẩm
                                 </a>
@@ -119,74 +228,39 @@
                                 </a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="@Url.Action("Index","Customers")">
+                        <a class="nav-link collapsed" href="#" data-bs-target="#collapseQLND" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseQLND">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-people-group"></i></div>
-                            Khách hàng
-                        </a>
-                        <a class="nav-link" href="@Url.Action("Index","AdminAccounts")">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user"></i></div>
-                            Tài khoản người dùng
-                        </a>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-newspaper"></i></div>
-                            Báo cáo
+                            Quản lý người dùng
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link" href="@Url.Action("DoanhThu","BaoCao")">
-                                    Doanh thu
+                        <div class="collapse" id="collapseQLND" aria-labelledby="headingTwo">
+                            <nav class="sb-sidenav-menu-nested nav accordion">
+                                <a class="nav-link" href="@Url.Action("Index","Customers")">
+                                    Khách hàng
                                 </a>
-                                <a class="nav-link" href="@Url.Action("Index","Payments")">
-                                    Danh sách khách hàng
-                                </a>
-                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
-                                    Danh sách sản phẩm
+                                <a class="nav-link" href="@Url.Action("Index","Employees")">
+                                    Nhân viên
                                 </a>
                             </nav>
                         </div>
-                        @*Multilist*@
-                        <!--<a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages5" aria-expanded="true" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><svg class="svg-inline--fa fa-book-open" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book-open" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"></path></svg>--><!-- <i class="fas fa-book-open"></i> Font Awesome fontawesome.com --><!--</div>
-                            Pages
-                            <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
-                        </a>
-                        <div class="collapse show" id="collapsePages5" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion" style="">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    Authentication
-                                    <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="login.html">Login</a>
-                                        <a class="nav-link" href="register.html">Register</a>
-                                        <a class="nav-link" href="password.html">Forgot Password</a>
-                                    </nav>
-                                </div>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                    Error
-                                    <div class="sb-sidenav-collapse-arrow"><svg class="svg-inline--fa fa-angle-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M169.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 274.7 54.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>--><!-- <i class="fas fa-angle-down"></i> Font Awesome fontawesome.com --><!--</div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="401.html">401 Page</a>
-                                        <a class="nav-link" href="404.html">404 Page</a>
-                                        <a class="nav-link" href="500.html">500 Page</a>
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>-->
-                        @*Multilist*@
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages3" aria-expanded="false" aria-controls="collapsePages">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseQLHT" aria-expanded="false" aria-controls="collapseQLHT">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-list"></i></div>
-                            Danh mục
+                            Quản lý hệ thống
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages3" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                        <div class="collapse" id="collapseQLHT" aria-labelledby="headingTwo">
+                            <nav class="sb-sidenav-menu-nested nav accordion">
                                 <a class="nav-link" href="@Url.Action("Index","Branches")">
                                     Chi nhánh
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
+                                    Phân quyền
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
+                                    Thay đổi banner
+                                </a>
+                                <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
+                                    Tài khoản của tôi
                                 </a>
                                 <a class="nav-link" href="@Url.Action("Index","Payments")">
                                     Hình thức thanh toán
@@ -194,47 +268,23 @@
                                 <a class="nav-link" href="@Url.Action("Index","DeliveryMethods")">
                                     Hình thức vận chuyển
                                 </a>
+                                <a class="nav-link" href="@Url.Action("Index","AdminAccounts")">
+                                    Tài khoản người dùng
+                                </a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages4" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-question"></i></div>
-                            Trợ giúp
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages2" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-newspaper"></i></div>
+                            Báo cáo
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages4" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DangNhap.htm">
-                                    Đăng nhập
+                        <div class="collapse" id="collapsePages2" aria-labelledby="headingTwo">
+                            <nav class="sb-sidenav-menu-nested nav accordion">
+                                <a class="nav-link" href="@Url.Action("DoanhThu","BaoCao")">
+                                    Doanh thu
                                 </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DanhMucSanPham.htm">
-                                    Danh mục sản phẩm
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/GioHang.htm">
-                                    Giỏ hàng
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/DatHang.htm">
-                                    Đặt hàng
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/ThanhToan.htm">
-                                    Thanh toán
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/TraCuuDonHang.htm">
-                                    Tra cứu đơn hàng
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/TrangQuanLy.htm">
-                                    Trang quản lý
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLySanPham.htm">
-                                    Quản lý sản phẩm
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyDonHang.htm">
-                                    Quản lý đơn hàng
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyKhachHang.htm">
-                                    Quản lý khách hàng
-                                </a>
-                                <a class="nav-link" target="_blank" rel="noopener noreferrer" href="/HuongDan/QuanLyTaiKhoan.htm">
-                                    Quản lý tài khoản
+                                <a class="nav-link" href="#">
+                                    Tồn kho
                                 </a>
                             </nav>
                         </div>
@@ -245,8 +295,10 @@
             </nav>
         </div>
         <div id="layoutSidenav_content">
-            <main class="ps-3">
-                @RenderBody()
+            <main class="ps-3 bg-gray-100">
+                <div class="px-3 bg-white shadow pb-3">
+                    @RenderBody()
+                </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">

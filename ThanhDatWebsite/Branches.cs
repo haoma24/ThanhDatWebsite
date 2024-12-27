@@ -20,6 +20,7 @@ namespace ThanhDatWebsite
             this.Inventory = new HashSet<Inventory>();
             this.Orders = new HashSet<Orders>();
             this.Receipts = new HashSet<Receipts>();
+            this.Employees = new HashSet<Employees>();
         }
     
         public string BranchID { get; set; }
@@ -33,5 +34,7 @@ namespace ThanhDatWebsite
         public virtual ICollection<Orders> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receipts> Receipts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employees> Employees { get; set; }
     }
 }

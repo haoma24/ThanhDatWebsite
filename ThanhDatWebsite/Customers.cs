@@ -18,6 +18,7 @@ namespace ThanhDatWebsite
         public Customers()
         {
             this.Orders = new HashSet<Orders>();
+            this.Wishlist = new HashSet<Wishlist>();
         }
     
         public string CustomerID { get; set; }
@@ -31,5 +32,7 @@ namespace ThanhDatWebsite
         public virtual Accounts Accounts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Wishlist> Wishlist { get; set; }
     }
 }

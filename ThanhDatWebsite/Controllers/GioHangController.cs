@@ -9,7 +9,7 @@ namespace ThanhDatWebsite.Controllers
 {
     public class GioHangController : Controller
     {
-        private thanhdatEntities de = new thanhdatEntities();
+        private thanhdatEntities1 de = new thanhdatEntities1();
         // GET: GioHang
         public ActionResult GioHang()
         {

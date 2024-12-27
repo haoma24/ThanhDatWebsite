@@ -1,18 +1,31 @@
 ﻿@model IEnumerable<ThanhDatWebsite.Products>
 @{
     ViewBag.Title = "Thành Đạt store";
+    var products = Model.GroupBy(od => od.ProductID).Select(g => new
+    {
+        ProductID = g.Key,
+        TotalQuantity = g.Sum(od => od.OrderDetails.Select(x => x.Quantity).FirstOrDefault())
+    }).Join(Model, od => od.ProductID, p => p.ProductID, (od, p) => new
+    {
+        Product = p,
+        TotalQuantity = od.TotalQuantity
+    }).OrderByDescending(x => x.TotalQuantity).Take(8).Select(x => x.Product);
+
+    var saleProducts = Model.Where(x => x.Promotions.Any(p => p.EndDate > DateTime.Now && p.StartDate < DateTime.Now) && x.Promotions.Any(p=>p.PromotionID=="KMFS"));
+
+    var endDate = Model.SelectMany(x=>x.Promotions).Where(pr=>pr.PromotionID=="KMFS").Select(pr=>pr.EndDate).FirstOrDefault();
 }
 
-<main>
-    <div id="carouselExampleInterval" class="carousel slide" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
-        <div class="carousel-inner mt-2">
-            <div class="carousel-item active" data-bs-interval="5000">
+<main class="shadow px-3 pb-3 rounded-2 bg-white mt-3" >
+    <div id="carouselExampleInterval" class="carousel slide mt-2" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
+        <div class="carousel-inner mt-2 rounded-2">
+            <div class="carousel-item active" data-bs-interval="10000">
                 <img src="~/Media/Slider_1.png" class="d-block w-100" alt="...">
             </div>
-            <div class="carousel-item" data-bs-interval="5000">
+            <div class="carousel-item" data-bs-interval="10000">
                 <img src="~/Media/Slider_2.png" class="d-block w-100" alt="...">
             </div>
-            <div class="carousel-item" data-bs-interval="5000">
+            <div class="carousel-item" data-bs-interval="10000">
                 <img src="~/Media/Slider_3.png" class="d-block w-100" alt="...">
             </div>
         </div>
@@ -27,7 +40,7 @@
     </div>
     <!-- The Modal -->
     <div class="modal fade mt-4" id="myModal">
-        <div class="modal-dialog modal-dialog-centered bg-transparent ">
+        <div class="modal-dialog bg-transparent ">
             <div class="modal-content bg-transparent border-0">
 
                 @using (Html.BeginForm("TimKiem", "Home", FormMethod.Post, new { @class = "d-flex justify-content-center text-center gap-3" }))
@@ -39,9 +52,8 @@
             </div>
         </div>
     </div>
-
     <div class=" text-center fw-bold fs-2 mt-3 ">Danh mục sản phẩm</div>
-    <div id="category" class="row d-flex container justify-content-evenly ">
+    <div id="category" class="row d-flex container justify-content-evenly">
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPhone"><img class="w-100" src="~/Media/IP_Desktop.png" /></a>iPhone</div>
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#iPad"><img class="w-100" src="~/Media/IPad_Desktop.png" /></a>iPad</div>
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="#Mac"><img class="w-100" src="~/Media/Mac_Desktop.png" /></a>Macbook</div>
@@ -49,37 +61,62 @@
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe</div>
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/PK.png" /></a>Phụ kiện</div>
     </div>
-    <div class="Iphone d-flex d-md-none position-sticky row overflow-hidden">
-        @foreach (var item in Model)
-        {
-            <div class="col-6 col-md-4 col-lg-3 mt-2 align-content-center bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2 col-3">
-                <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+    <div class="bg-red-800 py-2 px-4 rounded-2 mt-2">
+        <div class="text-center my-3">
+            <div class="pt-1"><img id="flashSaleImg" src="https://cdn2.cellphones.com.vn/x/media/catalog/product/f/s/fs-12-12-2024.gif" /></div>
+            <div>
+                <div class="text-light justify-content-center fs-6 fw-bold d-flex">
+                    Kết thúc trong:
+                    &nbsp;
+                    <div id="timer" class="badge bg-light text-red-800 fs-6 fw-bold"></div>
+                </div>
             </div>
-        }
-    </div>
-    <div class="product-slider d-none d-md-block">
-        <p class="fw-bold fs-3 text-danger">@ViewBag.msg</p>
-        <div id="iPhone" class="text-center fw-bold fs-2 my-3">Điện thoại</div>
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        </div>
+        <div id="FlashSaleCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
             <div class="carousel-inner">
-                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMDT").Count(); i += 4)
+                @for (int i = 0; i < saleProducts.Count(); i += 4)
                 {
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <div class="row">
+                        <div class="row py-3">
                             @for (int j = 0; j < 4; j++)
                             {
-                                if (i + j < Model.Where(x => x.CategoryID == "DMDT").Count())
+                                if (i + j < saleProducts.Count())
                                 {
-                                    var item = Model.Where(x => x.CategoryID == "DMDT").ElementAt(i + j);
-                                    <div class="col-6 col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
-                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice*item.)</div>
-                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    var item = saleProducts.ElementAt(i + j);
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <a href="#" id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></a>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
                                     </div>
                                 }
                             }
@@ -87,11 +124,188 @@
                     </div>
                 }
             </div>
-            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#FlashSaleCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#FlashSaleCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div class="justify-content-center my-3 d-flex">
+        <div class="fw-bold fs-2">
+            Bán chạy nhất
+        </div>
+        &nbsp;
+        <div class="pt-1"><img src="~/Media/fire.png" /></div>
+    </div>
+    <div>
+        <div id="TopSellCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+            <div class="carousel-inner">
+                @for (int i = 0; i < products.Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row py-3">
+                            @for (int j = 0; j < 4; j++)
+                                {
+                                    if (i + j < products.Count())
+                                    {
+                                        var item = products.ElementAt(i + j);
+                                        var sellAmount = item.OrderDetails.Sum(od => od.Quantity).Value;
+                                        var totalAmount = item.ReceiptDetails.Sum(rd => rd.Quantity).Value;
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#TopSellCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#TopSellCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div class="Iphone d-flex d-md-none position-sticky row overflow-hidden">
+        @foreach (var item in Model)
+        {
+            <div class="col-6 col-md-3 px-3 my-2">
+                <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                    <div class="text-end me-3">
+                        <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                        </a>
+                        <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                        </a>
+                    </div>
+                    <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                    <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                    @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                    {
+                        <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                            <div class="text-decoration-line-through fs-6">
+                                @string.Format("{0:C0}", item.UnitPrice)
+                            </div>
+                            &nbsp;
+                            <div class="text-danger">
+                                -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                            </div>
+                        </div>
+                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                    }
+                    else
+                    { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                            <div class="fw-bold text-danger fs-5">
+                                @string.Format("{0:C0}", item.UnitPrice)
+                            </div>
+                        </div>
+                    }
+                    <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="product-slider d-none d-md-block">
+        <p class="fw-bold fs-3 text-danger">@ViewBag.msg</p>
+        <div id="iPhone" class="text-center fw-bold fs-2 my-3">Điện thoại</div>
+        <div id="SmartPhoneCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMDT").Count(); i += 4)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row py-3">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < Model.Where(x => x.CategoryID == "DMDT").Count())
+                                {
+                                    var item = Model.Where(x => x.CategoryID == "DMDT").ElementAt(i + j);
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#SmartPhoneCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#SmartPhoneCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -99,22 +313,51 @@
 
 
         <div id="Mac" class="text-center fw-bold fs-2 my-3">Laptop</div>
-        <div id="productCarousel2" class="carousel slide" data-bs-ride="carousel">
+        <div id="LaptopCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
             <div class="carousel-inner">
                 @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMLT").Count(); i += 4)
                 {
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <div class="row">
+                        <div class="row py-3">
                             @for (int j = 0; j < 4; j++)
                             {
                                 if (i + j < Model.Where(x => x.CategoryID == "DMLT").Count())
                                 {
                                     var item = Model.Where(x => x.CategoryID == "DMLT").ElementAt(i + j);
-                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
-                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
                                     </div>
                                 }
                             }
@@ -122,33 +365,62 @@
                     </div>
                 }
             </div>
-            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel2" data-bs-slide="prev">
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#LaptopCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel2" data-bs-slide="next">
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#LaptopCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
 
         <div id="iPad" class="text-center fw-bold fs-2 my-3">Máy tính bảng</div>
-        <div id="productCarousel3" class="carousel slide" data-bs-ride="carousel">
+        <div id="IpadCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
             <div class="carousel-inner">
                 @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMMTB").Count(); i += 4)
                 {
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <div class="row">
+                        <div class="row py-3">
                             @for (int j = 0; j < 4; j++)
                             {
                                 if (i + j < Model.Where(x => x.CategoryID == "DMMTB").Count())
                                 {
                                     var item = Model.Where(x => x.CategoryID == "DMMTB").ElementAt(i + j);
-                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
-                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
                                     </div>
                                 }
                             }
@@ -156,33 +428,62 @@
                     </div>
                 }
             </div>
-            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel3" data-bs-slide="prev">
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#IpadCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel3" data-bs-slide="next">
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#IpadCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
 
         <div id="Watch" class="text-center fw-bold fs-2 my-3">Watch</div>
-        <div id="productCarousel4" class="carousel slide" data-bs-ride="carousel">
+        <div id="AccessoriesCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
             <div class="carousel-inner">
                 @for (int i = 0; i < Model.Where(x => x.CategoryID == "DMPK").Count(); i += 4)
                 {
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <div class="row">
+                        <div class="row py-3">
                             @for (int j = 0; j < 4; j++)
                             {
                                 if (i + j < Model.Where(x => x.CategoryID == "DMPK").Count())
                                 {
                                     var item = Model.Where(x => x.CategoryID == "DMPK").ElementAt(i + j);
-                                    <div class="col-md-3 image-item ip-item bg-opacity-25 bg-light justify-content-center pt-2 pb-2 rounded-2">
-                                        <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
-                                        <div class="item-name w-100 d-flex mt-1 ps-3 pe-3 align-content-center text-center justify-content-center">@item.ProductName</div>
-                                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold">@string.Format("{0:C0}", item.UnitPrice)</div>
-                                        <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                    <div class="col-6 col-md-3 px-3 my-2">
+                                        <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
+                                            <div class="text-end me-3">
+                                                <a class="btnAddToWishlist text-decoration-none" href="@Url.Action("AddToWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" /></svg>
+                                                </a>
+                                                <a class="btnRemoveFromWishlist text-decoration-none" href="@Url.Action("RemoveFromWishlist", "Home", new { id = item.ProductID.TrimEnd() })">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z" /></svg>
+                                                </a>
+                                            </div>
+                                            <div id="ProductImg" class="item-img align-content-center justify-content-center d-flex hover-zoom"><img class="w-50" src="@item.Image" /></div>
+                                            <div class="item-name w-100 d-flex mt-1 align-content-center text-center justify-content-center">@item.ProductName</div>
+                                            @if (item.Promotions.Where(x => x.EndDate > DateTime.Now && x.StartDate < DateTime.Now).Select(x => x.DiscountPercentage).Any())
+                                            {
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="text-decoration-line-through fs-6">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    &nbsp;
+                                                    <div class="text-danger">
+                                                        -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
+                                                    </div>
+                                                </div>
+                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                            }
+                                            else
+                                            { <div class="item-price w-100 d-flex mt-1 justify-content-center">
+                                                    <div class="fw-bold text-danger fs-5">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="item-btn align-content-center mt-1 justify-content-center d-flex"><a href="@Url.Action("AddToCart", "GioHang", new { id = item.ProductID.TrimEnd() })" class="text-decoration-none">Thêm vào giỏ</a></div>
+                                        </div>
                                     </div>
                                 }
                             }
@@ -190,11 +491,11 @@
                     </div>
                 }
             </div>
-            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel4" data-bs-slide="prev">
+            <button class="carousel-control-prev bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#AccessoriesCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#productCarousel4" data-bs-slide="next">
+            <button class="carousel-control-next bg-black rounded-circle mt-auto mb-auto" style="width:3vw; height:3vw" type="button" data-bs-target="#AccessoriesCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -202,3 +503,33 @@
     </div>
     <!-- PRODUCT -->
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    })
+    let rawDate = '@endDate';
+    rawDate = rawDate.replace('SA', 'AM').replace('CH', 'PM');
+    const endDate = new Date(rawDate).getTime();
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const timeLeft = endDate - now;
+
+        if (timeLeft > 0) {
+            // Tính toán ngày, giờ, phút, giây còn lại
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            // Hiển thị timer
+            document.getElementById("timer").innerHTML =
+                `${days} ngày, ${hours} giờ, ${minutes} phút, ${seconds} giây`;
+        } else {
+            // Hết hạn
+            document.getElementById("timer").innerHTML = "Khuyến mãi đã kết thúc!";
+            clearInterval(timerInterval); // Dừng cập nhật
+        }
+    }
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+</script>

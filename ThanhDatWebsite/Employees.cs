@@ -14,6 +14,13 @@ namespace ThanhDatWebsite
     
     public partial class Employees
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Employees()
+        {
+            this.Orders = new HashSet<Orders>();
+            this.Receipts = new HashSet<Receipts>();
+        }
+    
         public string EmployeeID { get; set; }
         public string AccountID { get; set; }
         public string BranchID { get; set; }
@@ -25,5 +32,10 @@ namespace ThanhDatWebsite
         public string Position { get; set; }
     
         public virtual Accounts Accounts { get; set; }
+        public virtual Branches Branches { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Receipts> Receipts { get; set; }
     }
 }

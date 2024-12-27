@@ -12,7 +12,7 @@ namespace ThanhDatWebsite.Controllers
 {
     public class CategoriesController : Controller
     {
-        private thanhdatEntities db = new thanhdatEntities();
+        private thanhdatEntities1 db = new thanhdatEntities1();
 
         // GET: Categories
         public ActionResult Index()

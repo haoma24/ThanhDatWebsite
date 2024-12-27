@@ -23,9 +23,11 @@ namespace ThanhDatWebsite
         public string ReceiptID { get; set; }
         public string BranchID { get; set; }
         public Nullable<System.DateTime> ReceiptDate { get; set; }
+        public string EmployeeID { get; set; }
     
         public virtual Branches Branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReceiptDetails> ReceiptDetails { get; set; }
+        public virtual Employees Employees { get; set; }
     }
 }
