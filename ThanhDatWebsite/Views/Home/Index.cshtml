@@ -12,22 +12,23 @@
     }).OrderByDescending(x => x.TotalQuantity).Take(8).Select(x => x.Product);
 
     var saleProducts = Model.Where(x => x.Promotions.Any(p => p.EndDate > DateTime.Now && p.StartDate < DateTime.Now) && x.Promotions.Any(p=>p.PromotionID=="KMFS"));
-
+    var bannermodel = ViewBag.banner as IEnumerable<ThanhDatWebsite.BannerImage>;
     var endDate = Model.SelectMany(x=>x.Promotions).Where(pr=>pr.PromotionID=="KMFS").Select(pr=>pr.EndDate).FirstOrDefault();
 }
 
-<main class="shadow px-3 pb-3 rounded-2 bg-white mt-3" >
+<main class="shadow px-3 pb-3 rounded-2 bg-white mt-3">
     <div id="carouselExampleInterval" class="carousel slide mt-2" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
         <div class="carousel-inner mt-2 rounded-2">
-            <div class="carousel-item active" data-bs-interval="10000">
-                <img src="~/Media/Slider_1.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item" data-bs-interval="10000">
-                <img src="~/Media/Slider_2.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item" data-bs-interval="10000">
-                <img src="~/Media/Slider_3.png" class="d-block w-100" alt="...">
-            </div>
+            @{
+                bool isActive = true; // Cờ để xác định mục đầu tiên
+            }
+            @foreach (var banner in bannermodel)
+            {
+                <div class="carousel-item @(isActive ? "active" : "")" data-bs-interval="10000">
+                    <img src="@banner.ImageUrl" class="d-block w-100" alt="...">
+                </div>
+                isActive = false; // Sau mục đầu tiên, đặt cờ thành false
+            }
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -61,14 +62,15 @@
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/Amthanh_Desktop.png" /></a>Tai nghe</div>
         <div class="col-4 col-md-2 mt-3 d-grid text-center pb-2 fw-bold fs-6 align-content-center justify-content-center rounded-2"><a href="@Url.Action("Index","Home")"><img class="w-100" src="~/Media/PK.png" /></a>Phụ kiện</div>
     </div>
-    <div class="bg-red-800 py-2 px-4 rounded-2 mt-2">
+    <div class="bg-danger py-2 px-md-4 px-1 rounded-2 mt-2">
         <div class="text-center my-3">
             <div class="pt-1"><img id="flashSaleImg" src="https://cdn2.cellphones.com.vn/x/media/catalog/product/f/s/fs-12-12-2024.gif" /></div>
             <div>
                 <div class="text-light justify-content-center fs-6 fw-bold d-flex">
                     Kết thúc trong:
                     &nbsp;
-                    <div id="timer" class="badge bg-light text-red-800 fs-6 fw-bold"></div>
+                    <div id="timer" class="badge bg-light text-danger fs-6 fw-bold d-none d-md-block"></div>
+                    <div id="timerMobile" class="badge bg-light text-danger fs-6 fw-bold d-md-none d-block"></div>
                 </div>
             </div>
         </div>
@@ -77,7 +79,7 @@
                 @for (int i = 0; i < saleProducts.Count(); i += 4)
                 {
                     <div class="carousel-item @(i == 0 ? "active" : "")">
-                        <div class="row py-3">
+                        <div class="row  py-3">
                             @for (int j = 0; j < 4; j++)
                             {
                                 if (i + j < saleProducts.Count())
@@ -106,11 +108,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -149,12 +155,12 @@
                     <div class="carousel-item @(i == 0 ? "active" : "")">
                         <div class="row py-3">
                             @for (int j = 0; j < 4; j++)
+                            {
+                                if (i + j < products.Count())
                                 {
-                                    if (i + j < products.Count())
-                                    {
-                                        var item = products.ElementAt(i + j);
-                                        var sellAmount = item.OrderDetails.Sum(od => od.Quantity).Value;
-                                        var totalAmount = item.ReceiptDetails.Sum(rd => rd.Quantity).Value;
+                                    var item = products.ElementAt(i + j);
+                                    var sellAmount = item.OrderDetails.Sum(od => od.Quantity).Value;
+                                    var totalAmount = item.ReceiptDetails.Sum(rd => rd.Quantity).Value;
                                     <div class="col-6 col-md-3 px-3 my-2">
                                         <div class="image-item ip-item bg-light justify-content-center py-4 rounded-2 shadow item-container">
                                             <div class="text-end me-3">
@@ -178,11 +184,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -232,11 +242,15 @@
                                 -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                             </div>
                         </div>
-                        <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                        <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                        <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                     }
                     else
                     { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                            <div class="fw-bold text-danger fs-5">
+                            <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                @string.Format("{0:C0}", item.UnitPrice)
+                            </div>
+                            <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                 @string.Format("{0:C0}", item.UnitPrice)
                             </div>
                         </div>
@@ -283,11 +297,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -347,11 +365,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -410,11 +432,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -473,11 +499,15 @@
                                                         -@string.Format("{0:#0}", item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault() * 100)%
                                                     </div>
                                                 </div>
-                                                <div class="item-price w-100 d-flex mt-1 justify-content-center fw-bold text-danger fs-5">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-flex mt-1 justify-content-center fw-bold text-danger fs-5 d-none">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
+                                                <div class="item-price w-100 d-md-none mt-1 justify-content-center fw-bold text-danger fs-6 d-flex">@string.Format("{0:C0}", item.UnitPrice - (item.UnitPrice * item.Promotions.Select(x => x.DiscountPercentage).FirstOrDefault()))</div>
                                             }
                                             else
                                             { <div class="item-price w-100 d-flex mt-1 justify-content-center">
-                                                    <div class="fw-bold text-danger fs-5">
+                                                    <div class="fw-bold text-danger fs-5 d-md-block d-none">
+                                                        @string.Format("{0:C0}", item.UnitPrice)
+                                                    </div>
+                                                    <div class="fw-bold text-danger fs-6 d-md-none d-block">
                                                         @string.Format("{0:C0}", item.UnitPrice)
                                                     </div>
                                                 </div>
@@ -504,6 +534,9 @@
     <!-- PRODUCT -->
 </main>
 <script>
+    $(document).ready(function () {
+        $('.carousel').carousel();
+    });
     document.addEventListener('DOMContentLoaded', () => {
     })
     let rawDate = '@endDate';
@@ -524,11 +557,14 @@
             // Hiển thị timer
             document.getElementById("timer").innerHTML =
                 `${days} ngày, ${hours} giờ, ${minutes} phút, ${seconds} giây`;
+            document.getElementById("timerMobile").innerHTML =
+                `${days}:${hours}:${minutes}:${seconds}`;
         } else {
             // Hết hạn
             document.getElementById("timer").innerHTML = "Khuyến mãi đã kết thúc!";
             clearInterval(timerInterval); // Dừng cập nhật
         }
+
     }
     const timerInterval = setInterval(updateTimer, 1000);
     updateTimer();

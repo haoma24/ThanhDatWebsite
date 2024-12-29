@@ -40,5 +40,6 @@ namespace ThanhDatWebsite
         public virtual DbSet<ReceiptDetails> ReceiptDetails { get; set; }
         public virtual DbSet<Receipts> Receipts { get; set; }
         public virtual DbSet<Wishlist> Wishlist { get; set; }
+        public virtual DbSet<BannerImage> BannerImage { get; set; }
     }
 }

@@ -40,6 +40,7 @@
         <EntityTypeShape EntityType="thanhdatModel.Wishlist" Width="1.5" PointX="8.25" PointY="9.375" />
         <AssociationConnector Association="thanhdatModel.FK__Wishlist__Custom__04659998" />
         <AssociationConnector Association="thanhdatModel.FK__Wishlist__Produc__0371755F" />
+        <EntityTypeShape EntityType="thanhdatModel.BannerImage" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

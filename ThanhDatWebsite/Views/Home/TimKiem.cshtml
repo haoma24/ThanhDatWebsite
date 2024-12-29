@@ -1,20 +1,22 @@
 ﻿@model IEnumerable<ThanhDatWebsite.Products>
 @{
     ViewBag.Title = "Thành Đạt store";
+    var bannermodel = ViewBag.banner as IEnumerable<ThanhDatWebsite.BannerImage>;
 }
 
 <main class="shadow px-3 pb-3 rounded-2 bg-white mt-3">
     <div id="carouselExampleInterval" class="carousel slide" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
         <div class="carousel-inner mt-2 rounded-2">
-            <div class="carousel-item active" data-bs-interval="5000">
-                <img src="~/Media/Slider_1.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item" data-bs-interval="5000">
-                <img src="~/Media/Slider_2.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item" data-bs-interval="5000">
-                <img src="~/Media/Slider_3.png" class="d-block w-100" alt="...">
-            </div>
+            @{
+                bool isActive = true; // Cờ để xác định mục đầu tiên
+            }
+            @foreach (var banner in bannermodel)
+            {
+                <div class="carousel-item @(isActive ? "active" : "")" data-bs-interval="10000">
+                    <img src="@banner.ImageUrl" class="d-block w-100" alt="...">
+                </div>
+                isActive = false; // Sau mục đầu tiên, đặt cờ thành false
+            }
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

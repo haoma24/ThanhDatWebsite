@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ThanhDatWebsite.BannerImage>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<div class="mb-3">
+    <div class="my-3 fs-2">Xem trước</div>
+    <div id="carouselExampleInterval" class="carousel slide w-50 h-50" style="height:24vw; overflow:hidden" data-bs-ride="carousel">
+        <div class="carousel-inner mt-2 rounded-2">
+            @{
+                bool isActive = true; // Cờ để xác định mục đầu tiên
+            }
+            @foreach (var banner in Model)
+            {
+                <div class="carousel-item @(isActive ? "active" : "")" data-bs-interval="10000">
+                    <img src="@banner.ImageUrl" class="d-block w-100" alt="...">
+                </div>
+                isActive = false; // Sau mục đầu tiên, đặt cờ thành false
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary my-3" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImageUrl)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ThanhDatWebsite.Accounts>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h2>Phân quyền tài khoản</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên người dùng</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td>@account.UserName</td>
+                <td>@account.Email</td>
+                <td>
+                    <select class="form-control form-select role-dropdown" data-account-id="@account.AccountID">
+                        <option value="ad" @(account.Role == "ad" ? "selected" : "")>Quản lý</option>
+                        <option value="emp" @(account.Role == "emp" ? "selected" : "")>Nhân viên</option>
+                        <option value="cus" @(account.Role == "cus" ? "selected" : "")>Khách hàng</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-update-role" data-account-id="@account.AccountID">Cập nhật</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.btn-update-role').on('click', function () {
+            var accountId = $(this).data('account-id');
+            var newRole = $('.role-dropdown[data-account-id="' + accountId + '"]').val();
+
+            $.ajax({
+                url: '@Url.Action("UpdateRole", "AccountAuthorization")',
+                type: 'POST',
+                data: { accountId: accountId, newRole: newRole },
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi cập nhật vai trò.');
+                }
+            });
+        });
+    });
+</script>
+

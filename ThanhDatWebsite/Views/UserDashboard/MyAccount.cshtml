@@ -37,6 +37,55 @@
             (<span class="text-red-700">&lowast;</span>):&nbsp; Trường bắt buộc
         </div>
     </div>
+    <div id="changePasswordModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đổi mật khẩu&nbsp;<span class="userName"></span></h5>
+                    <button type="button" class="close btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <input type="hidden" id="accountId" name="accountId">
+                        <div class="form-group">
+                            <label for="currentPassword">Mật khẩu hiện tại</label>
+                            <div class="input-group">
+                                <input type="password" id="currentPassword" class="form-control" placeholder="Nhập mật khẩu hiện tại">
+                                <span class="input-group-text bg-white">
+                                    <i id="toggleCurrentPassword" class="bi bi-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">Mật khẩu mới</label>
+                            <div class="input-group">
+                                <input type="password" id="newPassword" class="form-control" placeholder="Nhập mật khẩu mới">
+                                <span class="input-group-text bg-white">
+                                    <i id="toggleNewPassword" class="bi bi-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Nhập lại mật khẩu mới</label>
+                            <div class="input-group">
+                                <input type="password" id="confirmNewPassword" class="form-control" placeholder="Nhập lại mật khẩu mới">
+                                <span class="input-group-text bg-white">
+                                    <i id="toggleConfirmNewPassword" class="bi bi-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="savePasswordButton">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -45,6 +94,55 @@
         const btnSave = document.getElementById('btnSave');
         const Msg = document.getElementById('validation');
         const cusID = localStorage.getItem('customerid');
+        // Hiện modal khi nhấn nút Đổi mật khẩu
+        $('#btnChangePassword').on('click', function () {
+            $('#changePasswordModal').modal('show');
+        });
+
+        const toggleIcons = [
+            { input: 'currentPassword', toggle: 'toggleCurrentPassword' },
+            { input: 'newPassword', toggle: 'toggleNewPassword' },
+            { input: 'confirmNewPassword', toggle: 'toggleConfirmNewPassword' }
+        ];
+
+        toggleIcons.forEach(item => {
+            const inputField = document.getElementById(item.input);
+            const toggleIcon = document.getElementById(item.toggle);
+
+            toggleIcon.addEventListener('click', function () {
+                const isPassword = inputField.type === 'password';
+                inputField.type = isPassword ? 'text' : 'password';
+                toggleIcon.classList.toggle('bi-eye', !isPassword);
+                toggleIcon.classList.toggle('bi-eye-slash', isPassword);
+            });
+        });
+
+        // Lưu mật khẩu
+        $('#savePasswordButton').on('click', function () {
+            var formData = {
+                cusId: cusID,
+                currentPassword: $('#currentPassword').val(),
+                newPassword: $('#newPassword').val(),
+                confirmNewPassword: $('#confirmNewPassword').val()
+            };
+
+            $.ajax({
+                url: '@Url.Action("ChangePassword", "UserDashboard")',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        $('#changePasswordModal').modal('hide');
+                        $('#changePasswordForm')[0].reset();
+                    }
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
+        });
+        
         document.getElementById('Pass').disabled = true;
         const bindData = () => {
             fetch(`/UserDashboard/accounts?id=${cusID}`, {

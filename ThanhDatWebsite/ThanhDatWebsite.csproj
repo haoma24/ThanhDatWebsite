@@ -199,13 +199,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BannerImage.cs">
+      <DependentUpon>ThanhDatModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Branches.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Categories.cs">
       <DependentUpon>ThanhDatModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AccountAuthorizationController.cs" />
     <Compile Include="Controllers\AdminAccountsController.cs" />
+    <Compile Include="Controllers\BannerImagesController.cs" />
     <Compile Include="Controllers\BaoCaoController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
@@ -312,6 +317,28 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Media\adapter-sac-type-c-20w.png" />
+    <Content Include="Media\apple-macbook-pro-16-inch.png" />
+    <Content Include="Media\ChristmasBg.png" />
+    <Content Include="Media\employee-engagement.png" />
+    <Content Include="Media\fire.png" />
+    <Content Include="Media\flag.png" />
+    <Content Include="Media\imac-24-inch-nano-m4-16gb-256gb.png" />
+    <Content Include="Media\imac-m3-green-thumb-650x650.png" />
+    <Content Include="Media\ipad-air-m2-11-inch-wifi-gray.png" />
+    <Content Include="Media\ipad-mini-7-5g-grey.png" />
+    <Content Include="Media\ipad-mini-7-wifi-purple.png" />
+    <Content Include="Media\ipad-pro-11-inch-wifi.png" />
+    <Content Include="Media\ipad-pro-13-inch-wifi-silver.png" />
+    <Content Include="Media\iPad-Pro-M2-129-sliver.png" />
+    <Content Include="Media\iphone-14-plus-black-1-2-650x650.png" />
+    <Content Include="Media\iphone-14-pro-max-purple-650x650.png" />
+    <Content Include="Media\iphone-16-pro-max-titan-den.png" />
+    <Content Include="Media\mac-mini-m2-pro-32gb-512gb-bac.png" />
+    <Content Include="Media\mac-mini-m4-pro-48gb-1tb.png" />
+    <Content Include="Media\magic-keyboard-thumb-650x650.png" />
+    <Content Include="Media\magic-mouse-650x650.png" />
+    <Content Include="Media\profile.png" />
     <Content Include="Media\Spinner%401x-1.0s-200px-200px.gif" />
     <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
@@ -367,6 +394,7 @@
     <Content Include="Media\Slider_1.png" />
     <Content Include="Media\Slider_2.png" />
     <Content Include="Media\Slider_3.png" />
+    <Content Include="Media\summer_sale.jpg" />
     <Content Include="Media\Thanh.png" />
     <Content Include="Media\Watch_Desktop.png" />
     <Content Include="ReportViewerWebForm.aspx" />
@@ -381,6 +409,9 @@
     <Content Include="Scripts\demo\chart-pie-demo.js" />
     <Content Include="Scripts\demo\datatables-demo.js" />
     <Content Include="Scripts\dvhcvn.json" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\haoma24-001-site1 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\haoma24-001-site1 - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -513,6 +544,13 @@
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\UserDashboard\WishList.cshtml" />
     <Content Include="Views\UserDashboard\MyAccount.cshtml" />
+    <Content Include="Views\BannerImages\Create.cshtml" />
+    <Content Include="Views\BannerImages\Delete.cshtml" />
+    <Content Include="Views\BannerImages\Details.cshtml" />
+    <Content Include="Views\BannerImages\Edit.cshtml" />
+    <Content Include="Views\BannerImages\Index.cshtml" />
+    <Content Include="Views\AccountAuthorization\Index.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

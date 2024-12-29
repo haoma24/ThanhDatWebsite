@@ -176,5 +176,26 @@ namespace ThanhDatWebsite.Controllers
             db.SaveChanges();
             return Json(new { status = "200" }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult ChangePassword(string cusID, string currentPassword, string newPassword, string confirmNewPassword)
+        {
+            var account = db.Customers
+                 .Where(a => a.CustomerID == cusID)
+                 .Select(a => a.Accounts)
+                 .FirstOrDefault();
+
+            if (account == null)
+                return Json(new { success = false, message = "Tài khoản không tồn tại." });
+
+            if (account.PasswordHash != currentPassword)
+                return Json(new { success = false, message = "Mật khẩu hiện tại không chính xác." });
+
+            if (newPassword != confirmNewPassword)
+                return Json(new { success = false, message = "Mật khẩu mới không khớp." });
+
+            account.PasswordHash = newPassword; // Giả sử mật khẩu đã được mã hóa
+            db.SaveChanges();
+            return Json(new { success = true, message = "Đổi mật khẩu thành công." });
+        }
     }
 }

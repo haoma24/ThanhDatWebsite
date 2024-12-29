@@ -33,7 +33,17 @@ namespace ThanhDatWebsite.Controllers
             ViewBag.viewName = "BaoCaoDT";
             return View();
         }
-
+        public ActionResult BaoCaoTK()
+        {
+            
+            //Viewbag hien thi tren title
+            
+            ViewBag.Name = "BaoCaoTK";
+            reportViewer.ServerReport.ReportPath = "/DemoReport/BaoCaoTonKho";
+            reportViewer.ServerReport.Refresh();
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+        }
         public ActionResult BaoCaoDT(FormCollection form)
         {
             //Sau khi chon ngay bao cao

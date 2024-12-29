@@ -15,6 +15,13 @@
           <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="BannerImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImageUrl" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Branches">
           <Key>
             <PropertyRef Name="BranchID" />
@@ -418,6 +425,7 @@
         </Association>
         <EntityContainer Name="thanhdatModelStoreContainer">
           <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BannerImage" EntityType="Self.BannerImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Branches" EntityType="Self.Branches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -971,6 +979,7 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Wishlist" EntitySet="Wishlist" />
           </AssociationSet>
+          <EntitySet Name="BannerImage" EntityType="thanhdatModel.BannerImage" />
         </EntityContainer>
         <Association Name="FK__Employees__Branc__4E3E9311">
           <End Type="thanhdatModel.Branches" Role="Branches" Multiplicity="0..1" />
@@ -1042,6 +1051,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BannerImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1216,6 +1232,14 @@
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BannerImage">
+            <EntityTypeMapping TypeName="thanhdatModel.BannerImage">
+              <MappingFragment StoreEntitySet="BannerImage">
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

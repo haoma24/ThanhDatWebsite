@@ -26,6 +26,8 @@ namespace ThanhDatWebsite.Controllers
         public ActionResult Index()
         {  
             var sanPham2 = db.Products.OrderBy(x => x.CategoryID);
+            var banner = db.BannerImage.OrderBy(x => x.Id).ToList();
+            ViewBag.banner = banner;
             return View(sanPham2.ToList());
         }
         public ActionResult TimKiem (FormCollection form)
@@ -43,6 +45,8 @@ namespace ThanhDatWebsite.Controllers
             ViewBag.msg = string.Empty;
             if (sanPham == null)
                 ViewBag.msg = "Không tìm thấy sản phẩm";
+            var banner = db.BannerImage.OrderBy(x => x.Id).ToList();
+            ViewBag.banner = banner;
             return View(sanPham.ToList());
         }
         public ActionResult DangNhap()
